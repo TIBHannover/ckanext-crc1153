@@ -85,6 +85,7 @@ setup(
     entry_points='''
         [ckan.plugins]
         crc1153_specific_metadata=ckanext.crc1153.plugins.crc_specific_metadata:CrcSpecificMetadata
+        crc1153_layout=ckanext.sfb_layout.plugin.layout:CrcLayoutPlugin
 
         [babel.extractors]
         ckan = ckan.lib.extract:extract_ckan
