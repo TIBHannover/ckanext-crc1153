@@ -7,4 +7,4 @@ class CrcSpecificMetadataController:
 
     def render_add_metadata_page(package_id):
         
-        pass
+        return "0"

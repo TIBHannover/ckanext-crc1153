@@ -2,12 +2,15 @@
 
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
+from flask import Blueprint
 from ckanext.crc1153.libs.crc_specific_metadata.helpers import CrcSpecificMetadataHelpers
+from ckanext.crc1153.controllers.crcSpecificMetadataController import CrcSpecificMetadataController
 
 
 
 class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IConfigurer)
+    plugins.implements(plugins.IBlueprint)
     plugins.implements(plugins.IDatasetForm, inherit=False)
 
     # IConfigurer
@@ -18,6 +21,19 @@ class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         toolkit.add_resource('public/crc_specific_metadata', 'ckanext-crc1153-specific-metadata')
     
 
+    # Blueprint
+
+    def get_blueprint(self):
+
+        blueprint = Blueprint(self.name, self.__module__)        
+        blueprint.add_url_rule(
+            u'/resource_custom_metadata/add_metadata/<package_id>',
+            u'add_metadata',
+            CrcSpecificMetadataController.render_add_metadata_page,
+            methods=['GET']
+            )            
+        return blueprint
+    
     
     # IDatasetForm
     
