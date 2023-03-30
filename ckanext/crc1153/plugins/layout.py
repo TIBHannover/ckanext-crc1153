@@ -17,15 +17,14 @@ class CrcLayoutPlugin(plugins.SingletonPlugin):
         toolkit.add_resource('public/crc_layout', 'ckanext-crc1153-layout')
     
 
-     #plugin Blueprint
+    #plugin Blueprint
 
     def get_blueprint(self):
 
         blueprint = Blueprint(self.name, self.__module__)
         blueprint.template_folder = u'templates'
-
         blueprint.add_url_rule(
-            u'/sfb_layout/get_json/<dataset_name>',
+            u'/crc_layout/get_json/<dataset_name>',
             u'get_json',
             Helper.get_json,
             methods=['GET']

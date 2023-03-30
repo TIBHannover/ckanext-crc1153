@@ -1,0 +1,43 @@
+
+{% asset 'ckanext-crc1153-layout/stages-css' %}
+{% asset 'ckanext-crc1153-layout/stages-js' %}
+
+{% set stages = h.set_stages() %}
+{% set s = stages %}
+{% set orders = h.set_orders() %}
+{% set titles = h.set_titles() %}
+
+
+
+<ol class="stages stage-5">
+    <li class="first {{ s[0] }}">
+        {% if s1 != 'complete' %}
+        <span class="highlight">{{ _('dataset') }}</span>
+        {% else %}
+        <button class="highlight" name="save" value="go-dataset" type="submit">{{ _('dataset') }}</button>
+        {% endif %}
+    </li>
+
+    {% for i in range(1, h.stages_count() + 2) %}
+        {% if i == h.stages_count() + 1 %}
+            <li class="last {{ s[i] }}">
+                {% if s[i] != 'complete' %}
+                <span class="highlight">{{titles[i - 1]}}</span>
+                {% else %}
+                    <span class="highlight">{{titles[i - 1]}}</span>
+                {% endif %}
+            </li>
+
+        {% else %}
+            <li class="{{orders[i - 1]}} {{ s[i] }}">
+                {% if s[i] != 'complete' %}
+                <span class="highlight">{{titles[i - 1]}}</span>
+                {% else %}
+                    <span class="highlight">{{titles[i - 1]}}</span>
+                {% endif %}
+            </li>
+        {% endif %}
+
+    {% endfor %}
+
+</ol>

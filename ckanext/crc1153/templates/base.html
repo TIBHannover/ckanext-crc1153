@@ -1,0 +1,12 @@
+{% ckan_extends %}
+
+{% block styles %}
+  {{ super() }}
+  {% asset 'ckanext-crc1153-layout/sfb1153-css' %}
+{% endblock %}
+
+
+{%- block scripts %}
+  {{ super() }}
+  {% asset 'ckanext-crc1153-layout/sfb1153-js' %}
+{% endblock -%}
