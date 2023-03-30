@@ -1,6 +1,6 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
-from ckanext.sfb_layout.lib import Helper
+from ckanext.crc1153.libs.crc_layout.helpers import Helper
 from flask import Blueprint
 
 
