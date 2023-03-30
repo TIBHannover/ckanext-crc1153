@@ -84,7 +84,7 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points='''
         [ckan.plugins]
-        crc1153=ckanext.crc1153.plugin:Crc1153Plugin
+        crc1153_specific_metadata=ckanext.crc1153.plugins.crc_specific_metadata:CrcSpecificMetadata
 
         [babel.extractors]
         ckan = ckan.lib.extract:extract_ckan
