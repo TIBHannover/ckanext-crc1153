@@ -1,0 +1,56 @@
+sfb1153-css:
+  output: ckanext-crc1153-layout/%(version)s_my.css
+  contents:
+    - ckan_1153_style.css
+
+sfb1153-js:  
+  output: ckanext-crc1153-layout/%(version)s_my.js
+  extra:
+    preload:
+      - base/main
+      - vendor/vendor
+      - vendor/bootstrap
+      - vendor/jquery
+      - vendor/jquery.ui.core
+  contents:
+    - ckan_1153.js
+
+
+
+search-css:
+  output: ckanext-crc1153-layout/%(version)s_my.css
+  contents:
+    - search.css
+
+
+stages-css:
+  output: ckanext-crc1153-layout/%(version)s_my.css
+  contents:
+    - stages.css
+
+
+stages-js:  
+  output: ckanext-crc1153-layout/%(version)s_my.js
+  extra:
+    preload:
+      - base/main
+      - vendor/vendor
+      - vendor/bootstrap
+      - vendor/jquery
+      - vendor/jquery.ui.core
+  contents:
+    - stages.js
+
+
+search-js:  
+  output: ckanext-crc1153-layout/%(version)s_my.js
+  extra:
+    preload:
+      - base/main
+      - vendor/vendor
+      - vendor/bootstrap
+      - vendor/jquery
+      - vendor/jquery.ui.core
+      - vendor/select2
+  contents:
+    - search.js
