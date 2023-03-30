@@ -6,7 +6,7 @@ from ckanext.crc1153.libs.crc_specific_metadata.helpers import CrcSpecificMetada
 
 
 
-class CrcSpecificMetadata(plugins.SingletonPlugin):
+class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IDatasetForm, inherit=False)
 
@@ -28,17 +28,17 @@ class CrcSpecificMetadata(plugins.SingletonPlugin):
         return []
 
     def create_package_schema(self):
-        schema = super(ResourceCustomMetadataPlugin, self).create_package_schema()
+        schema = super(CrcSpecificMetadata, self).create_package_schema()
         schema = CrcSpecificMetadataHelpers.updateResourceSchema(schema)
         return schema
 
     def update_package_schema(self):
-        schema = super(ResourceCustomMetadataPlugin, self).update_package_schema()
+        schema = super(CrcSpecificMetadata, self).update_package_schema()
         schema = CrcSpecificMetadataHelpers.updateResourceSchema(schema)
         return schema
 
     def show_package_schema(self):
-        schema = super(ResourceCustomMetadataPlugin, self).show_package_schema()
+        schema = super(CrcSpecificMetadata, self).show_package_schema()
         schema = CrcSpecificMetadataHelpers.updateResourceSchema(schema)
         return schema
     
