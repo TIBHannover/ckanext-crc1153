@@ -16,9 +16,9 @@ class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     # IConfigurer
 
     def update_config(self, config_):
-        toolkit.add_template_directory(config_, 'templates')
-        toolkit.add_public_directory(config_, 'public')
-        toolkit.add_resource('public/crc_specific_metadata', 'ckanext-crc1153-specific-metadata')
+        toolkit.add_template_directory(config_, '../templates')
+        toolkit.add_public_directory(config_, '../public')
+        toolkit.add_resource('../public/crc_specific_metadata', 'ckanext-crc1153-specific-metadata')
     
 
     # Blueprint
