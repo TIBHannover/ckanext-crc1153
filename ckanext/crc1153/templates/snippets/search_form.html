@@ -13,22 +13,14 @@
 {% block search_input %}
   <input type="hidden" id="selected_search_type" value="{{h.query_prepration(query)[1]}}">
   <div class="row">
-    {% if h.is_selection_needed(form_id) and h.is_enabled("sfb_search"): %}
+    {% if h.search_type_selection_is_needed(form_id) and h.is_plugin_enabled("sfb_search"): %}
         <div class="col-sm-4">
           <label for="search-type-dropdown">{{_('Search type')}}</label>
           <select  id="search-type-dropdown">
             <option value="0">Simple Search</option>            
             <option value="column">Search in csv/xlsx resource (files) Columns</option>
-            <option value="publication">Search based on Publication</option>      
-            {% if h.which_sfb() == "1153" %}
-              <option value="sample">Search in linked Samples</option>
-            {% else %}
-              <option value="material_combination">Search in Material or Material Combination</option>
-              <option value="surface_preparation">Search in Surface Preparation</option>
-              <option value="atmosphere">Search in Atmosphere</option>
-              <option value="data_type">Search in Data type</option>
-              <option value="analysis_method">Search in Measurement/Analysis Method</option>
-            {% endif %}
+            <option value="publication">Search based on Publication</option>                  
+            <option value="sample">Search in linked Samples</option>            
           </select>
         </div>
       {% endif %}

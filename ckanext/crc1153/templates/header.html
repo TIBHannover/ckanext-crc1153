@@ -87,7 +87,7 @@
         <ul class="nav nav-pills">
             {% block header_site_navigation_tabs %}
 		
-    {%  if(h.is_enabled("user_manual")) %}
+    {%  if(h.is_plugin_enabled("user_manual")) %}
       {{ h.build_nav_main(
           ('dataset.search', _('Datasets')),
           ('organization.index', _('Organizations')),

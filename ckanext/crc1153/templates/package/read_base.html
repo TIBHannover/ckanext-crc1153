@@ -8,7 +8,7 @@
         <h2 class="module-heading"><i class="fa fa-cogs"></i> {{ _('Export Dataset Metadata') }}</h2>
         <div class="row dcat-export-link">
             <div class="col-sm-12">
-                <a href={{ h.get_export_url(pkg_dict['name'], '.rdf')}} target="_blank"><i class="fa fa-external-link"></i> RDF</a>
+                <a href={{ h.get_dataset_export_url(pkg_dict['name'], '.rdf')}} target="_blank"><i class="fa fa-external-link"></i> RDF</a>
             </div>
         </div>
         <div class="row dcat-export-link">
@@ -18,12 +18,12 @@
         </div>  
         <div class="row dcat-export-link">
             <div class="col-sm-12">
-                <a href={{ h.get_export_url(pkg_dict['name'], '.xml')}} target="_blank"><i class="fa fa-external-link"></i> XML</a>
+                <a href={{ h.get_dataset_export_url(pkg_dict['name'], '.xml')}} target="_blank"><i class="fa fa-external-link"></i> XML</a>
             </div>
         </div>
         <div class="row dcat-export-link">
             <div class="col-sm-12">
-                <a href={{ h.get_export_url(pkg_dict['name'], '.ttl')}} target="_blank"><i class="fa fa-external-link"></i> TTL</a>
+                <a href={{ h.get_dataset_export_url(pkg_dict['name'], '.ttl')}} target="_blank"><i class="fa fa-external-link"></i> TTL</a>
             </div>
         </div>     
     </section>

@@ -2,10 +2,10 @@
 {% asset 'ckanext-crc1153-layout/stages-css' %}
 {% asset 'ckanext-crc1153-layout/stages-js' %}
 
-{% set stages = h.set_stages() %}
+{% set stages = h.set_active_stage() %}
 {% set s = stages %}
-{% set orders = h.set_orders() %}
-{% set titles = h.set_titles() %}
+{% set orders = h.set_stage_orders() %}
+{% set titles = h.set_stage_titles() %}
 
 
 

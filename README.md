@@ -4,6 +4,15 @@
 This is the CKAN extension for the project CRC (SFB) 1153. The extensions includes all the plugins used in the project. 
 
 
+TODO:
+
+- Move get_json from crc_layout to dcat profile plugin
+- Move the common function among all plugins to a common library
+- Remove the duplicated template helpers function after adding all plugins
+
+
+
+
 ## Requirements
 
 Compatibility with core CKAN versions:
