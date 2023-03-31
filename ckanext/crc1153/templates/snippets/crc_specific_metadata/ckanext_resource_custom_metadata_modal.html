@@ -1,0 +1,57 @@
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="{{'#resourcesModal_' ~ metadata_field_name  ~ counter_id}}">
+  {{_('Select data resource')}}
+</button>
+<div id="{{'resourcesModal_' ~ metadata_field_name  ~ counter_id}}" class="resource-custom-metadata-modal modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{metadata_field_title}}: <div id="{{'modal-header-name-' ~ metadata_field_name ~ counter_id}}"></div> </h4>
+      </div>
+      <div class="modal-body">  
+        <b><i>
+          <p>{{_('Please select the data resource(s) for this ') ~ metadata_field_title }}</p>
+        </i></b>
+        <label class="checkbox-container">{{_('Select All')}}
+            <input type="checkbox" class="select-all-resources" id={{'select-all-resources-' ~ metadata_field_name ~ counter_id}}>
+            <span class="checkmark"></span>
+        </label>
+          <br>
+        <div class="resources-list-box">
+          {% for res in resources %}
+            {% if res['is_automated_processed'] and res[metadata_actual_name] == metadata_field_value and res[metadata_actual_name] != '' %}
+              <label class="checkbox-container" value={{res.id}} id="{{'resource-checkbox-input-label-' ~ metadata_field_name ~ counter_id}}">
+                  {{res.name}}
+                  <input type="checkbox" 
+                    class="{{'resource-checkbox-input-' ~ metadata_field_name ~ counter_id}} {{'resource-checkbox-input-' ~ metadata_field_name}}   resource-box"
+                    field_name={{metadata_field_name}}
+                    name={{'custom_metadata_' ~ metadata_field_name ~ counter_id}} 
+                    value={{res.id}}
+                    resource_name={{res.name}}
+                    checked
+                    >
+                  <span class="checkmark"></span>
+              </label>
+            {% else %}
+              <label class="checkbox-container" value={{res.id}} id="{{'resource-checkbox-input-label-' ~ metadata_field_name ~ counter_id}}">
+                  {{res.name}}
+                  <input type="checkbox" 
+                    class="{{'resource-checkbox-input-' ~ metadata_field_name ~ counter_id}} {{'resource-checkbox-input-' ~ metadata_field_name}}  resource-box"
+                    field_name={{metadata_field_name}}
+                    name={{'custom_metadata_' ~ metadata_field_name ~ counter_id}} 
+                    value={{res.id}}
+                    resource_name={{res.name}}
+                    >
+                  <span class="checkmark"></span>
+              </label>
+            {%  endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="{{'modal-add-btn-' ~ metadata_field_name ~ counter_id}}" class="btn btn-primary res_custom_metadat_modal_save" data-dismiss="modal">{{_('Save')}}</button>
+        <button type="button" id={{'ref_add_close_btn' ~ counter_id}} type="button" class="pull-left btn btn-default res_custom_metadat_modal_close" data-dismiss="modal">{{_('Close')}}</button>
+      </div>
+    </div>
+
+  </div>
+</div>

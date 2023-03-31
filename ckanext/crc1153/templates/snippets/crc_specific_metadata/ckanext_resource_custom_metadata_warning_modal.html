@@ -1,0 +1,31 @@
+<div id="resource_metadata_warning" class="resource_metadata_warning modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">{{_('Warning: Missing metadata')}}</h2>
+      </div>
+      <div class="modal-body">  
+        <div class="alert alert-warning text-justify">
+            <p>
+                {{_('Please note: Although these metadata are not mandatory, we strongly recommend to provide them. 
+                    These metadata allowes your fellow researchres to better find and understand your data resources.                    
+                 ')}}
+            </p>
+        </div>
+        <br>
+        <h3><strong>{{_('These metadata are missing for the following data resources:')}}</strong></h3>
+        <br>
+        <div class="row">
+            <div class="col-sm-12" id="warning_result_box">
+            
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="resource_custom_warning_skip" class="btn btn-primary" data-dismiss="modal">{{_('Skip and continue')}}</button>
+        <button type="button" id="resource_custom_warning_stay" type="button" class="pull-left btn btn-default " data-dismiss="modal">{{_('Stay on this page')}}</button>
+      </div>
+    </div>
+
+  </div>
+</div>

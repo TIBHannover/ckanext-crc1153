@@ -1,0 +1,151 @@
+{% extends "package/new_resource.html" %}
+{% import 'macros/form.html' as input_object %}
+
+{% block styles %}
+  {{ super() }}
+  {% asset 'ckanext-resource-custom-metadata/add-css' %}
+  {% asset 'ckanext-resource-custom-metadata/modal-css' %}
+{% endblock styles %} 
+
+{% block breadcrumb_content %}
+  {{ super() }}
+  {% if pkg %}
+    <li class="active"><a href="#">{{ _('Extra Metadata') }}</a></li>
+  {% endif %}
+{% endblock %}
+
+{% block form %}
+  {% block stages %}        
+      {% if custom_stage %}
+          {{ h.snippet('package/snippets/stages.html', stages=custom_stage, pkg_name=pkg_dict['name']) }}
+      {% endif %}
+  {% endblock %}
+
+  {% set action = h.url_for('resource_custom_metadata.save_metadata', _external=True) %}
+  
+  <input type="hidden" name="resource_count" id="resorces_count" value={{pkg_dict['resources']|length}}>
+  <form id="resource-custom-metadata-form" method="post" action='{{action}}' data-module="basic-form" enctype="multipart/form-data">
+    <div class="row">
+    <div class="col-sm-12">
+        <p>
+            <b>{{_('Here you can set the SFB specific metadata for your data resources (files). You can 
+                  also set them later by editing the target data resource. <br> You can skip this part if 
+                  the metadata is already set in your data resources. ')}}</b>
+          <button class="btn btn-primary btn-sm"  id="skip-btn" class="resource_custom_next_btn" name="save_skip_btn" value="finish_ownership" type="submit">{{ _('Save and continue') }}</button>
+        </p>
+        
+    </div>
+  </div><br><br>
+  
+    <input id="resource_count" type="hidden" name="resources_count" value={{pkg_dict['resources']|length}}>
+    <input type="hidden" name="pkg_name" value={{pkg_dict['name']}}>
+    <input type="hidden" name="processed_metadata_material_combination" value={{custom_metadata_fields['material_combination']|length}}>
+    <input type="hidden" name="processed_metadata_surface_preparation" value={{custom_metadata_fields['surface_preparation']|length}}>
+    <input type="hidden" name="processed_metadata_atmosphere" value={{custom_metadata_fields['atmosphere']|length}}>
+    <input type="hidden" name="processed_metadata_data_type" value={{custom_metadata_fields['data_type']|length}}>
+    <input type="hidden" name="processed_metadata_analysis_method" value={{custom_metadata_fields['analysis_method']|length}}>
+    <input type="hidden" id="reload_page" value="no">
+
+    {# warning modal #}
+    {% snippet 'snippets/ckanext_resource_custom_metadata_warning_modal.html' %}
+
+    {# Material Combination field #}
+    {% snippet 'snippets/ckanext_resource_custom_metadata_field.html', 
+        resources=pkg_dict['resources'],
+        box_class='row material-comb-box',
+        box_id='material_combination_box_',
+        input_name='material_combination_',
+        input_label='Material or Material Combination',
+        remove_icon_id='material_combination_box_remove_',
+        add_new_button_id='mat_comb',
+        add_new_button_text='New Material or Material Combination',
+        form=input_object,
+        metadata_actual_name='material_combination',
+        selected_fields=custom_metadata_fields['material_combination']
+    %}    
+    <hr>
+
+    {# Surface Preparation field #}
+    {% snippet 'snippets/ckanext_resource_custom_metadata_field.html', 
+        resources=pkg_dict['resources'],
+        box_class='row surface-preparation-box',
+        box_id='surface_preparation_box_',
+        input_name='surface_preparation_',
+        input_label='Surface Preparation',
+        remove_icon_id='surface_preparation_box_remove_',
+        add_new_button_id='surface_preparation_new',
+        add_new_button_text='New Surface Preparation',
+        form=input_object,
+        metadata_actual_name='surface_preparation',
+        selected_fields=custom_metadata_fields['surface_preparation']
+    %}
+    <hr>
+
+    {# Atmosphere field #}
+    {% snippet 'snippets/ckanext_resource_custom_metadata_field.html', 
+        resources=pkg_dict['resources'],
+        box_class='row atmosphere-box',
+        box_id='atmosphere_box_',
+        input_name='atmosphere_',
+        input_label='Atmosphere',
+        remove_icon_id='atmosphere_box_remove_',
+        add_new_button_id='atmosphere_new',
+        add_new_button_text='New Atmosphere',
+        form=input_object,
+        metadata_actual_name='atmosphere',
+        selected_fields=custom_metadata_fields['atmosphere']
+    %}
+    <hr>
+
+    {# Data Type field #}
+    {% snippet 'snippets/ckanext_resource_custom_metadata_field.html', 
+        resources=pkg_dict['resources'],
+        box_class='row data-type-box',
+        box_id='data_type_box_',
+        input_name='data_type_',
+        input_label='Data type (mechanical, chemical ...)',
+        remove_icon_id='data_type_box_remove_',
+        add_new_button_id='data_type_new',
+        add_new_button_text='New Data Type',
+        form=input_object,
+        metadata_actual_name='data_type',
+        selected_fields=custom_metadata_fields['data_type']
+    %}
+    <hr>
+
+    {# Analysis Method field #}
+    {% snippet 'snippets/ckanext_resource_custom_metadata_field.html', 
+        resources=pkg_dict['resources'],
+        box_class='row analysis-method-box',
+        box_id='analysis_method_box_',
+        input_name='analysis_method_',
+        input_label='Measurement/Analysis Method',
+        remove_icon_id='analysis_method_box_remove_',
+        add_new_button_id='analysis_method_new',
+        add_new_button_text='New Measurement/Analysis Method',
+        form=input_object,
+        metadata_actual_name='analysis_method',
+        selected_fields=custom_metadata_fields['analysis_method']
+    %}        
+
+    <br><br><br>
+    <hr>
+    
+    <div class="form-actions">
+        {% if h.cancel_dataset_is_enabled() %} 
+          {% set dest_url = h.url_for('cancel_dataset_creation.cancel_dataset', package_id=pkg_dict.id, is_draft=0, _external=True) %}
+          <a class="btn btn-danger pull-left" href="{{dest_url}}" data-module="confirm-action" data-module-content="{{ _('Are you sure you want to delete this dataset?') }}">{{ _('Cancel & Delete Dataset') }}</a>        
+        {% endif %}
+        <button class="btn btn-primary" class="resource_custom_next_btn"   id="resource_custom_next_btn" name="save_btn" value="finish_ownership" type="submit">{{ _('Next') }}</button>
+    </div> 
+
+  </form>
+ 
+
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {% asset 'ckanext-resource-custom-metadata/add-js' %}
+  {% asset 'ckanext-resource-custom-metadata/field-js' %}
+{% endblock %}

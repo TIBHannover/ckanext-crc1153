@@ -1,0 +1,54 @@
+{% ckan_extends %}
+
+{% block basic_fields %}
+    {{ super() }}
+    {% if h.is_plugin_enabled("crc1153_specific_metadata") %}
+        {# {% asset 'ckanext-resource-custom-metadata/add-css' %} #}
+        {# {% asset 'ckanext-resource-custom-metadata/field-js' %} #}
+
+        {{ form.input('material_combination',
+            id='material_combination_id',
+            label=_('Material or Material Combination'), 
+            value=data.material_combination,  
+            classes=['control-full'],
+            attrs={'class': 'custom-resource-metadata-input input-material_combination_'}
+        )
+        }}
+    {% endif %}
+
+    {# {{ form.input('surface_preparation',
+        id='surface_preparation_id',
+        label=_('Surface Preparation'), 
+        value=data.surface_preparation,  
+        classes=['control-full'],
+        attrs={'class': 'custom-resource-metadata-input input-surface_preparation_'}
+        ) 
+    }}
+
+    {{ form.input('atmosphere',
+        id='atmosphere_id',
+        label=_('Atmosphere'), 
+        value=data.atmosphere,  
+        classes=['control-full'],
+        attrs={'class': 'custom-resource-metadata-input input-atmosphere_'}
+        ) 
+    }}
+
+    {{ form.input('data_type',
+        id='data_type_id',
+        label=_('Data type (mechanical, chemical ...)'), 
+        value=data.data_type,  
+        classes=['control-full'],
+        attrs={'class': 'custom-resource-metadata-input input-data_type_'}
+        ) 
+    }}
+
+    {{ form.input('analysis_method',
+        id='analysis_method_id',
+        label=_('Measurement/Analysis method'), 
+        value=data.analysis_method,  
+        classes=['control-full'],
+        attrs={'class': 'custom-resource-metadata-input'}
+        ) 
+    }} #}
+{% endblock  %}
