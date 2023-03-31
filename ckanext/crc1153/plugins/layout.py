@@ -13,7 +13,7 @@ class CrcLayoutPlugin(plugins.SingletonPlugin):
 
     def update_config(self, config_):
         toolkit.add_template_directory(config_, 'templates')
-        toolkit.add_public_directory(config_, 'public/crc_layout')
+        toolkit.add_public_directory(config_, 'public')
         toolkit.add_resource('public/crc_layout', 'ckanext-crc1153-layout')
     
 
