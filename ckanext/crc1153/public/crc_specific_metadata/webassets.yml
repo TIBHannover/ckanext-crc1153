@@ -1,0 +1,34 @@
+add-css:
+  output: ckanext-crc1153-specific-metadata/%(version)s_my.css
+  contents:
+    - add.css
+
+modal-css:
+  output: ckanext-crc1153-specific-metadata/%(version)s_my.css
+  contents:
+    - modal.css
+
+add-js:  
+  output: ckanext-crc1153-specific-metadata/%(version)s_my.js
+  extra:
+    preload:
+      - base/main
+      - vendor/vendor
+      - vendor/bootstrap
+      - vendor/jquery
+      - vendor/jquery.ui.core
+  contents:
+    - add.js
+
+field-js:  
+  output: ckanext-crc1153-specific-metadata/%(version)s_my.js
+  extra:
+    preload:
+      - base/main
+      - vendor/vendor
+      - vendor/jquery
+      - vendor/bootstrap      
+      - vendor/jquery.ui.core      
+  contents:
+    - jquery.autocomplete.js
+    - field.js

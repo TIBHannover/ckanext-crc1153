@@ -1,0 +1,39 @@
+hr {
+    border: none;
+    height: 3px;
+    background-color: rgb(14, 29, 165); 
+}
+
+.material-comb-box, .surface-preparation-box, .atmosphere-box, .data-type-box, .analysis-method-box{
+    display: none;
+}
+
+.remove-metadata-icon{
+    color: red;
+    font-size: 35px !important;
+  }
+
+.right-side-columns{
+    margin-top: 20px;
+}
+
+.custom-metadata-resource_count_edit{
+    text-align: center;
+    display: none;
+    cursor: pointer;
+  }
+
+  .missing-resource-name{
+      margin-left: 40px;
+  }
+
+/* 
+  source: https://github.com/devbridge/jQuery-Autocomplete/blob/master/content/styles.css
+*/
+.autocomplete-suggestions { -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important; border: 1px solid #999 !important; background: #FFF !important; cursor: default !important; overflow: auto !important; -webkit-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64) !important; -moz-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64) !important; box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64) !important; }
+.autocomplete-suggestion { padding: 2px 5px !important; white-space: nowrap !important; overflow: hidden !important; }
+.autocomplete-no-suggestion { padding: 2px 5px !important;}
+.autocomplete-selected { background: #F0F0F0 !important; }
+.autocomplete-suggestions strong { font-weight: bold !important; color: #000 !important; }
+.autocomplete-group { padding: 2px 5px !important; font-weight: bold !important; font-size: 16px !important; color: #000 !important; display: block !important; border-bottom: 1px solid #000 !important; }
+  
