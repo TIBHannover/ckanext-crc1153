@@ -40,7 +40,7 @@ $(document).ready(function(){
       }
       e.preventDefault();
       $('#warning_result_box').html('')      
-      let metadataFieldsIds = ['material_combination_', 'demonstrator_', 'manufacturing_process_', , 'analysis_method_'];
+      let metadataFieldsIds = ['material_combination_', 'demonstrator_', 'manufacturing_process_', 'analysis_method_'];
       let metadataFields = ['Material or Material Combination', 'Demonstrator', 'Manufacturing Process', 'Measurement/Analysis Method'];
       let prefix = 'resource-checkbox-input-';
       let showWarning = false;
