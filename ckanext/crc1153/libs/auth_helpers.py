@@ -20,7 +20,7 @@ class AuthHelpers:
 
     @staticmethod
     def get_mediaWiki_creds():
-        credentials_path = '/etc/ckan/default/credentials/smw1153.txt'
+        credentials_path = toolkit.config.get('ckanext.mediaWiki_credentials_path')        
         try:
             credentials = open(credentials_path, 'r').read()
             credentials = credentials.split('\n')
