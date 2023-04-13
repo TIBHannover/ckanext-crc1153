@@ -130,27 +130,23 @@
                       </tr>
                     {% endif %}
                     {# sfb metadata #}
-                    {% if h.is_plugin_enabled("resource_custom_metadata") %}
+                    {% if h.is_plugin_enabled("crc1153_specific_metadata") %}
                         <tr>
                             <th scope="row">{{ _('Material or Material Combination') }}</th>
                             <td>{{ res.material_combination }}</td>
                         </tr>    
                         <tr>
-                            <th scope="row">{{ _('Surface Preparation') }}</th>
-                            <td>{{ res.surface_preparation }}</td>
+                            <th scope="row">{{ _('Demonstrator') }}</th>
+                            <td>{{ res.demonstrator }}</td>
                         </tr>
                         <tr>
-                            <th scope="row">{{ _('Atmosphere') }}</th>
-                            <td>{{ res.atmosphere }}</td>
+                            <th scope="row">{{ _('Manufacturing Process') }}</th>
+                            <td>{{ res.manufacturing_process }}</td>
                         </tr>
                         <tr>
-                            <th scope="row">{{ _('Data type (mechanical, chemical ...)') }}</th>
-                            <td>{{ res.data_type }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">{{ _('Measurement/Analysis Method') }}</th>
+                            <th scope="row">{{ _('Analysis Method') }}</th>
                             <td>{{ res.analysis_method }}</td>
-                        </tr>
+                        </tr>                        
                     {% endif %}                                        
                     </tbody>
                 </table>
@@ -262,9 +258,7 @@
     {% if res %}
       <section class="module">
         {% block resource_additional_information_inner %}      
-          {% if h.is_plugin_enabled("crc1153_specific_metadata") %}
-              {% snippet 'snippets/crc_specific_metadata/resource_info_table.html',  res=res %}   
-          {% endif %}
+          
         {% endblock %}
       </section>
     {% endif %}
