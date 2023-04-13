@@ -4,7 +4,7 @@ hr {
     background-color: rgb(14, 29, 165); 
 }
 
-.material-comb-box, .surface-preparation-box, .atmosphere-box, .data-type-box, .analysis-method-box{
+.material-comb-box, .demonstrator-box, .manufacturing_process-box, .analysis-method-box{
     display: none;
 }
 

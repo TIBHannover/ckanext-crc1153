@@ -12,45 +12,7 @@ $(document).ready(function(){
         ];
   $('.input-material_combination_').autocomplete({lookup:materials}); 
 
-  /* 
-    data types autocomplete
-  */
-    let dataTypes = [
-      {value : "Mech.-Eigenschaften" , data: "Mech.-Eigenschaften"},
-      {value : "Phys.-Eigenschaften" , data: "Phys.-Eigenschaften"}
-    ];
-  $('.input-data_type_').autocomplete({lookup:dataTypes});
-
-  
-  /* 
-    surface prepration autocomplete
-  */
-    let surfaces = [
-      {value : "Oberflächenbehandlung" , data: "Oberflächenbehandlung"},
-      {value : "Buersten" , data: "Buersten"},
-      {value : "Chemisch" , data: "Chemisch"},
-      {value : "Plasma" , data: "Plasma"},
-      {value : "Schleifen" , data: "Schleifen"},
-      {value : "Unbehandelt" , data: "Unbehandelt"}
-    ];
-  $('.input-surface_preparation_').autocomplete({lookup:surfaces});
-
-
-   /* 
-    Atmosphere autocomplete
-  */
-    let atmospheres = [
-      {value : "Ar" , data: "Ar"},
-      {value : "Ar-Silan" , data: "Ar-Silan"},
-      {value : "H2" , data: "H2"},
-      {value : "H2-Silan" , data: "H2-Silan"},
-      {value : "Schleifen" , data: "Schleifen"},
-      {value : "Normal-O2" , data: "Normal-O2"}
-    ];
-  $('.input-atmosphere_').autocomplete({lookup:atmospheres});
-  
-  
-  
+    
   
   /**
      * Add new metadata input field for material combination
@@ -58,7 +20,7 @@ $(document).ready(function(){
      */
      
     let mc_processed_count = $('#processed_metadata_count_material_combination_').val();
-    if(parseInt(mc_processed_count) != 0){
+    if(parseInt(mc_processed_count) !== 0){
       for(let i=1; i <= parseInt(mc_processed_count); i++){
         $('#material_combination_box_' + i).show();
       }
@@ -83,25 +45,25 @@ $(document).ready(function(){
 
 
      /**
-     * Add new metadata input field for surface preparation
+     * Add new metadata input field for demonstrator
      * 
      */
 
-      let sp_processed_count = $('#processed_metadata_count_surface_preparation_').val();
-      if(parseInt(sp_processed_count) != 0){
-        for(let i=1; i <= parseInt(sp_processed_count); i++){
-          $('#surface_preparation_box_' + i).show();
+      let dem_processed_count = $('#processed_metadata_count_demonstrator_').val();
+      if(parseInt(dem_processed_count) !== 0){
+        for(let i=1; i <= parseInt(dem_processed_count); i++){
+          $('#demonstrator_box_' + i).show();
         }
       }
       else{
-        $('#surface_preparation_box_1').show();
+        $('#demonstrator_box_1').show();
       }
 
-      $('#surface_preparation_new').click(function(){
+      $('#demonstrator_new').click(function(){
         let all_visible = false;
-        for(let i=1; i <= $('.surface-preparation-box').length; i++){
-          if ($('#surface_preparation_box_' + i).is(':hidden')){
-            $('#surface_preparation_box_' + i).fadeIn();
+        for(let i=1; i <= $('.demonstrator-box').length; i++){
+          if ($('#demonstrator_box_' + i).is(':hidden')){
+            $('#demonstrator_box_' + i).fadeIn();
             all_visible = true;
             break;
           }
@@ -114,24 +76,24 @@ $(document).ready(function(){
 
 
       /**
-     * Add new metadata input field for Atmosphere
+     * Add new metadata input field for manufacturing_process
      * 
      */
-       let at_processed_count = $('#processed_metadata_count_atmosphere_').val();
-       if(parseInt(at_processed_count) != 0){
+       let mp_processed_count = $('#processed_metadata_count_manufacturing_process_').val();
+       if(parseInt(mp_processed_count) !== 0){
          for(let i=1; i <= parseInt(at_processed_count); i++){
-           $('#atmosphere_box_' + i).show();
+           $('#manufacturing_process_box_' + i).show();
          }
        }
        else{
-          $('#atmosphere_box_1').show();
+          $('#manufacturing_process_box_1').show();
        }
        
-       $('#atmosphere_new').click(function(){
+       $('#manufacturing_process_new').click(function(){
          let all_visible = false;
-         for(let i=1; i <= $('.atmosphere-box').length; i++){
-           if ($('#atmosphere_box_' + i).is(':hidden')){
-             $('#atmosphere_box_' + i).fadeIn();
+         for(let i=1; i <= $('.manufacturing_process-box').length; i++){
+           if ($('#manufacturing_process_box_' + i).is(':hidden')){
+             $('#manufacturing_process_box_' + i).fadeIn();
              all_visible = true;
              break;
            }
@@ -140,38 +102,7 @@ $(document).ready(function(){
            $(this).hide();
          }
        });
-
-
-
-       /**
-     * Add new metadata input field for Data Type
-     * 
-     */
-        let dt_processed_count = $('#processed_metadata_count_data_type_').val();
-        if(parseInt(dt_processed_count) != 0){
-          for(let i=1; i <= parseInt(dt_processed_count); i++){
-            $('#data_type_box_' + i).show();
-          }
-        }
-        else{
-          $('#data_type_box_1').show();
-        }
-        
-        $('#data_type_new').click(function(){
-          let all_visible = false;
-          for(let i=1; i <= $('.data-type-box').length; i++){
-            if ($('#data_type_box_' + i).is(':hidden')){
-              $('#data_type_box_' + i).fadeIn();
-              all_visible = true;
-              break;
-            }
-          }
-          if(!all_visible){
-            $(this).hide();
-          }
-        });
-
-
+    
 
      /**
      * Add new metadata input field for Analysis Method
@@ -179,7 +110,7 @@ $(document).ready(function(){
      */
 
       let am_processed_count = $('#processed_metadata_count_analysis_method_').val();
-      if(parseInt(am_processed_count) != 0){
+      if(parseInt(am_processed_count) !== 0){
         for(let i=1; i <= parseInt(am_processed_count); i++){
           $('#analysis_method_box_' + i).show();
         }

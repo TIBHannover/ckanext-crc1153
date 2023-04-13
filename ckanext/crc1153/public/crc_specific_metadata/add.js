@@ -40,8 +40,8 @@ $(document).ready(function(){
       }
       e.preventDefault();
       $('#warning_result_box').html('')      
-      let metadataFieldsIds = ['material_combination_', 'surface_preparation_', 'atmosphere_', 'data_type_', 'analysis_method_'];
-      let metadataFields = ['Material or Material Combination', 'Surface Preparation', 'Atmosphere', 'Data type', 'Measurement/Analysis Method'];
+      let metadataFieldsIds = ['material_combination_', 'demonstrator_', 'manufacturing_process_', , 'analysis_method_'];
+      let metadataFields = ['Material or Material Combination', 'Demonstrator', 'Manufacturing Process', 'Measurement/Analysis Method'];
       let prefix = 'resource-checkbox-input-';
       let showWarning = false;
       for(let i=0; i < metadataFieldsIds.length; i++){       

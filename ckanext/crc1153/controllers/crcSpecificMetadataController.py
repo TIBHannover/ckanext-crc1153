@@ -32,7 +32,7 @@ class CrcSpecificMetadataController:
 
 
     def save_metadata():
-        metadata_fields = ['material_combination', 'surface_preparation', 'atmosphere', 'data_type', 'analysis_method']
+        metadata_fields = ['material_combination', 'demonstrator', 'manufacturing_process', 'analysis_method']
         resource_count = request.form.get('resources_count')
         package_name = request.form.get('pkg_name')
         
@@ -52,10 +52,7 @@ class CrcSpecificMetadataController:
             # raise
             return toolkit.abort(500, "")
 
-        if Commons.check_plugin_enabled("organization_group"): 
-            return redirect(h.url_for('organization_group.add_ownership_view', id=str(package_name) ,  _external=True)) 
-
-        elif Commons.check_plugin_enabled("media_wiki"):
-            return redirect(h.url_for('media_wiki.machines_view', id=str(package_name) ,  _external=True)) 
+        if Commons.check_plugin_enabled("media_wiki"):
+            return redirect(h.url_for('semantic_media_wiki.machines_view', id=str(package_name) ,  _external=True)) 
 
         return redirect(h.url_for('dataset.read', id=str(package_name) ,  _external=True)) 

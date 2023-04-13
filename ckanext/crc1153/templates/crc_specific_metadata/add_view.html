@@ -29,8 +29,7 @@
     <div class="col-sm-12">
         <p>
             <b>{{_('Here you can set the SFB specific metadata for your data resources (files). You can 
-                  also set them later by editing the target data resource. <br> You can skip this part if 
-                  the metadata is already set in your data resources. ')}}</b>
+                  also set them later by editing the target data resource. ')}}</b>
           <button class="btn btn-primary btn-sm"  id="skip-btn" class="resource_custom_next_btn" name="save_skip_btn" value="finish_ownership" type="submit">{{ _('Save and continue') }}</button>
         </p>
         
@@ -40,9 +39,8 @@
     <input id="resource_count" type="hidden" name="resources_count" value={{pkg_dict['resources']|length}}>
     <input type="hidden" name="pkg_name" value={{pkg_dict['name']}}>
     <input type="hidden" name="processed_metadata_material_combination" value={{custom_metadata_fields['material_combination']|length}}>
-    <input type="hidden" name="processed_metadata_surface_preparation" value={{custom_metadata_fields['surface_preparation']|length}}>
-    <input type="hidden" name="processed_metadata_atmosphere" value={{custom_metadata_fields['atmosphere']|length}}>
-    <input type="hidden" name="processed_metadata_data_type" value={{custom_metadata_fields['data_type']|length}}>
+    <input type="hidden" name="processed_metadata_demonstrator" value={{custom_metadata_fields['demonstrator']|length}}>
+    <input type="hidden" name="processed_metadata_manufacturing_process" value={{custom_metadata_fields['manufacturing_process']|length}}>
     <input type="hidden" name="processed_metadata_analysis_method" value={{custom_metadata_fields['analysis_method']|length}}>
     <input type="hidden" id="reload_page" value="no">
 
@@ -65,53 +63,37 @@
     %}    
     <hr>
 
-    {# Surface Preparation field #}
+    {# Demonstrator field #}
     {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_field.html', 
         resources=pkg_dict['resources'],
-        box_class='row surface-preparation-box',
-        box_id='surface_preparation_box_',
-        input_name='surface_preparation_',
-        input_label='Surface Preparation',
-        remove_icon_id='surface_preparation_box_remove_',
-        add_new_button_id='surface_preparation_new',
-        add_new_button_text='New Surface Preparation',
+        box_class='row demonstrator-box',
+        box_id='demonstrator_box_',
+        input_name='demonstrator_',
+        input_label='Demonstrator',
+        remove_icon_id='demonstrator_box_remove_',
+        add_new_button_id='demonstrator_new',
+        add_new_button_text='New Demonstrator',
         form=input_object,
-        metadata_actual_name='surface_preparation',
-        selected_fields=custom_metadata_fields['surface_preparation']
+        metadata_actual_name='demonstrator',
+        selected_fields=custom_metadata_fields['demonstrator']
     %}
     <hr>
 
-    {# Atmosphere field #}
+    {# Manufacturing Process field #}
     {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_field.html', 
         resources=pkg_dict['resources'],
-        box_class='row atmosphere-box',
-        box_id='atmosphere_box_',
-        input_name='atmosphere_',
-        input_label='Atmosphere',
-        remove_icon_id='atmosphere_box_remove_',
-        add_new_button_id='atmosphere_new',
-        add_new_button_text='New Atmosphere',
+        box_class='row manufacturing_process-box',
+        box_id='manufacturing_process_box_',
+        input_name='manufacturing_process_',
+        input_label='Manufacturing Process',
+        remove_icon_id='manufacturing_process_box_remove_',
+        add_new_button_id='manufacturing_process_new',
+        add_new_button_text='New Manufacturing Process',
         form=input_object,
-        metadata_actual_name='atmosphere',
-        selected_fields=custom_metadata_fields['atmosphere']
+        metadata_actual_name='manufacturing_process',
+        selected_fields=custom_metadata_fields['manufacturing_process']
     %}
-    <hr>
-
-    {# Data Type field #}
-    {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_field.html', 
-        resources=pkg_dict['resources'],
-        box_class='row data-type-box',
-        box_id='data_type_box_',
-        input_name='data_type_',
-        input_label='Data type (mechanical, chemical ...)',
-        remove_icon_id='data_type_box_remove_',
-        add_new_button_id='data_type_new',
-        add_new_button_text='New Data Type',
-        form=input_object,
-        metadata_actual_name='data_type',
-        selected_fields=custom_metadata_fields['data_type']
-    %}
-    <hr>
+    <hr>   
 
     {# Analysis Method field #}
     {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_field.html', 
