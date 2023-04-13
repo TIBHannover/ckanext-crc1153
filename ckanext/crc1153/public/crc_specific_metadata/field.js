@@ -1,23 +1,4 @@
-$(document).ready(function(){
-
-  /* 
-    Material/Material combination autocomplete
-  */
-    
-  $.ajax({
-      url: $('#get_material_list_endpoint').val(),
-      cache:false,   
-      dataType: 'json',      
-      type: "GET",
-      success: function(result){
-        $('.input-material_combination_').autocomplete({lookup:result}); 
-      }
-  });
-
-
-
-    
-  
+$(document).ready(function(){  
   /**
      * Add new metadata input field for material combination
      * 

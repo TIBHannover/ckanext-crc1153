@@ -1,54 +1,24 @@
 <input type="hidden" id="{{'processed_metadata_count_' ~ input_name}}" value={{selected_fields|length}}>
-{% for processed_meta in selected_fields %}
-    <div class="{{box_class}}" id="{{box_id ~ loop.index}}">
-        <div class="col-sm-6">
-            {{ form.input(input_name ~ loop.index, 
-                id=input_name ~ loop.index, 
-                label = input_label,
-                type='text',
-                value=processed_meta,
-                classes=['control-full'], attrs={'class': 'custom-resource-metadata-input ' ~ "input-" ~  input_name}, is_required=False) 
-            }} 
-        </div>
-        <div class="col-sm-2 right-side-columns">
-            {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_modal.html', 
-                metadata_field_name=input_name,
-                metadata_field_title=input_label,
-                counter_id=loop.index,
-                resources=resources,
-                metadata_field_value=processed_meta,
-                metadata_actual_name=metadata_actual_name
-            %}
-        </div>
-        {% if loop.index > 1 %}
-            {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_resources_count.html', 
-                    input_name=input_name,
-                    counter=loop.index
-            %}
-            <div class="col-sm-1 right-side-columns">
-                <a href="#" class="box-remove-anchor" id={{remove_icon_id ~ loop.index}}>
-                    <i class="fa fa-minus-circle remove-metadata-icon"></i>
-                </a>
-            </div>
-        {% else %}
-            {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_resources_count.html', 
-                    input_name=input_name,
-                    counter=loop.index
-            %}
-        {% endif %}
-    </div>
-{% endfor %}
-
 {% set offset = selected_fields|length %}
 {% for res in resources %}
-    <div class="{{box_class}}" id="{{box_id ~ (loop.index + offset)}}">
+    <div class="{{box_class}}" id="{{box_id ~ (loop.index + offset)}}">        
         <div class="col-sm-6">
-            {{ form.input(input_name ~ (loop.index + offset), 
-                id=input_name ~ (loop.index + offset), 
-                label = input_label,
-                type='text',
-                classes=['control-full'], attrs={'class': 'custom-resource-metadata-input ' ~ "input-" ~  input_name}, is_required=False) 
-            }} 
+            {% if input_type == "select" %}                        
+                <select name={{input_name ~ loop.index }} id={{input_name ~ loop.index}} class="metadata_dropdown" >
+                    {% for data in select_data_source %}           
+                        <option value={{data.value}}>
+                        {{data.text}} 
+                        </option>
+                    {% endfor %}
+                </select>
+            {% else  %}                      
+                    {{ form.input(input_name ~ (loop.index + offset), 
+                        id=input_name ~ (loop.index + offset), 
+                        label = input_label,
+                        type='text',
+                        classes=['control-full'], attrs={'class': 'custom-resource-metadata-input ' ~ "input-" ~  input_name}, is_required=False) 
+                    }} 
+            {% endif %}            
         </div>
         <div class="col-sm-2 right-side-columns">
             {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_modal.html', 

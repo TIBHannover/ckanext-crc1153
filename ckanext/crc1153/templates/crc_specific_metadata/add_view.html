@@ -42,9 +42,7 @@
     <input type="hidden" name="processed_metadata_demonstrator" value={{custom_metadata_fields['demonstrator']|length}}>
     <input type="hidden" name="processed_metadata_manufacturing_process" value={{custom_metadata_fields['manufacturing_process']|length}}>
     <input type="hidden" name="processed_metadata_analysis_method" value={{custom_metadata_fields['analysis_method']|length}}>
-    <input type="hidden" id="reload_page" value="no">
-    {% set get_material_list_endpoint = h.url_for('crc1153_specific_metadata.get_material_list', _external=True) %}
-    <input type="hidden" id="get_material_list_endpoint" value="{{get_material_list_endpoint}}">
+    <input type="hidden" id="reload_page" value="no">    
 
     {# warning modal #}
     {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_warning_modal.html' %}
@@ -61,7 +59,9 @@
         add_new_button_text='New Material or Material Combination',
         form=input_object,
         metadata_actual_name='material_combination',
-        selected_fields=custom_metadata_fields['material_combination']
+        selected_fields=custom_metadata_fields['material_combination'],
+        input_type="select",
+        select_data_source=material_list
     %}    
     <hr>
 
@@ -77,7 +77,9 @@
         add_new_button_text='New Demonstrator',
         form=input_object,
         metadata_actual_name='demonstrator',
-        selected_fields=custom_metadata_fields['demonstrator']
+        selected_fields=custom_metadata_fields['demonstrator'],
+        input_type="select",
+        select_data_source=material_list
     %}
     <hr>
 
@@ -93,7 +95,9 @@
         add_new_button_text='New Manufacturing Process',
         form=input_object,
         metadata_actual_name='manufacturing_process',
-        selected_fields=custom_metadata_fields['manufacturing_process']
+        selected_fields=custom_metadata_fields['manufacturing_process'],
+        input_type="text",
+        select_data_source=[]
     %}
     <hr>   
 
@@ -109,7 +113,9 @@
         add_new_button_text='New Measurement/Analysis Method',
         form=input_object,
         metadata_actual_name='analysis_method',
-        selected_fields=custom_metadata_fields['analysis_method']
+        selected_fields=custom_metadata_fields['analysis_method'],
+        input_type="text",
+        select_data_source=[]
     %}        
 
     <br><br><br>

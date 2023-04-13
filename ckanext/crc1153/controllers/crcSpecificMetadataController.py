@@ -4,8 +4,7 @@ import ckan.plugins.toolkit as toolkit
 from flask import render_template, request, redirect
 import ckan.lib.helpers as h
 from ckanext.crc1153.libs.commons import Commons
-from ckanext.crc1153.libs.media_wiki_api import MediaWikiAPI
-import json
+from ckanext.crc1153.libs.crc_specific_metadata.helpers import CrcSpecificMetadataHelpers
 
 
 
@@ -23,12 +22,15 @@ class CrcSpecificMetadataController:
                     custom_metadata_fields[meta].append(res[meta])
 
         for meta in custom_metadata_fields.keys():
-            custom_metadata_fields[meta] = list(set( custom_metadata_fields[meta])) 
+            custom_metadata_fields[meta] = list(set( custom_metadata_fields[meta]))
+
+
 
         return render_template('crc_specific_metadata/add_view.html', 
             pkg_dict=package, 
             custom_stage=stages,
-            custom_metadata_fields=custom_metadata_fields
+            custom_metadata_fields=custom_metadata_fields,
+            material_list=CrcSpecificMetadataHelpers.get_material_list()
         )
 
 
@@ -59,15 +61,4 @@ class CrcSpecificMetadataController:
 
         return redirect(h.url_for('dataset.read', id=str(package_name) ,  _external=True))
 
-
-
-    def get_material_list():        
-        query = "[[Category:SampleMaterial]]"
-        api_call = MediaWikiAPI(query=query)
-        matarials = []
-        for material_name in api_call.pipeline():
-            temp = {}
-            temp['value'] = material_name
-            temp['data'] = material_name
-            matarials.append(temp)
-        return json.dumps(matarials)
+    
