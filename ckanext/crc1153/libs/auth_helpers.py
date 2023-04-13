@@ -15,3 +15,18 @@ class AuthHelpers:
 
         except toolkit.NotAuthorized:
             return False
+    
+
+
+    @staticmethod
+    def get_mediaWiki_creds():
+        credentials_path = '/etc/ckan/default/credentials/smw1153.txt'
+        try:
+            credentials = open(credentials_path, 'r').read()
+            credentials = credentials.split('\n')
+            username = credentials[0].split('=')[1]
+            password = credentials[1].split('=')[1]
+            return {"username": username, "password": password}
+           
+        except:
+            return {}

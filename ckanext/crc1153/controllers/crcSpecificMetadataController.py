@@ -3,8 +3,9 @@
 import ckan.plugins.toolkit as toolkit
 from flask import render_template, request, redirect
 import ckan.lib.helpers as h
-from ckanext.crc1153.libs.crc_specific_metadata.helpers import CrcSpecificMetadataHelpers
 from ckanext.crc1153.libs.commons import Commons
+from ckanext.crc1153.libs.media_wiki_api import MediaWikiAPI
+
 
 
 class CrcSpecificMetadataController:
@@ -55,4 +56,12 @@ class CrcSpecificMetadataController:
         if Commons.check_plugin_enabled("media_wiki"):
             return redirect(h.url_for('semantic_media_wiki.machines_view', id=str(package_name) ,  _external=True)) 
 
-        return redirect(h.url_for('dataset.read', id=str(package_name) ,  _external=True)) 
+        return redirect(h.url_for('dataset.read', id=str(package_name) ,  _external=True))
+
+
+
+    def get_material_list():        
+        query = "[[Category:SampleMaterial]]"
+        api_call = MediaWikiAPI(query=query)
+        matarials = api_call.pipeline()
+        return matarials

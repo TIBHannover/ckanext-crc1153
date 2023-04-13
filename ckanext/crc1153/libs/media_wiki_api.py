@@ -1,25 +1,20 @@
 from mwclient import Site
+from ckanext.crc1153.libs.auth_helpers import AuthHelpers
 
 
-class API():
-    
-    username = None
-    password = None
-    site = None
-    host = ""
-    path = "/wiki/"
-    scheme = "https"
-    query = ""    
-    image_field = ""
-
-
-    def __init__(self, username, password, query, host, sample_query=False):
-        self.username = username
-        self.password = password
+class MediaWikiAPI():
+                 
+    def __init__(self, query, sample_query=False):
+        creds = AuthHelpers.get_mediaWiki_creds()
+        self.username = creds['username']
+        self.password = creds['password']
         self.query = query
-        self.host = host
+        self.host = "service.tib.eu/sfb1153"
         self.sample_query = sample_query        
         self.image_field = "Image"
+        self.site = None
+        self.path = "/wiki/"
+        self.scheme = "https"
     
 
     def pipeline(self):
@@ -30,6 +25,7 @@ class API():
             raw_results = self.site.ask(self.query)                            
             for answer in raw_results:
                results.append(answer['fulltext'])
+            return results
         except:
             return []
             
