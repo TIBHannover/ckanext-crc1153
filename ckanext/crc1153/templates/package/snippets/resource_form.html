@@ -16,39 +16,31 @@
         }}
     {% endif %}
 
-    {# {{ form.input('surface_preparation',
-        id='surface_preparation_id',
-        label=_('Surface Preparation'), 
-        value=data.surface_preparation,  
+    {{ form.input('demonstrator',
+        id='demonstrator_id',
+        label=_('Demonstrator'), 
+        value=data.demonstrator,  
         classes=['control-full'],
-        attrs={'class': 'custom-resource-metadata-input input-surface_preparation_'}
+        attrs={'class': 'custom-resource-metadata-input input-demonstrator_'}
         ) 
     }}
 
-    {{ form.input('atmosphere',
-        id='atmosphere_id',
-        label=_('Atmosphere'), 
-        value=data.atmosphere,  
+    {{ form.input('manufacturing_process',
+        id='manufacturing_process_id',
+        label=_('Manufacturing Process'), 
+        value=data.manufacturing_process,  
         classes=['control-full'],
-        attrs={'class': 'custom-resource-metadata-input input-atmosphere_'}
-        ) 
-    }}
-
-    {{ form.input('data_type',
-        id='data_type_id',
-        label=_('Data type (mechanical, chemical ...)'), 
-        value=data.data_type,  
-        classes=['control-full'],
-        attrs={'class': 'custom-resource-metadata-input input-data_type_'}
+        attrs={'class': 'custom-resource-metadata-input input-manufacturing_process_'}
         ) 
     }}
 
     {{ form.input('analysis_method',
         id='analysis_method_id',
-        label=_('Measurement/Analysis method'), 
-        value=data.analysis_method,  
+        label=_('Analysis Method'), 
+        value=data.data_type,  
         classes=['control-full'],
-        attrs={'class': 'custom-resource-metadata-input'}
+        attrs={'class': 'custom-resource-metadata-input input-analysis_method_'}
         ) 
-    }} #}
+    }}
+    
 {% endblock  %}
