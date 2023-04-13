@@ -3,14 +3,18 @@ $(document).ready(function(){
   /* 
     Material/Material combination autocomplete
   */
-  let materials = [
-          {value : "Aluminium" , data: "Aluminium"},
-          {value : "Kupfer" , data: "Kupfer"},
-          {value : "Stahl" , data: "Stahl"},
-          {value : "Titan" , data: "Titan"},
-          {value : "Titan_Pulver" , data: "Titan_Pulver"}
-        ];
-  $('.input-material_combination_').autocomplete({lookup:materials}); 
+    
+  $.ajax({
+      url: $('#get_material_list_endpoint').val(),
+      cache:false,   
+      dataType: 'json',      
+      type: "GET",
+      success: function(result){
+        $('.input-material_combination_').autocomplete({lookup:result}); 
+      }
+  });
+
+
 
     
   

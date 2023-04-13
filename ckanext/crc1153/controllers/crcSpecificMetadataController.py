@@ -5,6 +5,7 @@ from flask import render_template, request, redirect
 import ckan.lib.helpers as h
 from ckanext.crc1153.libs.commons import Commons
 from ckanext.crc1153.libs.media_wiki_api import MediaWikiAPI
+import json
 
 
 
@@ -63,5 +64,10 @@ class CrcSpecificMetadataController:
     def get_material_list():        
         query = "[[Category:SampleMaterial]]"
         api_call = MediaWikiAPI(query=query)
-        matarials = api_call.pipeline()
-        return matarials
+        matarials = []
+        for material_name in api_call.pipeline():
+            temp = {}
+            temp['value'] = material_name
+            temp['data'] = material_name
+            matarials.append(temp)
+        return json.dumps(matarials)
