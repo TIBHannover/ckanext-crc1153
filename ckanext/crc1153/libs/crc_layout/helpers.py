@@ -10,7 +10,7 @@ class Helper():
 
     @staticmethod
     def stages_count():
-        plugins_with_stages = ['resource_custom_metadata', 'organization_group', 'semantic_media_wiki', 'sample_link']
+        plugins_with_stages = ['crc1153_specific_metadata', 'organization_group', 'semantic_media_wiki', 'sample_link']
         enabled_plugins = toolkit.config.get("ckan.plugins")
         count = 0
         for pl in plugins_with_stages:
@@ -24,32 +24,35 @@ class Helper():
     def set_active_stage():
         stages= []                  
         if  'dataset/new' in  h.full_current_url():
-            stages = ['active', 'uncomplete','uncomplete', 'uncomplete', 'uncomplete']
+            stages = ['active', 'uncomplete','uncomplete', 'uncomplete', 'uncomplete', 'uncomplete']
         
         elif 'resource/new' in h.full_current_url():
-            stages = ['complete', 'active','uncomplete', 'uncomplete', 'uncomplete']
+            stages = ['complete', 'active','uncomplete', 'uncomplete', 'uncomplete', 'uncomplete']
                     
         elif 'upgrade_dataset/add_ownership_view' in h.full_current_url():
-            stages = ['complete', 'complete','active', 'uncomplete', 'uncomplete']
+            stages = ['complete', 'complete','active', 'uncomplete', 'uncomplete', 'uncomplete']
+        
+        elif 'resource_custom_metadata/add_metadata' in h.full_current_url():
+            stages = ['complete', 'complete','complete', 'active', 'uncomplete', 'uncomplete']
         
         elif 'smw/machines_view' in h.full_current_url():
-            stages = ['complete', 'complete','complete', 'active', 'uncomplete']
+            stages = ['complete', 'complete','complete', 'complete', 'active', 'uncomplete']
         
         elif '/smw/add_samples_view' in h.full_current_url():
-            stages = ['complete', 'complete','complete', 'complete', 'active']
+            stages = ['complete', 'complete','complete', 'complete', 'complete', 'active']
         
         return stages
 
 
     @staticmethod
     def set_stage_orders():
-        return ['second', 'third', 'forth']
+        return ['second', 'third', 'forth', 'fifth']
     
 
 
     @staticmethod
     def set_stage_titles():
-        return ['Add data', 'Ownership', 'Equipment(s)', 'Sample(s)'] 
+        return ['Add data', 'Ownership', 'Extra Metadata', 'Equipment(s)', 'Sample(s)'] 
 
 
 

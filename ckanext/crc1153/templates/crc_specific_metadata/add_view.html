@@ -21,7 +21,7 @@
       {% endif %}
   {% endblock %}
 
-  {% set action = h.url_for('resource_custom_metadata.save_metadata', _external=True) %}
+  {% set action = h.url_for('crc1153_specific_metadata.save_metadata', _external=True) %}
   
   <input type="hidden" name="resource_count" id="resorces_count" value={{pkg_dict['resources']|length}}>
   <form id="resource-custom-metadata-form" method="post" action='{{action}}' data-module="basic-form" enctype="multipart/form-data">
@@ -47,10 +47,10 @@
     <input type="hidden" id="reload_page" value="no">
 
     {# warning modal #}
-    {% snippet 'snippets/ckanext_resource_custom_metadata_warning_modal.html' %}
+    {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_warning_modal.html' %}
 
     {# Material Combination field #}
-    {% snippet 'snippets/ckanext_resource_custom_metadata_field.html', 
+    {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_field.html', 
         resources=pkg_dict['resources'],
         box_class='row material-comb-box',
         box_id='material_combination_box_',
@@ -66,7 +66,7 @@
     <hr>
 
     {# Surface Preparation field #}
-    {% snippet 'snippets/ckanext_resource_custom_metadata_field.html', 
+    {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_field.html', 
         resources=pkg_dict['resources'],
         box_class='row surface-preparation-box',
         box_id='surface_preparation_box_',
@@ -82,7 +82,7 @@
     <hr>
 
     {# Atmosphere field #}
-    {% snippet 'snippets/ckanext_resource_custom_metadata_field.html', 
+    {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_field.html', 
         resources=pkg_dict['resources'],
         box_class='row atmosphere-box',
         box_id='atmosphere_box_',
@@ -98,7 +98,7 @@
     <hr>
 
     {# Data Type field #}
-    {% snippet 'snippets/ckanext_resource_custom_metadata_field.html', 
+    {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_field.html', 
         resources=pkg_dict['resources'],
         box_class='row data-type-box',
         box_id='data_type_box_',
@@ -114,7 +114,7 @@
     <hr>
 
     {# Analysis Method field #}
-    {% snippet 'snippets/ckanext_resource_custom_metadata_field.html', 
+    {% snippet 'snippets/crc_specific_metadata/ckanext_resource_custom_metadata_field.html', 
         resources=pkg_dict['resources'],
         box_class='row analysis-method-box',
         box_id='analysis_method_box_',

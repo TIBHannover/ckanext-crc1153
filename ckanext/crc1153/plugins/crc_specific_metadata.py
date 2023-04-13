@@ -31,6 +31,12 @@ class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             u'add_metadata',
             CrcSpecificMetadataController.render_add_metadata_page,
             methods=['GET']
+            )
+        blueprint.add_url_rule(
+            u'/resource_custom_metadata/save_metadata',
+            u'save_metadata',
+            CrcSpecificMetadataController.save_metadata,
+            methods=['POST']
             )            
         return blueprint
     

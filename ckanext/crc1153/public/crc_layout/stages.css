@@ -4,7 +4,7 @@
     box-sizing: border-box;
     line-height: 27px;
     counter-increment: stage;
-    width: 20% !important;
+    width: 15% !important;
     background-color: #EDEDED;
     float: left;
     padding: 10px 20px;

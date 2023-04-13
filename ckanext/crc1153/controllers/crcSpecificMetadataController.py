@@ -11,12 +11,12 @@ class CrcSpecificMetadataController:
 
 
     def render_add_metadata_page(package_id):        
-        package = toolkit.get_action('package_show')({}, {'name_or_id': id})
+        package = toolkit.get_action('package_show')({}, {'name_or_id': package_id})
         stages = True    
-        resouces = package['resources']
-        custom_metadata_fields = {'material_combination': [], 'surface_preparation': [], 'atmosphere': [], 'data_type': [], 'analysis_method': []}
+        resources = package['resources']
+        custom_metadata_fields = {'material_combination': [], 'demonstrator': [], 'manufacturing_process': [], 'analysis_method': []}
         for meta in custom_metadata_fields.keys():
-            for res in resouces:
+            for res in resources:
                 if  meta in res.keys() and res[meta] and res[meta] != '':
                     custom_metadata_fields[meta].append(res[meta])
 
