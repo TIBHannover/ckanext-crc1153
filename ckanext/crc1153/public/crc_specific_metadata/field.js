@@ -1,5 +1,7 @@
 $(document).ready(function(){  
-  /**
+  $(".metadata_dropdown").select2();
+  
+    /**
      * Add new metadata input field for material combination
      * 
      */

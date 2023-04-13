@@ -30,7 +30,8 @@ class CrcSpecificMetadataController:
             pkg_dict=package, 
             custom_stage=stages,
             custom_metadata_fields=custom_metadata_fields,
-            material_list=CrcSpecificMetadataHelpers.get_material_list()
+            material_list=CrcSpecificMetadataHelpers.get_material_list(),
+            demonstrator_list=CrcSpecificMetadataHelpers.get_demonstrator_list()
         )
 
 
