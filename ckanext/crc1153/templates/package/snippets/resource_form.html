@@ -3,44 +3,55 @@
 {% block basic_fields %}
     {{ super() }}
     {% if h.is_plugin_enabled("crc1153_specific_metadata") %}
-        {% asset 'ckanext-crc1153-specific-metadata/add-css/' %}
+        {% asset 'ckanext-crc1153-specific-metadata/add-css' %}
         {% asset 'ckanext-crc1153-specific-metadata/field-js' %}
 
-        {{ form.input('material_combination',
-            id='material_combination_id',
-            label=_('Material or Material Combination'), 
-            value=data.material_combination,  
+        <label for="material_combination_id">{{_('Material or Material Combination')}}</label><br>
+        <select name="material_combination" id="material_combination_id" class="metadata_dropdown metadata_dropdown_in_edit" >
+            {% for rec in h.get_material_list_from_smw() %}
+                {% if rec.text == data.material_combination %}
+                    <option value={{rec.value}} selected="selected">
+                    {{rec.text}} 
+                    </option>
+                {% else %}
+                    <option value={{rec.value}}>
+                    {{rec.text}} 
+                    </option>
+                {% endif %}                
+            {% endfor %}
+        </select>            
+        <br>
+        <label for="demonstrator_id">{{_('Demonstrator')}}</label><br>
+        <select name="demonstrator" id="demonstrator_id" class="metadata_dropdown metadata_dropdown_in_edit" >
+            {% for rec in h.get_demonstrator_list_from_smw() %}
+                {% if rec.text == data.demonstrator %}
+                    <option value={{rec.value}}>
+                    {{rec.text}} 
+                    </option>
+                {% else %}  
+                    <option value={{rec.value}}>
+                    {{rec.text}} 
+                    </option>
+                {% endif %}                           
+            {% endfor %}
+        </select>     
+        {{ form.input('manufacturing_process',
+            id='manufacturing_process_id',
+            label=_('Manufacturing Process'), 
+            value=data.manufacturing_process,  
             classes=['control-full'],
-            attrs={'class': 'custom-resource-metadata-input input-material_combination_'}
-        )
+            attrs={'class': 'custom-resource-metadata-input input-manufacturing_process_'}
+            ) 
+        }}
+
+        {{ form.input('analysis_method',
+            id='analysis_method_id',
+            label=_('Analysis Method'), 
+            value=data.analysis_method,  
+            classes=['control-full'],
+            attrs={'class': 'custom-resource-metadata-input input-analysis_method_'}
+            ) 
         }}
     {% endif %}
-
-    {{ form.input('demonstrator',
-        id='demonstrator_id',
-        label=_('Demonstrator'), 
-        value=data.demonstrator,  
-        classes=['control-full'],
-        attrs={'class': 'custom-resource-metadata-input input-demonstrator_'}
-        ) 
-    }}
-
-    {{ form.input('manufacturing_process',
-        id='manufacturing_process_id',
-        label=_('Manufacturing Process'), 
-        value=data.manufacturing_process,  
-        classes=['control-full'],
-        attrs={'class': 'custom-resource-metadata-input input-manufacturing_process_'}
-        ) 
-    }}
-
-    {{ form.input('analysis_method',
-        id='analysis_method_id',
-        label=_('Analysis Method'), 
-        value=data.analysis_method,  
-        classes=['control-full'],
-        attrs={'class': 'custom-resource-metadata-input input-analysis_method_'}
-        ) 
-    }}
     
 {% endblock  %}

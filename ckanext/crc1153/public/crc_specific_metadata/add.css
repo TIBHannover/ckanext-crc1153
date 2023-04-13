@@ -30,4 +30,8 @@ hr {
 .metadata_dropdown{
   width: 80%;  
 }
+
+.metadata_dropdown_in_edit{
+  margin-bottom: 20px !important;
+}
   

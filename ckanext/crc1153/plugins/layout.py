@@ -3,6 +3,7 @@ import ckan.plugins.toolkit as toolkit
 from ckanext.crc1153.libs.crc_layout.helpers import Helper
 from ckanext.crc1153.libs.commons import Commons
 from flask import Blueprint
+from ckanext.crc1153.libs.crc_specific_metadata.helpers import CrcSpecificMetadataHelpers
 
 
 class CrcLayoutPlugin(plugins.SingletonPlugin):
@@ -43,5 +44,7 @@ class CrcLayoutPlugin(plugins.SingletonPlugin):
             'set_stage_titles': Helper.set_stage_titles,
             'query_prepration': Helper.search_query_prepration,
             'search_type_selection_is_needed': Helper.search_type_selection_is_needed,
-            'get_dataset_export_url': Helper.get_dataset_export_url
+            'get_dataset_export_url': Helper.get_dataset_export_url,
+            'get_material_list_from_smw': CrcSpecificMetadataHelpers.get_material_list,
+            'get_demonstrator_list_from_smw': CrcSpecificMetadataHelpers.get_demonstrator_list
         }
