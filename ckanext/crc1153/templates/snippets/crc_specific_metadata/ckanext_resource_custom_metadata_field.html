@@ -6,7 +6,7 @@
             {% if input_type == "select" %}                        
                 <select name={{input_name ~ loop.index }} id={{input_name ~ loop.index}} class="metadata_dropdown" >
                     {% for data in select_data_source %}           
-                        <option value={{data.value}}>
+                        <option value="{{data.value}}">
                         {{data.text}} 
                         </option>
                     {% endfor %}
