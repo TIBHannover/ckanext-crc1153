@@ -1,7 +1,7 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from flask import Blueprint
-from ckanext.system_stats.controller import BaseController
+from ckanext.crc1153.controllers.systemStatsController import BaseController
 
 
 class SystemStatsPlugin(plugins.SingletonPlugin):
