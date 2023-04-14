@@ -21,7 +21,7 @@ class CrcSpecificMetadataHelpers:
     def get_material_list():        
         query = "[[Category:SampleMaterial]]"
         api_call = MediaWikiAPI(query=query, query_type="material")
-        matarials = [{"value": "0", "text": "None selected"}]
+        matarials = [{"value": "N/A", "text": "None selected"}]
         for material_name in api_call.pipeline():
             temp = {}
             temp['value'] = material_name
@@ -34,7 +34,7 @@ class CrcSpecificMetadataHelpers:
     def get_demonstrator_list():        
         query = "[[Category:Samples]] [[RepresentsDemonstrator::+]]|?RepresentsDemonstrator"
         api_call = MediaWikiAPI(query=query, query_type="demontrator")
-        demonstrators = [{"value": "0", "text": "None selected"}]
+        demonstrators = [{"value": "N/A", "text": "None selected"}]
         api_result = set(api_call.pipeline())
         for demons_name in api_result:            
             temp = {}
