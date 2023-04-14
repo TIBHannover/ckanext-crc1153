@@ -1,27 +1,20 @@
 # encoding: utf-8
 
-def check_plugin_enabled(plugin_name):
-    plugins = toolkit.config.get("ckan.plugins")
-    if plugin_name in plugins:
-        return True
-    return False
-
-
-
 from flask import render_template
+from ckanext.crc1153.libs.commons import Commons
 import ckan.plugins.toolkit as toolkit
 from sqlalchemy.sql.expression import false
 import ckan.lib.helpers as h
 import ckan.model as model
 import ckan.logic as logic
 from ckan.model import Package, Group, User
-if check_plugin_enabled("semantic_media_wiki"):
+if Commons.check_plugin_enabled("semantic_media_wiki"):
     from ckanext.semantic_media_wiki.libs.media_wiki import Helper as machineHelper
 
-if check_plugin_enabled("sample_link"):
+if Commons.check_plugin_enabled("sample_link"):
     from ckanext.semantic_media_wiki.libs.sample_link import SampleLinkHelper
 
-if check_plugin_enabled("dataset_reference"):
+if Commons.check_plugin_enabled("dataset_reference"):
     from ckanext.dataset_reference.models.package_reference_link import PackageReferenceLink
  
 
@@ -97,7 +90,7 @@ class BaseController():
 
     @staticmethod
     def get_linked_machines_count():
-        if not check_plugin_enabled("semantic_media_wiki"):
+        if not Commons.check_plugin_enabled("semantic_media_wiki"):
             return [0, 0]
         count = 0
         dataset_count = 0
@@ -120,7 +113,7 @@ class BaseController():
 
     @staticmethod
     def get_linked_samples_count():
-        if not check_plugin_enabled("sample_link"):
+        if not Commons.check_plugin_enabled("sample_link"):
             return [0,0]
         count = 0
         dataset_count = 0
@@ -143,7 +136,7 @@ class BaseController():
 
     @staticmethod
     def get_linked_publications_count():
-        if not check_plugin_enabled("dataset_reference"):
+        if not Commons.check_plugin_enabled("dataset_reference"):
             return 0
         count = 0
         all_datasets = Package.search_by_name('')
@@ -212,7 +205,7 @@ class BaseController():
 
     @staticmethod
     def get_dataset_with_publication():
-        if not check_plugin_enabled("dataset_reference"):
+        if not Commons.check_plugin_enabled("dataset_reference"):
             return []
         result_datasets = []
         all_datasets = Package.search_by_name('')
@@ -228,7 +221,7 @@ class BaseController():
 
     @staticmethod
     def get_dataset_with_machines():
-        if not check_plugin_enabled("semantic_media_wiki"):
+        if not Commons.check_plugin_enabled("semantic_media_wiki"):
             return []
         result_datasets = []
         dataset_found = False
@@ -250,7 +243,7 @@ class BaseController():
 
     @staticmethod
     def get_dataset_with_samples():
-        if not check_plugin_enabled("sample_link"):
+        if not Commons.check_plugin_enabled("sample_link"):
             return []
         result_datasets = []
         dataset_found = False
