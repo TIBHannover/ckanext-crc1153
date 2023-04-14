@@ -19,19 +19,16 @@ class MediaWikiAPI():
     
 
     def pipeline(self):
-        results = []        
-        self.login(self.host, self.path, self.scheme)
-        try:            
-            self.login(self.host, self.path, self.scheme)
+        results = []                
+        try:
+            self.login(self.host, self.path, self.scheme)            
             raw_results = self.site.ask(self.query)                            
             for answer in raw_results:
                results.append(self.process_answer(self.query_type, answer))
             return results
         except:
             return []
-            
-        return []
-
+                    
 
     def login(self, host: str, path: str, scheme: str):
         site_ = Site(host=host, path=path, scheme=scheme)
