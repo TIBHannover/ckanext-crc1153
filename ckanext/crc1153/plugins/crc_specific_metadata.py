@@ -12,6 +12,7 @@ class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IBlueprint)
     plugins.implements(plugins.IDatasetForm, inherit=False)
+    plugins.implements(plugins.IFacets)
 
     # IConfigurer
 
@@ -51,16 +52,39 @@ class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def create_package_schema(self):
         schema = super(CrcSpecificMetadata, self).create_package_schema()
+        schema = CrcSpecificMetadataHelpers.updateDatasetSchema(schema)
         schema = CrcSpecificMetadataHelpers.updateResourceSchema(schema)
         return schema
 
     def update_package_schema(self):
         schema = super(CrcSpecificMetadata, self).update_package_schema()
+        schema = CrcSpecificMetadataHelpers.updateDatasetSchema(schema)
         schema = CrcSpecificMetadataHelpers.updateResourceSchema(schema)
         return schema
 
     def show_package_schema(self):
         schema = super(CrcSpecificMetadata, self).show_package_schema()
+        schema = CrcSpecificMetadataHelpers.updateDatasetSchema(schema)
         schema = CrcSpecificMetadataHelpers.updateResourceSchema(schema)
         return schema
+    
+
+
+    # IFacet
+
+    def dataset_facets(self, facets_dict, package_type):
+        new_metadata_name = 'sfb_dataset_type'
+        new_metadata_title = plugins.toolkit._('Dataset Type')              
+        return CrcSpecificMetadataHelpers.update_dataset_facet(facets_dict, new_metadata_name, new_metadata_title)
+
+
+    def  organization_facets(self, facets_dict, group_type, package_type):
+        new_metadata_name = 'sfb_dataset_type'
+        new_metadata_title = plugins.toolkit._('Dataset Type')        
+        return CrcSpecificMetadataHelpers.update_dataset_facet(facets_dict, new_metadata_name, new_metadata_title)
+
+    def  group_facets(self, facets_dict, group_type, package_type):
+        new_metadata_name = 'sfb_dataset_type'
+        new_metadata_title = plugins.toolkit._('Dataset Type')
+        return CrcSpecificMetadataHelpers.update_dataset_facet(facets_dict, new_metadata_name, new_metadata_title)
     

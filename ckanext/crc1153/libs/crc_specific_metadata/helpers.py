@@ -15,6 +15,23 @@ class CrcSpecificMetadataHelpers:
         schema['resources'].update({'analysis_method' : [toolkit.get_validator('ignore_missing')] })
         schema['resources'].update({'is_automated_processed' : [toolkit.get_validator('ignore_missing')] })
         return schema
+    
+
+    @staticmethod
+    def updateDatasetSchema(schema):
+        schema.update({
+            'sfb_dataset_type': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+        })
+        return schema
+
+
+
+    @staticmethod
+    def update_dataset_facet(current_facet_dict, new_metadata_name, title):
+        new_facet = { new_metadata_name: title}
+        new_facet.update(current_facet_dict)
+        return new_facet
+
 
 
     @staticmethod
