@@ -52,7 +52,7 @@ class BaseController():
         result['datasets_with_annotaion'] = BaseController.get_datasets_with_extra_annotaion()
         result['group_with_datasets_with_publication'] = BaseController.get_dataset_with_publication_per_group()
 
-        return render_template('stats_page.html', result=result)
+        return render_template('system_stats/stats_page.html', result=result)
     
 
 
