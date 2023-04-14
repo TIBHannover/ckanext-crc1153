@@ -1,0 +1,7 @@
+{% ckan_extends %}
+
+{% block content_primary_nav %}
+    {{ super() }}
+    {{ h.build_nav_icon('system_stats.stats_page', _('Statistics'), icon='fa fa-line-chart') }}
+
+{% endblock content_primary_nav %}
