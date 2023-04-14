@@ -5,7 +5,8 @@ $(window).on('pageshow', function(){
 });
 
 $(document).ready(function(){
-
+    $("select.sfb_dataset_type_dropdown").select2();
+    
     var skipWarning = false;
     // ser resource count (for the data resources that already have the metadata values in them)
     let all_modals_save_btn = $('.res_custom_metadat_modal_save');

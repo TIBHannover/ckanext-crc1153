@@ -1,7 +1,7 @@
 add-css:
   output: ckanext-crc1153-specific-metadata/%(version)s_my.css
   contents:
-    - add.css
+    - index.css
 
 modal-css:
   output: ckanext-crc1153-specific-metadata/%(version)s_my.css
@@ -18,7 +18,7 @@ add-js:
       - vendor/jquery
       - vendor/jquery.ui.core
   contents:
-    - add.js
+    - index.js
 
 field-js:  
   output: ckanext-crc1153-specific-metadata/%(version)s_my.js
