@@ -8,10 +8,10 @@ class CrcSpecificMetadataHelpers:
 
 
     @staticmethod
-    def updateResourceSchema(schema):        
+    def updateResourceSchema(schema):
         schema['resources'].update({'material_combination' : [toolkit.get_validator('ignore_missing')] })
         schema['resources'].update({'demonstrator' : [toolkit.get_validator('ignore_missing')] })
-        schema['resources'].update({'manufacturing_process' : [toolkit.get_validator('ignore_missing')] })        
+        schema['resources'].update({'manufacturing_process' : [toolkit.get_validator('ignore_missing')] })
         schema['resources'].update({'analysis_method' : [toolkit.get_validator('ignore_missing')] })
         schema['resources'].update({'is_automated_processed' : [toolkit.get_validator('ignore_missing')] })
         return schema
@@ -19,11 +19,12 @@ class CrcSpecificMetadataHelpers:
 
     @staticmethod
     def updateDatasetSchema(schema):
+        print(schema['extras'])
         schema.update({
-            'sfb_dataset_type': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            'sfb_dataset_type': [toolkit.get_validator('ignore_missing'), 
+                                 toolkit.get_converter('convert_to_extras')]
         })
         return schema
-
 
 
     @staticmethod
@@ -45,6 +46,7 @@ class CrcSpecificMetadataHelpers:
             temp['text'] = material_name
             matarials.append(temp)
         return matarials
+
 
 
     @staticmethod

@@ -64,7 +64,9 @@ class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def show_package_schema(self):
         schema = super(CrcSpecificMetadata, self).show_package_schema()
-        schema = CrcSpecificMetadataHelpers.updateDatasetSchema(schema)
+        schema.update({
+            'sfb_dataset_type': [toolkit.get_converter('convert_from_extras'), toolkit.get_validator('ignore_missing')]
+        })
         schema = CrcSpecificMetadataHelpers.updateResourceSchema(schema)
         return schema
     
