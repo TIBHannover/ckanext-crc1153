@@ -1,0 +1,11 @@
+{% ckan_extends %}
+
+{% block heading %}
+    {{ super() }}
+    {% asset 'ckanext-crc1153-specific-metadata/add-css' %}
+    {% if pkg.sfb_dataset_type and pkg.sfb_dataset_type != '0' %}
+        <div class="sfb_dataset_type_tag">
+            {{pkg.sfb_dataset_type}}
+        </div>
+  {% endif %}
+{% endblock %}
