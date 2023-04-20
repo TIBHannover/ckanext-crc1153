@@ -26,7 +26,7 @@ Compatibility with core CKAN versions:
 - **crc1153_layout**
 - **crc1153_specific_metadata**
 - **crc1153_system_stats**
-
+- **crc1153_dcat_ap**
 
 
 ## Installation
@@ -58,7 +58,7 @@ To install ckanext-crc1153:
 
 ## Config settings
 
-To use the plugins that needs Semantic Media Wiki APIs, the credentials need to be in a text file with this format:
+1. To use the plugins that needs Semantic Media Wiki APIs, the credentials need to be in a text file with this format:
 
      username=YYY
      password=XXXX 
@@ -67,7 +67,9 @@ The credentials file path need to be set in the **ckan.ini** file with the name:
 
      ckanext.mediaWiki_credentials_path = /YOUR_Credential_PATH/
 
+2. To use the plugins that needs Apache Jena Endpoint (such as crc1153_dcat_ap), you need to set the endpoint in **ckan.ini**
 
+          ckanext.apacheJena.endpoint = APACHE_JENA_ENDPOINT/update
 
 
 ## Tests
