@@ -24,7 +24,7 @@ class Crc1153DcatProfileController:
         except logic.NotAuthorized:
             toolkit.abort(403, 'Need to be system administrator to administer')
 
-        return render_template('admin_panel.html')
+        return render_template('crc_profile/admin_panel.html')
     
 
 

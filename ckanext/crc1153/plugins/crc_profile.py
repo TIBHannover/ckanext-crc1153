@@ -20,14 +20,14 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
     def get_blueprint(self):
         blueprint = Blueprint(self.name, self.__module__) 
         blueprint.add_url_rule(
-            u'/dcatapcrc/load_admin_view',
+            u'/dcatapcrc1153/load_admin_view',
             u'load_admin_view',
             Crc1153DcatProfileController.load_admin_view,
             methods=['GET']
             )   
         
         blueprint.add_url_rule(
-            u'/dcatapcrc/export_catalog',
+            u'/dcatapcrc1153/export_catalog',
             u'export_catalog',
             Crc1153DcatProfileController.export_catalog,
             methods=['GET']
