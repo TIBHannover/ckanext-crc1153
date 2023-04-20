@@ -9,7 +9,7 @@ from ckanext.dcat.processors import RDFSerializer
 from xml.etree import ElementTree
 from flask import send_file
 import io
-from ckanext.dcatapcrc.libs.helpers import Helper
+from ckanext.crc1153.libs.crc_profile.helpers import Crc1153DcatProfileHelper as Helper
 
 
 class Crc1153DcatProfileController:

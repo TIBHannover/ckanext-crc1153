@@ -1,8 +1,8 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from flask import Blueprint
-from ckanext.dcatapcrc.controller import BaseController
-from ckanext.dcatapcrc.libs.helpers import Helper
+from ckanext.crc1153.controllers.crcDcatProfileController import Crc1153DcatProfileController
+from ckanext.crc1153.libs.crc_profile.helpers import Crc1153DcatProfileHelper as Helper
 
 
 class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
@@ -24,14 +24,14 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
         blueprint.add_url_rule(
             u'/dcatapcrc/load_admin_view',
             u'load_admin_view',
-            BaseController.load_admin_view,
+            Crc1153DcatProfileController.load_admin_view,
             methods=['GET']
             )   
         
         blueprint.add_url_rule(
             u'/dcatapcrc/export_catalog',
             u'export_catalog',
-            BaseController.export_catalog,
+            Crc1153DcatProfileController.export_catalog,
             methods=['GET']
             )   
         
