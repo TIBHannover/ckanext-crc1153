@@ -9,9 +9,6 @@ from SPARQLWrapper import SPARQLWrapper, POST
 from ckanext.crc1153.libs.commons import Commons
 
 
-SPARQL_ENDPOINT = "http://sparql11.test.service.tib.eu/fuseki/TestCKAN/update"
- 
-
 if Commons.check_plugin_enabled("dataset_reference"):
     from ckanext.dataset_reference.models.package_reference_link import PackageReferenceLink
 if Commons.check_plugin_enabled("semantic_media_wiki"):
@@ -22,6 +19,11 @@ if Commons.check_plugin_enabled("sample_link"):
 
 
 class Crc1153DcatProfileHelper():
+
+
+    def get_apache_jena_endpoint():
+        return toolkit.config.get('ckanext.apacheJena.endpoint')  
+    
 
     def get_linked_publication(dataset_name):
         '''
@@ -68,7 +70,7 @@ class Crc1153DcatProfileHelper():
         for s,p,o in graph:
             s,p,o = Helper.clean_triples(s,p,o)
             query = 'INSERT DATA{ ' + s + ' ' + p + ' ' + o + ' .  }'            
-            sparql = SPARQLWrapper(SPARQL_ENDPOINT)                        
+            sparql = SPARQLWrapper(Crc1153DcatProfileHelper.get_apache_jena_endpoint())                        
             sparql.setMethod(POST)
             sparql.setQuery(query)
             results = sparql.query() 
@@ -84,13 +86,13 @@ class Crc1153DcatProfileHelper():
             if "_:N" in o:
                 # blank node as object
                 query = 'DELETE{ ' + s + ' ' + p + ' ?bnode . ?bnode ?p ?o .} WHERE{ '  + s + ' ' + p + ' ?bnode . ?bnode ?p ?o . FILTER (isBlank(?bnode))}'
-                sparql = SPARQLWrapper(SPARQL_ENDPOINT)                        
+                sparql = SPARQLWrapper(Crc1153DcatProfileHelper.get_apache_jena_endpoint())                        
                 sparql.setMethod(POST)
                 sparql.setQuery(query)
                 results = sparql.query()
             elif "_:N" not in s and "_:N" not in p:
                 query = 'DELETE WHERE{ ' + s + ' ' + p + ' ?anything .  }'
-                sparql = SPARQLWrapper(SPARQL_ENDPOINT)                        
+                sparql = SPARQLWrapper(Crc1153DcatProfileHelper.get_apache_jena_endpoint())                        
                 sparql.setMethod(POST)
                 sparql.setQuery(query)
                 results = sparql.query()                        
