@@ -87,6 +87,7 @@ setup(
         crc1153_specific_metadata=ckanext.crc1153.plugins.crc_specific_metadata:CrcSpecificMetadata
         crc1153_layout=ckanext.crc1153.plugins.layout:CrcLayoutPlugin
         crc1153_system_stats=ckanext.crc1153.plugins.system_stats:SystemStatsPlugin
+        crc1153_dcat_profile=ckanext.crc1153.plugins.crc_profile:Dcatapcrc1153Plugin
 
         [babel.extractors]
         ckan = ckan.lib.extract:extract_ckan
