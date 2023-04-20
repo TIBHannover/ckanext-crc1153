@@ -6,26 +6,17 @@ from sqlalchemy.sql.expression import false
 from SPARQLWrapper import SPARQLWrapper, POST
 from ckanext.dcat.processors import RDFSerializer
 from SPARQLWrapper import SPARQLWrapper, POST
+from ckanext.crc1153.libs.commons import Commons
 
 
 SPARQL_ENDPOINT = "http://sparql11.test.service.tib.eu/fuseki/TestCKAN/update"
  
-def check_plugin_enabled(plugin_name):
-        '''
-            Check a plugin is enabled in the target ckan instance or not.
-        '''
-        
-        plugins = toolkit.config.get("ckan.plugins")
-        if plugin_name in plugins:
-            return True
-        return False
 
-
-if check_plugin_enabled("dataset_reference"):
+if Commons.check_plugin_enabled("dataset_reference"):
     from ckanext.dataset_reference.models.package_reference_link import PackageReferenceLink
-if check_plugin_enabled("semantic_media_wiki"):
+if Commons.check_plugin_enabled("semantic_media_wiki"):
     from ckanext.semantic_media_wiki.libs.media_wiki import Helper as mediaWikiHelper
-if check_plugin_enabled("sample_link"):
+if Commons.check_plugin_enabled("sample_link"):
     from ckanext.semantic_media_wiki.libs.sample_link import SampleLinkHelper
 
 
@@ -42,7 +33,7 @@ class Crc1153DcatProfileHelper():
                 - The publication citation
         '''
 
-        if not check_plugin_enabled("dataset_reference"):
+        if not Commons.check_plugin_enabled("dataset_reference"):
             return None
         
         linked_pubs = []
@@ -57,7 +48,7 @@ class Crc1153DcatProfileHelper():
 
     @staticmethod
     def get_linked_machines(resource_id):
-        if not check_plugin_enabled("semantic_media_wiki"):
+        if not Commons.check_plugin_enabled("semantic_media_wiki"):
             return {}
         # a dict of machines [machine_name:machine_link]
         return mediaWikiHelper.get_machine_link(resource_id)        
@@ -65,7 +56,7 @@ class Crc1153DcatProfileHelper():
 
     @staticmethod
     def get_linked_samples(resource_id):
-        if not check_plugin_enabled("sample_link"):
+        if not Commons.check_plugin_enabled("sample_link"):
             return {}
         
         # a dict of samples [sample_name:sample_link]
