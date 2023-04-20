@@ -65,7 +65,7 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
             package = toolkit.get_action('package_show')({}, {'name_or_id': pkg_dict['id']})            
             graph = Helper.get_dataset_graph(package)
             res_d = Helper.delete_from_sparql(graph)
-            res_i = Helper.insert_to_sparql(graph)
+            res_i = Helper.insert_to_sparql(graph)         
         except:
             return pkg_dict
             # raise
