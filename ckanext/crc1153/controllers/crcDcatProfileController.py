@@ -12,7 +12,7 @@ import io
 from ckanext.dcatapcrc.libs.helpers import Helper
 
 
-class BaseController:
+class Crc1153DcatProfileController:
 
 
     def load_admin_view():
