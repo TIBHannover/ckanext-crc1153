@@ -44,6 +44,12 @@ class CRC1153DCATAPProfile(RDFProfile):
             for citation in linked_publications:
                 schema_org_citation = URIRef("https://schema.org/citation")
                 g.add((dataset_ref, schema_org_citation, Literal(citation)))
+        
+
+         ## add Dataset Type ##
+        if dataset_dict.get('sfb_dataset_type') and dataset_dict.get('sfb_dataset_type') != '0':
+            dc_type = URIRef("http://purl.org/dc/terms/Type") 
+            g.add((dataset_ref, dc_type, Literal(dataset_dict.get('sfb_dataset_type'))))
 
         
         for resource_dict in dataset_dict.get('resources', []):            
@@ -72,7 +78,7 @@ class CRC1153DCATAPProfile(RDFProfile):
             
             ## add manufacturing_process ##
             if resource_dict.get("manufacturing_process"):
-                envo_manufacturing_process = URIRef("http://purl.obolibrary.org/obo/envo/ENVO:01000993") 
+                envo_manufacturing_process = URIRef("http://purl.obolibrary.org/obo/envo/ManufacturingProcess") 
                 g.add((distribution, envo_manufacturing_process, Literal(resource_dict.get("manufacturing_process"))))
             
             
