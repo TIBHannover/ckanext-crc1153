@@ -68,22 +68,13 @@ class CRC1153DCATAPProfile(RDFProfile):
             if resource_dict.get("material_combination"):
                 emmo_material = URIRef("http://emmo.info/emmo/Material") 
                 g.add((distribution, emmo_material, Literal(resource_dict.get("material_combination"))))
-                        
-            ## add surface preparation ##
-            if resource_dict.get("surface_preparation"):                
-                tema_sfp = URIRef("https://www.tib.eu/tema/surfacePreparation") 
-                g.add((distribution, tema_sfp, Literal(resource_dict.get("surface_preparation"))))
+                                 
             
-            ## add atmosphere ##
-            if resource_dict.get("atmosphere"):
-                envo_atmosphere = URIRef("http://purl.obolibrary.org/obo/envo/atmosphere") 
-                g.add((distribution, envo_atmosphere, Literal(resource_dict.get("atmosphere"))))
-                
-
-            ## add data_type ##
-            if resource_dict.get("data_type"):
-                ncit_dataType = URIRef("http://purl.obolibrary.org/obo/ncit/ScientificDataType") 
-                g.add((distribution, ncit_dataType, Literal(resource_dict.get("data_type"))))
+            ## add manufacturing_process ##
+            if resource_dict.get("manufacturing_process"):
+                envo_manufacturing_process = URIRef("http://purl.obolibrary.org/obo/envo/ENVO:01000993") 
+                g.add((distribution, envo_manufacturing_process, Literal(resource_dict.get("manufacturing_process"))))
+            
             
 
             ## add analysis method ##
