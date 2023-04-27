@@ -1,2 +1,5 @@
 mwclient==0.10.1
 SPARQLWrapper
+pandas
+clevercsv
+scikit-learn
