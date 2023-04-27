@@ -2,8 +2,8 @@
 
 
 import ckan.plugins.toolkit as toolkit
-from ckanext.sfb_search_extension.libs.commons import CommonHelper
-if CommonHelper.check_plugin_enabled("sample_link"):
+from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
+if SearchHelper.check_plugin_enabled("sample_link"):
     from ckanext.semantic_media_wiki.libs.sample_link import SampleLinkHelper
 
 
@@ -26,7 +26,7 @@ class SampleSearchHelper():
         '''
 
         for package in datasets:
-            if package.state != 'active' or not CommonHelper.check_access_package(package.id):
+            if package.state != 'active' or not SearchHelper.check_access_package(package.id):
                 continue
             
             # only consider dataset in an organization. If search triggers from an organization page.
@@ -59,11 +59,11 @@ class SampleSearchHelper():
                 for name in samples:
                     if search_phrase in name.lower():
                         if not detected:
-                            search_results['search_facets'] = CommonHelper.update_search_facet(search_results['search_facets'], dataset, 'sfb_dataset_type')
-                            search_results['search_facets'] = CommonHelper.update_search_facet(search_results['search_facets'], dataset, 'organization')
-                            search_results['search_facets'] = CommonHelper.update_search_facet(search_results['search_facets'], dataset, 'tags')
-                            search_results['search_facets'] = CommonHelper.update_search_facet(search_results['search_facets'], dataset, 'groups')
-                            search_results = CommonHelper.add_search_result(dataset, search_filters, search_results)                            
+                            search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'sfb_dataset_type')
+                            search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'organization')
+                            search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'tags')
+                            search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'groups')
+                            search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)                            
                         detected = True
                         search_results['detected_resources_ids'].append(res['id'])
                         break
