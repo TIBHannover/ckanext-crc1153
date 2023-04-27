@@ -4,6 +4,7 @@
 import ckan.plugins.toolkit as toolkit
 from ckan.model import Package
 from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
+from ckanext.crc1153.libs.crc_search.facet_helpers import FacetHelper
 
 
 class ExtraMetadataSearchHelper():
@@ -55,7 +56,7 @@ class ExtraMetadataSearchHelper():
             for res in dataset['resources']:               
                 if res.get(target_metadata_name) and search_phrase.lower() in res.get(target_metadata_name).lower():                                         
                         if not detected:
-                            search_results['search_facets'] = SearchHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                            
+                            search_results['search_facets'] = FacetHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                            
                             search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)                            
                         detected = True
                         search_results['detected_resources_ids'].append(res['id'])

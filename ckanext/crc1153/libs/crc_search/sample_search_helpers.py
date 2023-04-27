@@ -3,6 +3,7 @@
 
 import ckan.plugins.toolkit as toolkit
 from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
+from ckanext.crc1153.libs.crc_search.facet_helpers import FacetHelper
 from ckan.model import Package
 if SearchHelper.check_plugin_enabled("sample_link"):
     from ckanext.semantic_media_wiki.libs.sample_link import SampleLinkHelper
@@ -58,7 +59,7 @@ class SampleSearchHelper():
                 for name in samples:
                     if search_phrase in name.lower():
                         if not detected:
-                            search_results['search_facets'] = SearchHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)
+                            search_results['search_facets'] = FacetHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)
                             search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)                            
                         detected = True
                         if res['id'] not in search_results['detected_resources_ids']:

@@ -3,6 +3,7 @@
 from this import d
 import ckan.plugins.toolkit as toolkit
 from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
+from ckanext.crc1153.libs.crc_search.facet_helpers import FacetHelper
 from sqlalchemy.sql.expression import false
 import re
 from ckan.model import Package
@@ -64,7 +65,7 @@ class PublicationSearchHelper():
                     continue                                
                 elif PublicationSearchHelper.similarity_calc(search_phrase.lower(), pub.citation.lower()) >= 0.7:
                     if not detected:
-                        search_results['search_facets'] = SearchHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                        
+                        search_results['search_facets'] = FacetHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                        
                         search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)
                     detected = True 
                 elif search_phrase.lower() in pub.citation.lower():
@@ -72,7 +73,7 @@ class PublicationSearchHelper():
                     for tok in tokens:
                         if tok.lower() in pub.citation.lower():
                             if not detected:
-                                search_results['search_facets'] = SearchHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                                
+                                search_results['search_facets'] = FacetHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                                
                                 search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)
                             detected = True 
                             break

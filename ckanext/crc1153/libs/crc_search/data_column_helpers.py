@@ -2,6 +2,7 @@
 
 import ckan.plugins.toolkit as toolkit
 from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
+from ckanext.crc1153.libs.crc_search.facet_helpers import FacetHelper
 from ckanext.crc1153.models.data_resource_column_index import DataResourceColumnIndex
 
 
@@ -58,7 +59,7 @@ class ColumnSearchHelper():
 
                 
                 if dataset['id'] not in already_included_datasets:            
-                    search_results['search_facets'] = SearchHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                    
+                    search_results['search_facets'] = FacetHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                    
                     search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)
                     already_included_datasets.append(dataset['id'])
                 
