@@ -3,6 +3,7 @@
 import ckan.plugins.toolkit as toolkit
 from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
 from ckanext.crc1153.libs.crc_search.facet_helpers import FacetHelper
+from ckanext.crc1153.libs.auth_helpers import AuthHelpers
 from ckanext.crc1153.libs.commons import Commons
 from sqlalchemy.sql.expression import false
 from ckan.model import Package
@@ -28,7 +29,7 @@ class PublicationSearchHelper():
     def publication_search(datasets, search_phrase, search_filters, search_results):
         pub_model = PackageReferenceLink({})
         for package in datasets:
-            if package.state != 'active' or not SearchHelper.check_access_package(package.id):
+            if package.state != 'active' or not AuthHelpers.check_access_show_package(package.id):
                 continue
             
             #  If search triggers from an organization page.

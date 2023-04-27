@@ -4,6 +4,7 @@
 import ckan.plugins.toolkit as toolkit
 from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
 from ckanext.crc1153.libs.crc_search.facet_helpers import FacetHelper
+from ckanext.crc1153.libs.auth_helpers import AuthHelpers
 from ckanext.crc1153.libs.commons import Commons
 from ckan.model import Package
 if Commons.check_plugin_enabled("sample_link"):
@@ -27,7 +28,7 @@ class SampleSearchHelper():
     @staticmethod
     def sample_search(datasets, search_phrase, search_filters, search_results):
         for package in datasets:
-            if package.state != 'active' or not SearchHelper.check_access_package(package.id):
+            if package.state != 'active' or not AuthHelpers.check_access_show_package(package.id):
                 continue
             
             # If search triggers from an organization page.
