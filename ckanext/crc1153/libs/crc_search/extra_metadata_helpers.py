@@ -11,7 +11,8 @@ class ExtraMetadataSearchHelper():
 
     @staticmethod
     def run(search_query, search_params, target_metadata_name, search_results):
-        search_phrase = search_query.split('material_combination:')[1].strip().lower()
+        query_splitor = target_metadata_name + ":"
+        search_phrase = search_query.split(query_splitor)[1].strip().lower()
         search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
         datasets = Package.search_by_name('')
         search_results = ExtraMetadataSearchHelper.crc_metadata_search(datasets, target_metadata_name, search_phrase, search_filters, search_results)
@@ -21,7 +22,7 @@ class ExtraMetadataSearchHelper():
 
 
     @staticmethod
-    def crc_metadata_search(datasets, target_metadata_name, search_phrase, search_filters, search_results):
+    def crc_metadata_search(datasets, target_metadata_name, search_phrase, search_filters, search_results):        
         for package in datasets:
             if package.state != 'active' or not SearchHelper.check_access_package(package.id):
                 continue
@@ -51,7 +52,7 @@ class ExtraMetadataSearchHelper():
             dataset = toolkit.get_action('package_show')({}, {'name_or_id': package.name})
             detected = False
 
-            for res in dataset['resources']:
+            for res in dataset['resources']:               
                 if res.get(target_metadata_name) and search_phrase.lower() in res.get(target_metadata_name).lower():                                         
                         if not detected:
                             search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'sfb_dataset_type')

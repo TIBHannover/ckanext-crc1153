@@ -59,7 +59,7 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
                 target_metadata = 'material_combination'
                 search_results = ExtraMetadataSearchHelper.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
             
-            elif len(search_query.split('demonstrator:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):
+            elif len(search_query.split('demonstrator:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):                
                 target_metadata = 'demonstrator'
                 search_results = ExtraMetadataSearchHelper.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
             
@@ -77,7 +77,8 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
             return search_results
         
         except:
-            return search_results
+            # return search_results
+            raise
   
 
     def after_delete(self, context, pkg_dict):
