@@ -6,7 +6,7 @@ from ckanext.crc1153.libs.crc_search.sample_search_helpers import SampleSearchHe
 from ckanext.crc1153.libs.crc_search.publication_search_helpers import PublicationSearchHelper
 from ckanext.crc1153.libs.crc_search.extra_metadata_helpers import ExtraMetadataSearchHelper
 from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
-# from ckanext.sfb_search_extension.models.data_resource_column_index import DataResourceColumnIndex
+from ckanext.crc1153.models.data_resource_column_index import DataResourceColumnIndex
 from flask import Blueprint
 
 
@@ -141,12 +141,12 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
 
     def after_delete(self, context, pkg_dict):
         dataset = toolkit.get_action('package_show')({}, {'name_or_id': pkg_dict['id']})
-        # for resource in dataset['resources']:
-        #     column_indexer = DataResourceColumnIndex()
-        #     records = column_indexer.get_by_resource(id=resource['id'])
-        #     for rec in records:
-        #         rec.delete()
-        #         rec.commit()
+        for resource in dataset['resources']:
+            column_indexer = DataResourceColumnIndex()
+            records = column_indexer.get_by_resource(id=resource['id'])
+            for rec in records:
+                rec.delete()
+                rec.commit()
 
         return pkg_dict
 
@@ -194,8 +194,8 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
                 columns_names = ""
                 for col in dataframe_columns:
                     columns_names += (col + ",")
-                # column_indexer = DataResourceColumnIndex(resource_id=resource['id'], columns_names=columns_names)
-                # column_indexer.save()
+                column_indexer = DataResourceColumnIndex(resource_id=resource['id'], columns_names=columns_names)
+                column_indexer.save()
             
             elif SearchHelper.is_xlsx(resource):
                 xls_dataframes_columns = SearchHelper.get_xlsx_columns(resource['id'])
@@ -204,8 +204,8 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
                     for col in columns_object[0]:  
                         columns_names += (col + ",")
                 
-                # column_indexer = DataResourceColumnIndex(resource_id=resource['id'], columns_names=columns_names)
-                # column_indexer.save()
+                column_indexer = DataResourceColumnIndex(resource_id=resource['id'], columns_names=columns_names)
+                column_indexer.save()
   
         return resource
 
@@ -214,11 +214,11 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
     def before_delete(self, context, resource, resources):
         if not SearchHelper.is_csv(resource) and not SearchHelper.is_xlsx(resource):
             return resource
-        # column_indexer = DataResourceColumnIndex()
-        # records = column_indexer.get_by_resource(id=resource['id'])
-        # for rec in records:
-        #     rec.delete()
-        #     rec.commit()
+        column_indexer = DataResourceColumnIndex()
+        records = column_indexer.get_by_resource(id=resource['id'])
+        for rec in records:
+            rec.delete()
+            rec.commit()
         return resources    
 
     

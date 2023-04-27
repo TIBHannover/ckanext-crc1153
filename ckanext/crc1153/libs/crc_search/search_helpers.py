@@ -6,7 +6,7 @@ import pandas as pd
 from ckan.model import Package
 import ckan.model as model
 import ckan.logic as logic
-# from ckanext.sfb_search_extension.models.data_resource_column_index import DataResourceColumnIndex
+from ckanext.crc1153.models.data_resource_column_index import DataResourceColumnIndex
 
 
 RESOURCE_DIR = toolkit.config['ckan.storage_path'] + '/resources/'
@@ -27,11 +27,11 @@ class SearchHelper():
             toolkit.abort(404, 'Not found')
 
         # empty the index table
-        # indexTableModel = DataResourceColumnIndex()
-        # records = indexTableModel.get_all()
-        # for rec in records:
-        #     rec.delete()
-        #     rec.commit()
+        indexTableModel = DataResourceColumnIndex()
+        records = indexTableModel.get_all()
+        for rec in records:
+            rec.delete()
+            rec.commit()
 
 
         all_datasets = Package.search_by_name('')
@@ -72,20 +72,20 @@ class SearchHelper():
             Index a data resource columns name in the database.
         '''
         
-        # check_existence_indexer = DataResourceColumnIndex()
-        # if not check_existence_indexer.get_by_resource(id=resource_id):
-        #     column_indexer = DataResourceColumnIndex(resource_id=resource_id, columns_names=index_value)
-        #     column_indexer.save()
-        #     return True
+        check_existence_indexer = DataResourceColumnIndex()
+        if not check_existence_indexer.get_by_resource(id=resource_id):
+            column_indexer = DataResourceColumnIndex(resource_id=resource_id, columns_names=index_value)
+            column_indexer.save()
+            return True
         
         # first delete all old records and then add
-        # records = check_existence_indexer.get_by_resource(id=resource_id)
-        # for rec in records:
-        #     rec.delete()
-        #     rec.commit()
+        records = check_existence_indexer.get_by_resource(id=resource_id)
+        for rec in records:
+            rec.delete()
+            rec.commit()
         
-        # column_indexer = DataResourceColumnIndex(resource_id=resource_id, columns_names=index_value)
-        # column_indexer.save()
+        column_indexer = DataResourceColumnIndex(resource_id=resource_id, columns_names=index_value)
+        column_indexer.save()
         return True
 
 
