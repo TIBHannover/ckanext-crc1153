@@ -514,3 +514,18 @@ class SearchHelper():
 
         except toolkit.NotAuthorized:
             return False
+
+
+
+    def empty_ckan_search_result(search_results_dict, search_params):
+        search_results_dict['results'] = []
+        search_results_dict['search_facets']['organization']['items'] = []
+        search_results_dict['search_facets']['tags']['items'] = []
+        search_results_dict['search_facets']['groups']['items'] = []
+        if(search_results_dict['search_facets'].get('sfb_dataset_type')):
+            search_results_dict['search_facets']['sfb_dataset_type']['items'] = []
+        search_results_dict['count'] = 0
+        search_results_dict['detected_resources_ids'] = []
+        search_filters = search_params['fq'][0]
+        return [search_results_dict, search_filters]
+
