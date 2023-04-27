@@ -44,7 +44,7 @@ class ExtraMetadataSearchHelper():
                 if res.get(target_metadata_name) and search_phrase.lower() in res.get(target_metadata_name).lower():                                         
                         if not detected:
                             search_results['search_facets'] = FacetHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                            
-                            search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)                            
+                            search_results = SearchHelper.add_dataset_to_search_result(dataset, search_filters, search_results)                            
                         detected = True
                         search_results['detected_resources_ids'].append(res['id'])
                         break

@@ -19,6 +19,16 @@ class AuthHelpers:
             return False
     
 
+    @staticmethod
+    def check_access_show_resource(resource_id):
+        context = {'user': toolkit.g.user, 'auth_user_obj': toolkit.g.userobj}        
+        try:
+            toolkit.check_access('resource_show', context, {'id':resource_id})            
+            return True
+        except toolkit.NotAuthorized:
+            return False
+
+
 
     @staticmethod
     def get_mediaWiki_creds():

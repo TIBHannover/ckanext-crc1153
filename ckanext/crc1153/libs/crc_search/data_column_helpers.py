@@ -28,7 +28,7 @@ class ColumnSearchHelper():
             resource_id = record.resource_id
             resource_index_value = record.columns_names                    
             if search_phrase.lower() in resource_index_value.lower():
-                if SearchHelper.skip_data(resource_id):
+                if SearchHelper.skip_if_not_authorized(resource_id):
                     continue
                 
                 resource = toolkit.get_action('resource_show')({}, {'id': resource_id})
@@ -44,7 +44,7 @@ class ColumnSearchHelper():
                 
                 if dataset['id'] not in already_included_datasets:            
                     search_results['search_facets'] = FacetHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                    
-                    search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)
+                    search_results = SearchHelper.add_dataset_to_search_result(dataset, search_filters, search_results)
                     already_included_datasets.append(dataset['id'])
                 
                 search_results['detected_resources_ids'].append(resource_id)

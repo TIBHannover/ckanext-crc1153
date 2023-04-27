@@ -52,7 +52,7 @@ class PublicationSearchHelper():
                 elif PublicationSearchHelper.similarity_calc(search_phrase.lower(), pub.citation.lower()) >= 0.7:
                     if not detected:
                         search_results['search_facets'] = FacetHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                        
-                        search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)
+                        search_results = SearchHelper.add_dataset_to_search_result(dataset, search_filters, search_results)
                     detected = True 
                 elif search_phrase.lower() in pub.citation.lower():
                     tokens = search_phrase.split(' ')
@@ -60,7 +60,7 @@ class PublicationSearchHelper():
                         if tok.lower() in pub.citation.lower():
                             if not detected:
                                 search_results['search_facets'] = FacetHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                                
-                                search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)
+                                search_results = SearchHelper.add_dataset_to_search_result(dataset, search_filters, search_results)
                             detected = True 
                             break
 

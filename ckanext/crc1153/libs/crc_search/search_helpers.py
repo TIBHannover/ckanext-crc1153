@@ -7,6 +7,7 @@ from ckan.model import Package
 import ckan.model as model
 import ckan.logic as logic
 from ckanext.crc1153.models.data_resource_column_index import DataResourceColumnIndex
+from ckanext.crc1153.libs.auth_helpers import AuthHelpers
 
 
 RESOURCE_DIR = toolkit.config['ckan.storage_path'] + '/resources/'
@@ -90,26 +91,15 @@ class SearchHelper():
 
 
     @staticmethod
-    def skip_data(resource_id):
-        '''
-            Skip the resource owner dataset that should not be on the search result.
-        '''
-
-        context = {'user': toolkit.g.user, 'auth_user_obj': toolkit.g.userobj}
-        resource = ""
-        dataset = "" 
-        try:
-            toolkit.check_access('resource_show', context, {'id':resource_id})
-            resource = toolkit.get_action('resource_show')({}, {'id': resource_id})
-        except toolkit.NotAuthorized:
+    def skip_if_not_authorized(resource_id):     
+        if not AuthHelpers.check_access_show_resource(resource_id):
             return True
 
-        try:
-            toolkit.check_access('package_show', context, {'name_or_id': resource['package_id']})
-            dataset = toolkit.get_action('package_show')({}, {'name_or_id': resource['package_id']})
-        except toolkit.NotAuthorized:
-            return True
-
+        resource = toolkit.get_action('resource_show')({}, {'id': resource_id})
+        if not AuthHelpers.check_access_show_package(resource['package_id']):
+            return True            
+        
+        dataset = toolkit.get_action('package_show')({}, {'id': resource['package_id']})
         if dataset['state'] != "active":
             return True
         
@@ -117,16 +107,7 @@ class SearchHelper():
 
 
     @staticmethod
-    def add_search_result(dataset, search_filters_string, search_results):
-        '''
-            Add a dataset to search result based on the search filter.
-
-            Args:
-                - dataset: target dataset
-                - search_filters_string: ckan facet filter string. exist in search_params['fq]
-                - search_result: search result array
-        '''
-
+    def add_dataset_to_search_result(dataset, search_filters_string, search_results):
         org_filter = SearchHelper.apply_filters_organization(dataset, search_filters_string)
         tag_filter = SearchHelper.apply_filters_tags(dataset, search_filters_string)
         group_filter = SearchHelper.apply_filters_groups(dataset, search_filters_string)
