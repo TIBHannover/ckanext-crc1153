@@ -2,7 +2,7 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.model import Package
 from ckanext.crc1153.libs.crc_search.data_column_helpers import ColumnSearchHelper
-# from ckanext.sfb_search_extension.libs.sample_search_helpers import SampleSearchHelper
+from ckanext.crc1153.libs.crc_search.sample_search_helpers import SampleSearchHelper
 # from ckanext.sfb_search_extension.libs.publication_search import PublicationSearchHelper
 # from ckanext.sfb_search_extension.libs.resource_metadata_search_helper import ResourceMetadataSearchHelper
 # from ckanext.sfb_search_extension.libs.commons import CommonHelper
