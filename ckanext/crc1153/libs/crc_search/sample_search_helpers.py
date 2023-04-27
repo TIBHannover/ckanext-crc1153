@@ -58,10 +58,7 @@ class SampleSearchHelper():
                 for name in samples:
                     if search_phrase in name.lower():
                         if not detected:
-                            search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'sfb_dataset_type')
-                            search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'organization')
-                            search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'tags')
-                            search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'groups')
+                            search_results['search_facets'] = SearchHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)
                             search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)                            
                         detected = True
                         if res['id'] not in search_results['detected_resources_ids']:

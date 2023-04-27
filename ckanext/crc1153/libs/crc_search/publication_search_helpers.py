@@ -64,10 +64,7 @@ class PublicationSearchHelper():
                     continue                                
                 elif PublicationSearchHelper.similarity_calc(search_phrase.lower(), pub.citation.lower()) >= 0.7:
                     if not detected:
-                        search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'sfb_dataset_type')
-                        search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'organization')
-                        search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'tags')
-                        search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'groups')
+                        search_results['search_facets'] = SearchHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                        
                         search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)
                     detected = True 
                 elif search_phrase.lower() in pub.citation.lower():
@@ -75,10 +72,7 @@ class PublicationSearchHelper():
                     for tok in tokens:
                         if tok.lower() in pub.citation.lower():
                             if not detected:
-                                search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'sfb_dataset_type')
-                                search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'organization')
-                                search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'tags')
-                                search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'groups')
+                                search_results['search_facets'] = SearchHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                                
                                 search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)
                             detected = True 
                             break

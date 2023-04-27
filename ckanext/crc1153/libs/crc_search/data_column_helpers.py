@@ -58,10 +58,7 @@ class ColumnSearchHelper():
 
                 
                 if dataset['id'] not in already_included_datasets:            
-                    search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'sfb_dataset_type')
-                    search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'organization')
-                    search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'tags')
-                    search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'groups')
+                    search_results['search_facets'] = SearchHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                    
                     search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)
                     already_included_datasets.append(dataset['id'])
                 
