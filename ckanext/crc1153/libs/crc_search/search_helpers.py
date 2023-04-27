@@ -243,34 +243,6 @@ class SearchHelper():
 
 
     @staticmethod
-    def apply_filters_tags(dataset, search_filters_string):
-        '''
-            Apply tags facet filters for a dataset.
-
-            Args:
-                - dataset: target dataset
-                - search_filters_string: ckan facet filter string. exist in search_params['fq']
-
-            Return:
-                - Boolean
-        '''
-
-        if 'tags:' not in search_filters_string:
-            return True
-        
-        for tag in dataset['tags']:
-            tag_query = 'tags:"' + tag['name'] + '"'
-            if tag_query in search_filters_string:
-                search_filters_string = search_filters_string.replace(tag_query, ' ')
-        
-        if 'tags:' in search_filters_string:
-            return False
-
-        return True 
-    
-
-
-    @staticmethod
     def apply_filters_groups(dataset, search_filters_string):
         '''
             Apply groups facet filters for a dataset.
@@ -433,7 +405,7 @@ class SearchHelper():
             return False
 
 
-
+    @staticmethod
     def empty_ckan_search_result(search_results_dict, search_params):
         search_results_dict['results'] = []
         search_results_dict['search_facets']['organization']['items'] = []
@@ -445,4 +417,35 @@ class SearchHelper():
         search_results_dict['detected_resources_ids'] = []
         search_filters = search_params['fq'][0]
         return [search_results_dict, search_filters]
+    
 
+
+    @staticmethod
+    def dataset_is_not_in_selected_organization(search_filters, dataset_owner_org_id):
+        if 'owner_org' in search_filters:
+            owner_org_id = search_filters.split('owner_org:')[1]
+            if ' ' in owner_org_id:
+                owner_org_id = owner_org_id.split(' ')[0]                    
+            if '"' + dataset_owner_org_id + '"' != owner_org_id:
+                return True
+        return False
+
+
+    @staticmethod
+    def dataset_is_not_in_selected_group(search_filters, dataset_groups):
+        if 'groups' in search_filters:                          
+            target_group_title = search_filters.split('groups:')[1]                                      
+            if ' ' in target_group_title:
+                target_group_title = target_group_title.split(' ')[0]
+            is_part_of_group = False
+            for g in dataset_groups:
+                group_name = ""
+                if type(g) == dict:
+                    group_name = g['name']
+                else:
+                    group_name = g.name                     
+                if '"' + group_name + '"' == target_group_title:
+                    is_part_of_group = True
+                    break
+            return not is_part_of_group
+        return False

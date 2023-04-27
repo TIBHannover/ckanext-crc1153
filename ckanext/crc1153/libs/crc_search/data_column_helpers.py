@@ -34,29 +34,13 @@ class ColumnSearchHelper():
                 resource = toolkit.get_action('resource_show')({}, {'id': resource_id})
                 dataset = toolkit.get_action('package_show')({}, {'name_or_id': resource['package_id']})
                 
-                # only consider dataset in an organization. If search triggers from an organization page.
-                if 'owner_org' in search_filters:
-                    owner_org_id = search_filters.split('owner_org:')[1]
-                    if ' ' in owner_org_id:
-                        owner_org_id = owner_org_id.split(' ')[0]                    
-                    if '"' + dataset['owner_org'] + '"' != owner_org_id:
-                        continue
+                # If search triggers from an organization page.
+                if SearchHelper.dataset_is_not_in_selected_organization(search_filters, dataset['owner_org']):
+                    continue
                 
-
-                # only consider dataset in a group. If search triggers from a group page.
-                if 'groups' in search_filters:
-                    this_dataset_groups = dataset['groups']                    
-                    target_group_title = search_filters.split('groups:')[1]                                      
-                    if ' ' in target_group_title:
-                        target_group_title = target_group_title.split(' ')[0]
-                    is_part_of_group = False
-                    for g in this_dataset_groups:
-                        if '"' + g['name'] + '"' == target_group_title:
-                            is_part_of_group = True
-                            break
-                    if not is_part_of_group:
-                        continue
-
+                # If search triggers from a group page.
+                if SearchHelper.dataset_is_not_in_selected_group(search_filters, dataset['groups']):
+                    continue
                 
                 if dataset['id'] not in already_included_datasets:            
                     search_results['search_facets'] = FacetHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                    

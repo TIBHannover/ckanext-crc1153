@@ -32,27 +32,13 @@ class PublicationSearchHelper():
             if package.state != 'active' or not SearchHelper.check_access_package(package.id):
                 continue
             
-            # only consider dataset in an organization. If search triggers from an organization page.
-            if 'owner_org' in search_filters:
-                owner_org_id = search_filters.split('owner_org:')[1]
-                if ' ' in owner_org_id:
-                    owner_org_id = owner_org_id.split(' ')[0]                    
-                if '"' + package.owner_org + '"' != owner_org_id:
-                    continue
+            #  If search triggers from an organization page.
+            if SearchHelper.dataset_is_not_in_selected_organization(search_filters, package.owner_org):
+                continue            
             
-            # only consider dataset in a group. If search triggers from a group page.
-            if 'groups' in search_filters:
-                this_dataset_groups = package.get_groups()
-                target_group_title = search_filters.split('groups:')[1]
-                if ' ' in target_group_title:
-                    target_group_title = target_group_title.split(' ')[0]
-                is_part_of_group = False
-                for g in this_dataset_groups:
-                    if '"' + g.name + '"' == target_group_title:
-                        is_part_of_group = True
-                        break
-                if not is_part_of_group:
-                    continue
+            # If search triggers from a group page.
+            if SearchHelper.dataset_is_not_in_selected_group(search_filters, package.get_groups()):
+                continue
             
             dataset = toolkit.get_action('package_show')({}, {'name_or_id': package.name})
             detected = False            
