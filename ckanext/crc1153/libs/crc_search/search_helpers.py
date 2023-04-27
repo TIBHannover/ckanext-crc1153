@@ -10,7 +10,6 @@ from ckanext.crc1153.models.data_resource_column_index import DataResourceColumn
 
 
 RESOURCE_DIR = toolkit.config['ckan.storage_path'] + '/resources/'
-STANDARD_HEADERS = ['X-Kategorie', 'Y-Kategorie', 'Datentyp', 'Werkstoff-1', 'Werkstoff-2', 'Atmosphaere', 'Vorbehandlung']
 
 class SearchHelper():
 
@@ -115,23 +114,6 @@ class SearchHelper():
             return True
         
         return False
-
-
-
-    @staticmethod
-    def is_possible_to_automate(resource_df):
-        '''
-            If data file is annotated or not.
-        '''
-
-        df_columns = resource_df.columns
-        if len(df_columns) != len(STANDARD_HEADERS):
-            return False
-        for header in df_columns:
-            if header.strip() not in STANDARD_HEADERS:
-                return False
-        return True
-    
 
 
     @staticmethod
@@ -314,11 +296,7 @@ class SearchHelper():
         try:
             df = clevercsv.read_dataframe(file_path)
             df = df.fillna(0)        
-            if not SearchHelper.is_possible_to_automate(df):
-                return [list(df.columns), False]
-            else:
-                # skip the first row to get the actual columns names
-                return [list(df.iloc[0]), True]
+            return [list(df.columns), False]
         except:
             return[[], False]
     
@@ -355,16 +333,6 @@ class SearchHelper():
 
     @staticmethod
     def get_xlsx_columns(resource_id):
-        '''
-            Read a xlsx file as pandas dataframe and return the columns name.
-
-            Args:
-                - resource_id: the data resource id in ckan
-            
-            Returns:
-                - a list of columns names
-        '''
-
         result_df = {}
         file_path = RESOURCE_DIR + resource_id[0:3] + '/' + resource_id[3:6] + '/' + resource_id[6:]
         try:
@@ -377,10 +345,7 @@ class SearchHelper():
             if len(temp_df) > 0:
                 headers = temp_df.iloc[0]
                 final_data_df  = pd.DataFrame(temp_df.values[1:], columns=headers)
-                if not SearchHelper.is_possible_to_automate(final_data_df):
-                    result_df[sheet] = [final_data_df, False]
-                else:
-                    result_df[sheet] = [list(final_data_df.iloc[0]), True]
+                result_df[sheet] = [final_data_df, False]
 
         return result_df
 
