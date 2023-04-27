@@ -21,18 +21,15 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
     # IConfigurer
 
     def update_config(self, config_):
-        toolkit.add_template_directory(config_, 'templates')
-        toolkit.add_public_directory(config_, 'public')
-        toolkit.add_resource('public/statics', 'ckanext-sfb-search')
-    
-
+        toolkit.add_template_directory(config_, '../templates')
+        
 
     def get_blueprint(self):
         blueprint = Blueprint(self.name, self.__module__)        
         blueprint.add_url_rule(
             u'/sfb_search/indexer',
             u'indexer',
-            CommonHelper.indexer,
+            SearchHelper.indexer,
             methods=['GET']
             )   
         
@@ -110,7 +107,7 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
             
             return search_results
         
-        elif search_mode.lower() == 'sample' and CommonHelper.check_plugin_enabled("sample_link"):            
+        elif search_mode.lower() == 'sample' and SearchHelper.check_plugin_enabled("sample_link"):            
             search_results = SampleSearchHelper.run(datasets=all_datasets, 
                 search_filters=search_filters, 
                 search_phrase=search_phrase, 
@@ -119,7 +116,7 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
             return search_results
         
         elif search_mode.lower() == 'resource_metadata':
-            search_results = ResourceMetadataSearchHelper.run(
+            search_results = ExtraMetadataSearchHelper.run(
                 datasets=all_datasets,
                 target_metadata_name=target_metadata,
                 search_filters=search_filters, 
@@ -144,12 +141,12 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
 
     def after_delete(self, context, pkg_dict):
         dataset = toolkit.get_action('package_show')({}, {'name_or_id': pkg_dict['id']})
-        for resource in dataset['resources']:
-            column_indexer = DataResourceColumnIndex()
-            records = column_indexer.get_by_resource(id=resource['id'])
-            for rec in records:
-                rec.delete()
-                rec.commit()
+        # for resource in dataset['resources']:
+        #     column_indexer = DataResourceColumnIndex()
+        #     records = column_indexer.get_by_resource(id=resource['id'])
+        #     for rec in records:
+        #         rec.delete()
+        #         rec.commit()
 
         return pkg_dict
 
@@ -192,36 +189,36 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
             return resource
 
         if resource['url_type'] == 'upload':
-            if CommonHelper.is_csv(resource):
-                dataframe_columns, fit_for_autotag = CommonHelper.get_csv_columns(resource['id'])
+            if SearchHelper.is_csv(resource):
+                dataframe_columns, fit_for_autotag = SearchHelper.get_csv_columns(resource['id'])
                 columns_names = ""
                 for col in dataframe_columns:
                     columns_names += (col + ",")
-                column_indexer = DataResourceColumnIndex(resource_id=resource['id'], columns_names=columns_names)
-                column_indexer.save()
+                # column_indexer = DataResourceColumnIndex(resource_id=resource['id'], columns_names=columns_names)
+                # column_indexer.save()
             
-            elif CommonHelper.is_xlsx(resource):
-                xls_dataframes_columns = CommonHelper.get_xlsx_columns(resource['id'])
+            elif SearchHelper.is_xlsx(resource):
+                xls_dataframes_columns = SearchHelper.get_xlsx_columns(resource['id'])
                 columns_names = ""
                 for sheet, columns_object in xls_dataframes_columns.items():
                     for col in columns_object[0]:  
                         columns_names += (col + ",")
                 
-                column_indexer = DataResourceColumnIndex(resource_id=resource['id'], columns_names=columns_names)
-                column_indexer.save()
+                # column_indexer = DataResourceColumnIndex(resource_id=resource['id'], columns_names=columns_names)
+                # column_indexer.save()
   
         return resource
 
 
 
     def before_delete(self, context, resource, resources):
-        if not CommonHelper.is_csv(resource) and not CommonHelper.is_xlsx(resource):
+        if not SearchHelper.is_csv(resource) and not SearchHelper.is_xlsx(resource):
             return resource
-        column_indexer = DataResourceColumnIndex()
-        records = column_indexer.get_by_resource(id=resource['id'])
-        for rec in records:
-            rec.delete()
-            rec.commit()
+        # column_indexer = DataResourceColumnIndex()
+        # records = column_indexer.get_by_resource(id=resource['id'])
+        # for rec in records:
+        #     rec.delete()
+        #     rec.commit()
         return resources    
 
     
