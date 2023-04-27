@@ -5,6 +5,7 @@ import ckan.plugins.toolkit as toolkit
 from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
 from sqlalchemy.sql.expression import false
 import re
+from ckan.model import Package
 from sklearn.feature_extraction.text import TfidfVectorizer
 if SearchHelper.check_plugin_enabled("dataset_reference"):
     from ckanext.dataset_reference.models.package_reference_link import PackageReferenceLink
@@ -14,20 +15,17 @@ if SearchHelper.check_plugin_enabled("dataset_reference"):
 class PublicationSearchHelper():
 
     @staticmethod
-    def run(datasets, search_phrase, search_filters, search_results):
-        '''
-            Run the search for dataset that are link to a publication based on the search term.
+    def run(search_query, search_params, search_results):
+        search_phrase = search_query.split('publication:')[1].strip().lower()
+        search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
+        datasets = Package.search_by_name('')
+        search_results = PublicationSearchHelper.publication_search(datasets, search_phrase, search_filters, search_results)        
+        return search_results
 
-            Args:
-                - datasets: the target datasets to search in. 
-                - search_phrase: the search input
-                - search_filters: the ckan search facets dictionary (search_params['fq'][0])
-                - search_results: the ckan search results dictionary.
-            
-            Return:
-                - search_results dictionary
-        '''
 
+
+    @staticmethod
+    def publication_search(datasets, search_phrase, search_filters, search_results):
         pub_model = PackageReferenceLink({})
         for package in datasets:
             if package.state != 'active' or not SearchHelper.check_access_package(package.id):
@@ -84,24 +82,14 @@ class PublicationSearchHelper():
                                 search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)
                             detected = True 
                             break
-        
+
+
         return search_results
 
-    
+
 
     @staticmethod
     def similarity_calc(query, doc):
-        '''
-            Calculate the similarity between the search input and the target doc.
-
-            Args:
-                - query: Input search query
-                - doc: the target doc
-            
-            Return:
-                - The similartiy score
-        '''
-
         corpus = [query, doc]
         vectorModel = TfidfVectorizer(min_df=1)
         tfidf = vectorModel.fit_transform(corpus)

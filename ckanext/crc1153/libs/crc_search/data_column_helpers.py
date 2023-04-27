@@ -9,19 +9,17 @@ from ckanext.crc1153.models.data_resource_column_index import DataResourceColumn
 class ColumnSearchHelper():
 
     @staticmethod
-    def run(search_phrase, search_filters, search_results):
-        '''
-            Run the search for column in data resources.
+    def run(search_query, search_params, search_results):
+        search_phrase = search_query.split('column:')[1].strip().lower()
+        search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
+        search_results = ColumnSearchHelper.column_search(search_phrase, search_filters, search_results)        
+        toolkit.g.detected_resources_ids = search_results['detected_resources_ids']
+        return search_results
+    
 
-            Args:
-                - search_phrase: the search input
-                - search_filters: the ckan search facets dictionary (search_params['fq'][0])
-                - search_results: the ckan search results dictionary.
-            
-            Return:
-                - search_results dictionary
-        '''
 
+    @staticmethod
+    def column_search(search_phrase, search_filters, search_results):
         column_indexer_model = DataResourceColumnIndex()
         all_indexes = column_indexer_model.get_all()
         already_included_datasets = []  
@@ -68,8 +66,7 @@ class ColumnSearchHelper():
                     already_included_datasets.append(dataset['id'])
                 
                 search_results['detected_resources_ids'].append(resource_id)
-        
-        toolkit.g.detected_resources_ids = search_results['detected_resources_ids']
+
         return search_results
     
     

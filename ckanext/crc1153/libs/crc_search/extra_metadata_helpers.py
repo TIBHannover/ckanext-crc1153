@@ -2,6 +2,7 @@
 
 
 import ckan.plugins.toolkit as toolkit
+from ckan.model import Package
 from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
 
 
@@ -9,21 +10,18 @@ class ExtraMetadataSearchHelper():
 
 
     @staticmethod
-    def run(datasets, target_metadata_name, search_phrase, search_filters, search_results):
-        '''
-            Run the search for sfb metadata for data resources
+    def run(search_query, search_params, target_metadata_name, search_results):
+        search_phrase = search_query.split('material_combination:')[1].strip().lower()
+        search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
+        datasets = Package.search_by_name('')
+        search_results = ExtraMetadataSearchHelper.crc_metadata_search(datasets, target_metadata_name, search_phrase, search_filters, search_results)
+        toolkit.g.detected_resources_ids = search_results['detected_resources_ids']       
+        return search_results
+    
 
-            Args:
-                - datasets: the target datasets to search in. 
-                - target_metadata_name: The target SFB metadata to search in
-                - search_phrase: the search input
-                - search_filters: the ckan search facets dictionary (search_params['fq'][0])
-                - search_results: the ckan search results dictionary.
-            
-            Return:
-                - search_results dictionary
-        '''
 
+    @staticmethod
+    def crc_metadata_search(datasets, target_metadata_name, search_phrase, search_filters, search_results):
         for package in datasets:
             if package.state != 'active' or not SearchHelper.check_access_package(package.id):
                 continue
@@ -64,6 +62,5 @@ class ExtraMetadataSearchHelper():
                         detected = True
                         search_results['detected_resources_ids'].append(res['id'])
                         break
-        
-        toolkit.g.detected_resources_ids = search_results['detected_resources_ids']       
+
         return search_results

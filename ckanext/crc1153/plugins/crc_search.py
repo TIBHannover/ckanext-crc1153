@@ -41,55 +41,44 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
     # IPackageController
 
     def after_search(self, search_results, search_params):        
-        target_metadata = ""
-        search_types = ['column', 'publication', 'sample', 'material_combination', 'demonstrator', 'manufacturing_process', 'analysis_method']
-        search_query = search_params['q'].lower()
-        all_datasets = Package.search_by_name('')
-        if search_query.split(':')[0].lower() not in search_types:
-            return search_results
-        
-        elif len(search_query.split('column:')) > 1:            
-            search_phrase = search_params['q'].lower().split('column:')[1].strip().lower()
-            search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
-            search_results = ColumnSearchHelper.run(search_filters=search_filters, search_phrase=search_phrase, search_results=search_results)            
-        
-        elif len(search_query.split('publication:')) > 1 and Commons.check_plugin_enabled("dataset_reference"):            
-            search_phrase = search_params['q'].lower().split('publication:')[1].strip().lower()
-            search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
-            search_results = PublicationSearchHelper.run(datasets=all_datasets, search_filters=search_filters, search_phrase=search_phrase, search_results=search_results)
-                    
-        elif len(search_query.split('sample:')) > 1 and Commons.check_plugin_enabled("sample_link"):
-            search_phrase = search_params['q'].lower().split('sample:')[1].strip().lower()
-            search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
-            search_results = SampleSearchHelper.run(datasets=all_datasets, search_filters=search_filters, search_phrase=search_phrase, search_results=search_results)
-        
-        elif len(search_query.split('material_combination:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):
-            search_phrase = search_params['q'].lower().split('material_combination:')[1].strip().lower()
-            search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
-            target_metadata = 'material_combination'            
-            search_results = ExtraMetadataSearchHelper.run(datasets=all_datasets, target_metadata_name=target_metadata, search_filters=search_filters, search_phrase=search_phrase, search_results=search_results)
-        
-        elif len(search_query.split('demonstrator:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):
-            search_phrase = search_params['q'].lower().split('demonstrator:')[1].strip().lower()
-            search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
-            target_metadata = 'demonstrator'
-            search_results = ExtraMetadataSearchHelper.run(datasets=all_datasets, target_metadata_name=target_metadata, search_filters=search_filters, search_phrase=search_phrase, search_results=search_results)            
-        
-        elif len(search_query.split('manufacturing_process:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):
-            search_phrase = search_params['q'].lower().split('manufacturing_process:')[1].strip().lower()
-            search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
-            target_metadata = 'manufacturing_process'
-            search_results = ExtraMetadataSearchHelper.run(datasets=all_datasets, target_metadata_name=target_metadata, search_filters=search_filters, search_phrase=search_phrase, search_results=search_results)            
+        try:            
+            search_types = ['column', 'publication', 'sample', 'material_combination', 'demonstrator', 'manufacturing_process', 'analysis_method']
+            search_query = search_params['q'].lower()            
+            if search_query.split(':')[0].lower() not in search_types:
+                return search_results
+            
+            elif len(search_query.split('column:')) > 1:                
+                search_results = ColumnSearchHelper.run(search_query=search_query, search_params=search_params, search_results=search_results)
+            
+            elif len(search_query.split('publication:')) > 1 and Commons.check_plugin_enabled("dataset_reference"):                            
+                search_results = PublicationSearchHelper.run(search_query=search_query, search_params=search_params, search_results=search_results)
                         
-        elif len(search_query.split('analysis_method:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):
-            search_phrase = search_params['q'].lower().split('analysis_method:')[1].strip().lower()
-            search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
-            target_metadata = 'analysis_method'
-            search_results = ExtraMetadataSearchHelper.run(datasets=all_datasets, target_metadata_name=target_metadata, search_filters=search_filters, search_phrase=search_phrase, search_results=search_results)            
+            elif len(search_query.split('sample:')) > 1 and Commons.check_plugin_enabled("sample_link"):                
+                search_results = SampleSearchHelper.run(search_query=search_query, search_params=search_params, search_results=search_results)
+            
+            elif len(search_query.split('material_combination:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):                
+                target_metadata = 'material_combination'            
+                search_results = ExtraMetadataSearchHelper.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
+            
+            elif len(search_query.split('demonstrator:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):                
+                target_metadata = 'demonstrator'
+                search_results = ExtraMetadataSearchHelper.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
+            
+            elif len(search_query.split('manufacturing_process:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):                
+                target_metadata = 'manufacturing_process'
+                search_results = ExtraMetadataSearchHelper.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
+                            
+            elif len(search_query.split('analysis_method:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):                
+                target_metadata = 'analysis_method'
+                search_results = ExtraMetadataSearchHelper.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
 
-        else:            
+            else:            
+                return search_results
+
             return search_results
-
+        
+        except:
+            return search_results
   
 
     def after_delete(self, context, pkg_dict):
