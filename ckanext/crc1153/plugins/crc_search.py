@@ -21,7 +21,7 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
     # IConfigurer
 
     def update_config(self, config_):
-        toolkit.add_template_directory(config_, '../templates')
+        toolkit.add_template_directory(config_, 'templates/crc_search')
         
 
     def get_blueprint(self):
@@ -31,8 +31,7 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
             u'indexer',
             SearchHelper.indexer,
             methods=['GET']
-            )   
-        
+            )           
 
         return blueprint 
     
@@ -77,8 +76,8 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
             return search_results
         
         except:
-            # return search_results
-            raise
+            return search_results
+            # raise
   
 
     def after_delete(self, context, pkg_dict):

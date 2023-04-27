@@ -16,7 +16,7 @@ class SampleSearchHelper():
         search_phrase = search_query.split('sample:')[1].strip().lower()
         search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
         datasets = Package.search_by_name('')
-        search_results = SampleSearchHelper.sample_search(datasets, search_phrase, search_filters, search_results)
+        search_results = SampleSearchHelper.sample_search(datasets, search_phrase, search_filters, search_results)        
         toolkit.g.detected_resources_ids = search_results['detected_resources_ids']
         return search_results
 
@@ -64,7 +64,8 @@ class SampleSearchHelper():
                             search_results['search_facets'] = SearchHelper.update_search_facet(search_results['search_facets'], dataset, 'groups')
                             search_results = SearchHelper.add_search_result(dataset, search_filters, search_results)                            
                         detected = True
-                        search_results['detected_resources_ids'].append(res['id'])
+                        if res['id'] not in search_results['detected_resources_ids']:
+                            search_results['detected_resources_ids'].append(res['id'])
                         break
 
         return search_results
