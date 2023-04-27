@@ -1,14 +1,13 @@
 # encoding: utf-8
 
-from this import d
 import ckan.plugins.toolkit as toolkit
 from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
 from ckanext.crc1153.libs.crc_search.facet_helpers import FacetHelper
+from ckanext.crc1153.libs.commons import Commons
 from sqlalchemy.sql.expression import false
-import re
 from ckan.model import Package
 from sklearn.feature_extraction.text import TfidfVectorizer
-if SearchHelper.check_plugin_enabled("dataset_reference"):
+if Commons.check_plugin_enabled("dataset_reference"):
     from ckanext.dataset_reference.models.package_reference_link import PackageReferenceLink
 
 

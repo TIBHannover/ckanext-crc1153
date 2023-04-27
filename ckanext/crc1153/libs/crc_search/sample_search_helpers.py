@@ -4,8 +4,9 @@
 import ckan.plugins.toolkit as toolkit
 from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
 from ckanext.crc1153.libs.crc_search.facet_helpers import FacetHelper
+from ckanext.crc1153.libs.commons import Commons
 from ckan.model import Package
-if SearchHelper.check_plugin_enabled("sample_link"):
+if Commons.check_plugin_enabled("sample_link"):
     from ckanext.semantic_media_wiki.libs.sample_link import SampleLinkHelper
 
 
