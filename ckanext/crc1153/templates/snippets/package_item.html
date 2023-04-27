@@ -1,0 +1,25 @@
+{% ckan_extends %}
+
+{% block resources %}
+    {% for res in package['resources'] %}
+        <ul>
+        {% if res['id'] in g.detected_resources_ids %}
+            
+            {% set resource_url = h.url_for('dataset_resource.read', resource_id=res['id'], package_type=package['type'], id=package['id'], _external=True) %}
+                {% if res['name'] and res['name'] != ''  %}
+                    <li>
+                        <a href="{{resource_url}}" target='_blank'>{{res['name']}}</a>
+                    </li>
+                {% else%}
+                    <li>
+                        <a href="{{resource_url}}" target='_blank'>{{_('unnamed resource')}}</a>
+                    </li>
+                {% endif %}
+                
+            
+        {% endif %}
+        </ul>
+    {% endfor %}
+    
+    {{ super() }}
+{% endblock  %}

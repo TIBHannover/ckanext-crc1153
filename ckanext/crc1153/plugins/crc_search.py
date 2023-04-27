@@ -27,7 +27,7 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
     def get_blueprint(self):
         blueprint = Blueprint(self.name, self.__module__)        
         blueprint.add_url_rule(
-            u'/sfb_search/indexer',
+            u'/crc_search/indexer',
             u'indexer',
             SearchHelper.indexer,
             methods=['GET']
