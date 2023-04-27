@@ -64,6 +64,14 @@ class Helper():
             return [query.split(":")[1], "column"]        
         elif "publication:" in query:
             return [query.split(":")[1], "publication"]
+        elif "material_combination:" in query:
+            return [query.split(":")[1], "material_combination"]
+        elif "demonstrator:" in query:
+            return [query.split(":")[1], "demonstrator"]
+        elif "manufacturing_process:" in query:
+            return [query.split(":")[1], "manufacturing_process"]
+        elif "analysis_method:" in query:
+            return [query.split(":")[1], "analysis_method"]
         else:
             return [query, '0']
     
