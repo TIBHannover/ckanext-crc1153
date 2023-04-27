@@ -6,7 +6,6 @@ import pandas as pd
 from ckan.model import Package
 import ckan.model as model
 import ckan.logic as logic
-from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
 # from ckanext.sfb_search_extension.models.data_resource_column_index import DataResourceColumnIndex
 
 
