@@ -4,7 +4,7 @@ from ckan.model import Package
 from ckanext.crc1153.libs.crc_search.data_column_helpers import ColumnSearchHelper
 from ckanext.crc1153.libs.crc_search.sample_search_helpers import SampleSearchHelper
 from ckanext.crc1153.libs.crc_search.publication_search_helpers import PublicationSearchHelper
-# from ckanext.sfb_search_extension.libs.resource_metadata_search_helper import ResourceMetadataSearchHelper
+from ckanext.crc1153.libs.crc_search.extra_metadata_helpers import ExtraMetadataSearchHelper
 # from ckanext.sfb_search_extension.libs.commons import CommonHelper
 # from ckanext.sfb_search_extension.models.data_resource_column_index import DataResourceColumnIndex
 from flask import Blueprint
