@@ -76,8 +76,8 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
             return search_results
         
         except:
-            return search_results
-            # raise
+            # return search_results
+            raise
   
 
     def after_delete(self, context, pkg_dict):
