@@ -13,14 +13,18 @@
 {% block search_input %}
   <input type="hidden" id="selected_search_type" value="{{h.query_prepration(query)[1]}}">
   <div class="row">
-    {% if h.search_type_selection_is_needed(form_id) and h.is_plugin_enabled("sfb_search"): %}
+    {% if h.search_type_selection_is_needed(form_id) and h.is_plugin_enabled("crc1153_search"): %}
         <div class="col-sm-4">
-          <label for="search-type-dropdown">{{_('Search type')}}</label>
+          <label for="search-type-dropdown">{{_('Search based on')}}</label>
           <select  id="search-type-dropdown">
             <option value="0">Simple Search</option>            
-            <option value="column">Search in csv/xlsx resource (files) Columns</option>
-            <option value="publication">Search based on Publication</option>                  
-            <option value="sample">Search in linked Samples</option>            
+            <option value="column">csv/xlsx resource (files) Columns</option>
+            <option value="publication">Linked Publication</option>                  
+            <option value="sample">Linked Samples</option>
+            <option value="material_combination">Material or Material Combination</option>
+            <option value="demonstrator">Demonstrator</option>
+            <option value="manufacturing_process">Manufacturing Process</option>
+            <option value="analysis_method">Measurement/Analysis Method</option>
           </select>
         </div>
       {% endif %}
