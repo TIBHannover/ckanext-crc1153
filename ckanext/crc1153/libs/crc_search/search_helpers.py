@@ -6,7 +6,8 @@ import pandas as pd
 from ckan.model import Package
 import ckan.model as model
 import ckan.logic as logic
-from ckanext.sfb_search_extension.models.data_resource_column_index import DataResourceColumnIndex
+from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
+# from ckanext.sfb_search_extension.models.data_resource_column_index import DataResourceColumnIndex
 
 
 RESOURCE_DIR = toolkit.config['ckan.storage_path'] + '/resources/'
@@ -27,11 +28,11 @@ class SearchHelper():
             toolkit.abort(404, 'Not found')
 
         # empty the index table
-        indexTableModel = DataResourceColumnIndex()
-        records = indexTableModel.get_all()
-        for rec in records:
-            rec.delete()
-            rec.commit()
+        # indexTableModel = DataResourceColumnIndex()
+        # records = indexTableModel.get_all()
+        # for rec in records:
+        #     rec.delete()
+        #     rec.commit()
 
 
         all_datasets = Package.search_by_name('')
@@ -42,16 +43,16 @@ class SearchHelper():
             dataset = toolkit.get_action('package_show')({}, {'name_or_id': package.name})
             for resource in dataset['resources']:
                  if resource['url_type'] == 'upload' and resource['state'] == "active":
-                    if CommonHelper.is_csv(resource):
-                        dataframe_columns, fit_for_autotag = CommonHelper.get_csv_columns(resource['id'])
+                    if SearchHelper.is_csv(resource):
+                        dataframe_columns, fit_for_autotag = SearchHelper.get_csv_columns(resource['id'])
                         columns_names = ""
                         for col in dataframe_columns:
                             columns_names += (str(col) + ",")
                         if len(dataframe_columns) != 0:
-                            CommonHelper.add_index(resource['id'], columns_names)  
+                            SearchHelper.add_index(resource['id'], columns_names)  
                     
-                    elif CommonHelper.is_xlsx(resource):
-                        xls_dataframes_columns = CommonHelper.get_xlsx_columns(resource['id'])
+                    elif SearchHelper.is_xlsx(resource):
+                        xls_dataframes_columns = SearchHelper.get_xlsx_columns(resource['id'])
                         if len(xls_dataframes_columns) == 0:
                             continue
 
@@ -60,7 +61,7 @@ class SearchHelper():
                             for col in columns_object[0]:  
                                 columns_names += (str(col) + ",")
                                 
-                        CommonHelper.add_index(resource['id'], columns_names)                       
+                        SearchHelper.add_index(resource['id'], columns_names)                       
         
         return "Indexed"
 
@@ -72,20 +73,21 @@ class SearchHelper():
             Index a data resource columns name in the database.
         '''
         
-        check_existence_indexer = DataResourceColumnIndex()
-        if not check_existence_indexer.get_by_resource(id=resource_id):
-            column_indexer = DataResourceColumnIndex(resource_id=resource_id, columns_names=index_value)
-            column_indexer.save()
-            return True
+        # check_existence_indexer = DataResourceColumnIndex()
+        # if not check_existence_indexer.get_by_resource(id=resource_id):
+        #     column_indexer = DataResourceColumnIndex(resource_id=resource_id, columns_names=index_value)
+        #     column_indexer.save()
+        #     return True
         
         # first delete all old records and then add
-        records = check_existence_indexer.get_by_resource(id=resource_id)
-        for rec in records:
-            rec.delete()
-            rec.commit()
+        # records = check_existence_indexer.get_by_resource(id=resource_id)
+        # for rec in records:
+        #     rec.delete()
+        #     rec.commit()
         
-        column_indexer = DataResourceColumnIndex(resource_id=resource_id, columns_names=index_value)
-        column_indexer.save()
+        # column_indexer = DataResourceColumnIndex(resource_id=resource_id, columns_names=index_value)
+        # column_indexer.save()
+        return True
 
 
 
@@ -144,10 +146,10 @@ class SearchHelper():
                 - search_result: search result array
         '''
 
-        org_filter = CommonHelper.apply_filters_organization(dataset, search_filters_string)
-        tag_filter = CommonHelper.apply_filters_tags(dataset, search_filters_string)
-        group_filter = CommonHelper.apply_filters_groups(dataset, search_filters_string)
-        type_filter = CommonHelper.apply_filters_type(dataset, search_filters_string)
+        org_filter = SearchHelper.apply_filters_organization(dataset, search_filters_string)
+        tag_filter = SearchHelper.apply_filters_tags(dataset, search_filters_string)
+        group_filter = SearchHelper.apply_filters_groups(dataset, search_filters_string)
+        type_filter = SearchHelper.apply_filters_type(dataset, search_filters_string)
 
         if org_filter and type_filter and tag_filter and group_filter:
             search_results['results'].append(dataset)
@@ -424,7 +426,7 @@ class SearchHelper():
         try:
             df = clevercsv.read_dataframe(file_path)
             df = df.fillna(0)        
-            if not CommonHelper.is_possible_to_automate(df):
+            if not SearchHelper.is_possible_to_automate(df):
                 return [list(df.columns), False]
             else:
                 # skip the first row to get the actual columns names
@@ -487,7 +489,7 @@ class SearchHelper():
             if len(temp_df) > 0:
                 headers = temp_df.iloc[0]
                 final_data_df  = pd.DataFrame(temp_df.values[1:], columns=headers)
-                if not CommonHelper.is_possible_to_automate(final_data_df):
+                if not SearchHelper.is_possible_to_automate(final_data_df):
                     result_df[sheet] = [final_data_df, False]
                 else:
                     result_df[sheet] = [list(final_data_df.iloc[0]), True]
