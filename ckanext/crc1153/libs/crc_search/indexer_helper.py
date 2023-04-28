@@ -32,7 +32,8 @@ class IndexerHelper():
                             columns_names = IndexerHelper.shape_xlsx_column_names_for_index(resource['id'])
                             IndexerHelper.add_index(resource['id'], columns_names) 
         except:
-            return "Indexed Failed!"
+            # return "Indexed Failed!"
+            raise
         
         return "Indexed"
 
