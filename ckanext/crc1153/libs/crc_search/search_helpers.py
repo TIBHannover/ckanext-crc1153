@@ -125,13 +125,6 @@ class SearchHelper():
     def apply_filters_organization(dataset, search_filters_string):
         '''
             Apply organization facet filters for a dataset.
-
-            Args:
-                - dataset: target dataset
-                - search_filters_string: ckan facet filter string. exist in search_params['fq']
-
-            Return:
-                - Boolean
         '''
 
         if len(search_filters_string.split('organization:')) == 2:
@@ -153,13 +146,6 @@ class SearchHelper():
     def apply_filters_type(dataset, search_filters_string):
         '''
             Apply dataset type facet filters for a dataset.
-
-            Args:
-                - dataset: target dataset
-                - search_filters_string: ckan facet filter string. exist in search_params['fq']
-
-            Return:
-                - Boolean
         '''
        
         if 'sfb_dataset_type' in dataset.keys() and len(search_filters_string.split('sfb_dataset_type:')) == 2:
@@ -181,13 +167,6 @@ class SearchHelper():
     def apply_filters_tags(dataset, search_filters_string):
         '''
             Apply tags facet filters for a dataset.
-
-            Args:
-                - dataset: target dataset
-                - search_filters_string: ckan facet filter string. exist in search_params['fq']
-
-            Return:
-                - Boolean
         '''
 
         if 'tags:' not in search_filters_string:
@@ -209,13 +188,6 @@ class SearchHelper():
     def apply_filters_groups(dataset, search_filters_string):
         '''
             Apply groups facet filters for a dataset.
-
-            Args:
-                - dataset: target dataset
-                - search_filters_string: ckan facet filter string. exist in search_params['fq']
-
-            Return:
-                - Boolean
         '''
 
         if 'groups:' not in search_filters_string:
@@ -236,13 +208,7 @@ class SearchHelper():
     @staticmethod
     def is_csv(resource):
         '''
-            Check if a data resource in csv or not.
-
-            Args:
-                - resource: the data resource object.
-            
-            Returns:
-                - Boolean        
+            Check if a data resource in csv or not.       
         '''
 
         format = ''
@@ -265,12 +231,6 @@ class SearchHelper():
     def get_csv_columns(resource_id):
         '''
             Read a csv file as pandas dataframe and return the columns name.
-
-            Args:
-                - resource_id: the data resource id in ckan
-            
-            Returns:
-                - a list of columns names
         '''
 
         file_path = RESOURCE_DIR + resource_id[0:3] + '/' + resource_id[3:6] + '/' + resource_id[6:]
@@ -287,13 +247,7 @@ class SearchHelper():
     @staticmethod
     def is_xlsx(resource):
         '''
-            Check if a data resource in xlsx or not.
-
-            Args:
-                - resource: the data resource object.
-            
-            Returns:
-                - Boolean        
+            Check if a data resource in xlsx or not.      
         '''
 
         format = ''

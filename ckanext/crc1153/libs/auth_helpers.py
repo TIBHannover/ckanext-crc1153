@@ -51,4 +51,4 @@ class AuthHelpers:
         try:
             logic.check_access('sysadmin', context, {})
         except logic.NotAuthorized:
-            toolkit.abort(403, 'Need to be system administrator to administer')
+            toolkit.abort(404, 'Not Found')
