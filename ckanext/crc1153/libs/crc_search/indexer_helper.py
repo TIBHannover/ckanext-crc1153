@@ -24,7 +24,7 @@ class IndexerHelper():
                 dataset = toolkit.get_action('package_show')({}, {'name_or_id': package.name})
                 for resource in dataset['resources']:
                     if resource['url_type'] == 'upload' and resource['state'] == "active":
-                        if SearchHelper.is_csv(resource):                            
+                        if SearchHelper.is_csv(resource):
                             columns_names = IndexerHelper.shape_csv_column_names_for_index(resource['id'])
                             IndexerHelper.add_index(resource['id'], columns_names)
                                                           
@@ -32,7 +32,7 @@ class IndexerHelper():
                             columns_names = IndexerHelper.shape_xlsx_column_names_for_index(resource['id'])
                             IndexerHelper.add_index(resource['id'], columns_names) 
         except:
-            return "Indexed Failed!"                      
+            return "Indexed Failed!"
         
         return "Indexed"
 
