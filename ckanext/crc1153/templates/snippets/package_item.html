@@ -1,7 +1,7 @@
 {% ckan_extends %}
 
 {% block resources %}
-    {# <ul>
+    <ul>
     {% for res in package['resources'] %}        
         {% if res['id'] in g.detected_resources_ids %}            
             {% set resource_url = h.url_for('dataset_resource.read', resource_id=res['id'], package_type=package['type'], id=package['id'], _external=True) %}
@@ -16,6 +16,6 @@
                 {% endif %}                            
         {% endif %}        
     {% endfor %}
-    </ul> #}
+    </ul>
     {{ super() }}
 {% endblock  %}
