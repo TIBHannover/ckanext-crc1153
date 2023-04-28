@@ -4,8 +4,8 @@ from ckanext.crc1153.libs.crc_search.data_column_helpers import ColumnSearchHelp
 from ckanext.crc1153.libs.crc_search.sample_search_helpers import SampleSearchHelper
 from ckanext.crc1153.libs.crc_search.publication_search_helpers import PublicationSearchHelper
 from ckanext.crc1153.libs.crc_search.extra_metadata_helpers import ExtraMetadataSearchHelper
-from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
 from ckanext.crc1153.libs.crc_search.file_helpers import FileHelper
+from ckanext.crc1153.libs.crc_search.indexer_helper import IndexerHelper
 from ckanext.crc1153.libs.commons import Commons
 from ckanext.crc1153.models.data_resource_column_index import DataResourceColumnIndex
 from flask import Blueprint
@@ -30,7 +30,7 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
         blueprint.add_url_rule(
             u'/crc_search/indexer',
             u'indexer',
-            SearchHelper.indexer,
+            IndexerHelper.indexer,
             methods=['GET']
             )           
 

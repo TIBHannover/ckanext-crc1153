@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+import ckan.plugins.toolkit as toolkit
 import clevercsv
 import pandas as pd
 
