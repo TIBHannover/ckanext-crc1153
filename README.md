@@ -4,13 +4,6 @@
 This is the CKAN extension for the project CRC (SFB) 1153. The extensions includes the plugins that are implemented specifically for CRC1153. 
 
 
-TODO:
-
-- Move get_json from crc_layout to dcat profile plugin
-
-
-
-
 ## Requirements
 
 Compatibility with core CKAN versions:
@@ -27,6 +20,7 @@ Compatibility with core CKAN versions:
 - **crc1153_specific_metadata**
 - **crc1153_system_stats**
 - **crc1153_dcat_ap**
+- **crc1153_search**
 
 
 ## Installation
@@ -70,6 +64,10 @@ The credentials file path need to be set in the **ckan.ini** file with the name:
 2. To use the plugins that needs Apache Jena Endpoint (such as crc1153_dcat_ap), you need to set the endpoint in **ckan.ini**
 
           ckanext.apacheJena.endpoint = APACHE_JENA_ENDPOINT/update
+
+3. The **crc1153_search** has a feature to search for data resources that are in CSV/XLSX formats based on their columns' name. The search works based on an indexing table to boost the search speed. The indexer auotomatically index a new resource. However, to index the already existing data resources, you need to call the indexer endpoint (Only Admin can run this):
+
+          GET   "CKAN_BASE_URL/crc_search/indexer"
 
 
 ## Tests
