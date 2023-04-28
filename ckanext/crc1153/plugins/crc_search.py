@@ -42,6 +42,7 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
     def after_search(self, search_results, search_params):
         try:
             search_types = ['column', 'publication', 'sample', 'material_combination', 'demonstrator', 'manufacturing_process', 'analysis_method']
+            extra_metadata = ['material_combination', 'demonstrator', 'manufacturing_process', 'analysis_method']
             search_query = search_params['q'].lower()
             if search_query.split(':')[0].lower() not in search_types:
                 return search_results
@@ -55,30 +56,17 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
             elif len(search_query.split('sample:')) > 1 and Commons.check_plugin_enabled("sample_link"):     
                 search_results = SampleSearch.run(search_query=search_query, search_params=search_params, search_results=search_results)
             
-            elif len(search_query.split('material_combination:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):
-                target_metadata = 'material_combination'
+            elif search_query.split(':')[0].strip() in extra_metadata and Commons.check_plugin_enabled("crc1153_specific_metadata"):
+                target_metadata = search_query.split(':')[0].strip()
                 search_results = ExtraMetadataSearch.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
-            
-            elif len(search_query.split('demonstrator:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):                
-                target_metadata = 'demonstrator'
-                search_results = ExtraMetadataSearch.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
-            
-            elif len(search_query.split('manufacturing_process:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):
-                target_metadata = 'manufacturing_process'
-                search_results = ExtraMetadataSearch.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
-                            
-            elif len(search_query.split('analysis_method:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):          
-                target_metadata = 'analysis_method'
-                search_results = ExtraMetadataSearch.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
-
             else:
                 return search_results
 
             return search_results
         
         except:
-            # return search_results
-            raise
+            return search_results
+            # raise
   
 
     def after_delete(self, context, pkg_dict):
