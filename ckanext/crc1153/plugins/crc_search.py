@@ -22,7 +22,7 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
     # IConfigurer
 
     def update_config(self, config_):
-        toolkit.add_template_directory(config_, 'templates/crc_search')
+        toolkit.add_template_directory(config_, '../templates')
         
 
     def get_blueprint(self):
