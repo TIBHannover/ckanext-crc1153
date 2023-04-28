@@ -12,6 +12,8 @@ if Commons.check_plugin_enabled("dataset_reference"):
     from ckanext.dataset_reference.models.package_reference_link import PackageReferenceLink
 
 
+SIMILARITY_MEASURE_THRESHOLD = 0.7
+
 
 class PublicationSearchHelper():
 
@@ -49,7 +51,7 @@ class PublicationSearchHelper():
             for pub in linked_publications:                
                 if not pub.citation:
                     continue                                
-                elif PublicationSearchHelper.similarity_calc(search_phrase.lower(), pub.citation.lower()) >= 0.7:
+                elif PublicationSearchHelper.similarity_calc(search_phrase.lower(), pub.citation.lower()) >= SIMILARITY_MEASURE_THRESHOLD:
                     if not detected:
                         search_results['search_facets'] = FacetHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                        
                         search_results = SearchHelper.add_dataset_to_search_result(dataset, search_filters, search_results)
