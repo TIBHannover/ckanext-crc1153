@@ -16,11 +16,27 @@ Compatibility with core CKAN versions:
 
 ## Plugins
 
-- **crc1153_layout**
-- **crc1153_specific_metadata**
-- **crc1153_system_stats**
-- **crc1153_dcat_ap**
-- **crc1153_search**
+- **crc1153_layout**: The CKAN layout customization plugin. 
+
+- **crc1153_specific_metadata**: Extending CKAN metadata schema to included CRC1153-specific metadata for dataset and data resources. 
+
+- **crc1153_system_stats**: The system stats (data resources count, formats, etc) for system admins.
+
+- **crc1153_dcat_ap**: The CRC1153 DCAT profile extension based the CRC-specific vocabulary. 
+
+- **crc1153_search**: Extending The CKAN search to enable users to search for dataset and data resources based on the CRC-specific metadata. 
+
+
+## Hint: 
+
+There are also other CRC-specific metadata that exist in the CRC1153 DCAT profile. However, since they have general uses for all CRCs that use CKAN as the data repository, they have their own CKAN extension. **But the CRC1153 DCAT profile also contains them**
+
+- **Linked Publication**: Enables users to link a publication to a dataset. https://github.com/TIBHannover/ckanext-Dataset-Reference
+
+- **Linked Equipment**: Enables users to link machines/tools to their data resources. https://github.com/TIBHannover/ckanext-Semantic-Media-Wiki
+
+- **Linked Sample**: Enables users to link Lab Samples to their data resources. https://github.com/TIBHannover/ckanext-Semantic-Media-Wiki
+
 
 
 ## Installation
