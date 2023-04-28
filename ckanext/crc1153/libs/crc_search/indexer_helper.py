@@ -3,7 +3,7 @@
 from ckan.model import Package
 from ckanext.crc1153.models.data_resource_column_index import DataResourceColumnIndex
 from ckanext.crc1153.libs.auth_helpers import AuthHelpers
-from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
+from ckanext.crc1153.libs.crc_search.file_helpers import FileHelper
 
 
 class IndexerHelper():
@@ -24,11 +24,11 @@ class IndexerHelper():
                 dataset = toolkit.get_action('package_show')({}, {'name_or_id': package.name})
                 for resource in dataset['resources']:
                     if resource['url_type'] == 'upload' and resource['state'] == "active":
-                        if SearchHelper.is_csv(resource):
+                        if FileHelper.is_csv(resource):
                             columns_names = IndexerHelper.shape_csv_column_names_for_index(resource['id'])
                             IndexerHelper.add_index(resource['id'], columns_names)
                                                           
-                        elif SearchHelper.is_xlsx(resource):
+                        elif FileHelper.is_xlsx(resource):
                             columns_names = IndexerHelper.shape_xlsx_column_names_for_index(resource['id'])
                             IndexerHelper.add_index(resource['id'], columns_names) 
         except:
@@ -74,7 +74,7 @@ class IndexerHelper():
 
     @staticmethod
     def shape_csv_column_names_for_index(resource_id):
-        dataframe_columns, _ = SearchHelper.get_csv_columns(resource_id)
+        dataframe_columns, _ = FileHelper.get_csv_columns(resource_id)
         columns_names = ""
         for col in dataframe_columns:
             columns_names += (str(col) + ",")
@@ -83,7 +83,7 @@ class IndexerHelper():
 
     @staticmethod
     def shape_xlsx_column_names_for_index(resource_id):
-        xls_dataframes_columns = SearchHelper.get_xlsx_columns(resource_id)        
+        xls_dataframes_columns = FileHelper.get_xlsx_columns(resource_id)        
         columns_names = ""
         for sheet, columns_object in xls_dataframes_columns.items():
             for col in columns_object[0]:  

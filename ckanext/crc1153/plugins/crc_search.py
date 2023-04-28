@@ -5,6 +5,7 @@ from ckanext.crc1153.libs.crc_search.sample_search_helpers import SampleSearchHe
 from ckanext.crc1153.libs.crc_search.publication_search_helpers import PublicationSearchHelper
 from ckanext.crc1153.libs.crc_search.extra_metadata_helpers import ExtraMetadataSearchHelper
 from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
+from ckanext.crc1153.libs.crc_search.file_helpers import FileHelper
 from ckanext.crc1153.libs.commons import Commons
 from ckanext.crc1153.models.data_resource_column_index import DataResourceColumnIndex
 from flask import Blueprint
@@ -130,16 +131,16 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
             return resource
 
         if resource['url_type'] == 'upload':
-            if SearchHelper.is_csv(resource):
-                dataframe_columns, fit_for_autotag = SearchHelper.get_csv_columns(resource['id'])
+            if FileHelper.is_csv(resource):
+                dataframe_columns, _ = FileHelper.get_csv_columns(resource['id'])
                 columns_names = ""
                 for col in dataframe_columns:
                     columns_names += (col + ",")
                 column_indexer = DataResourceColumnIndex(resource_id=resource['id'], columns_names=columns_names)
                 column_indexer.save()
             
-            elif SearchHelper.is_xlsx(resource):
-                xls_dataframes_columns = SearchHelper.get_xlsx_columns(resource['id'])
+            elif FileHelper.is_xlsx(resource):
+                xls_dataframes_columns = FileHelper.get_xlsx_columns(resource['id'])
                 columns_names = ""
                 for sheet, columns_object in xls_dataframes_columns.items():
                     for col in columns_object[0]:  
@@ -153,7 +154,7 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
 
 
     def before_delete(self, context, resource, resources):
-        if not SearchHelper.is_csv(resource) and not SearchHelper.is_xlsx(resource):
+        if not FileHelper.is_csv(resource) and not FileHelper.is_xlsx(resource):
             return resource
         column_indexer = DataResourceColumnIndex()
         records = column_indexer.get_by_resource(id=resource['id'])
