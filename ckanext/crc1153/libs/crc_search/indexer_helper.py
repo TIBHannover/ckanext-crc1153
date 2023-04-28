@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+import ckan.plugins.toolkit as toolkit
 from ckan.model import Package
 from ckanext.crc1153.models.data_resource_column_index import DataResourceColumnIndex
 from ckanext.crc1153.libs.auth_helpers import AuthHelpers
