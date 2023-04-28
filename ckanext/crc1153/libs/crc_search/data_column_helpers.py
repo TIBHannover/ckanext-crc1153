@@ -7,13 +7,13 @@ from ckanext.crc1153.models.data_resource_column_index import DataResourceColumn
 
 
 
-class ColumnSearchHelper():
+class ColumnSearch():
 
     @staticmethod
     def run(search_query, search_params, search_results):
         search_phrase = search_query.split('column:')[1].strip().lower()
         search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
-        search_results = ColumnSearchHelper.column_search(search_phrase, search_filters, search_results)        
+        search_results = ColumnSearch.column_search(search_phrase, search_filters, search_results)        
         toolkit.g.detected_resources_ids = search_results['detected_resources_ids']
         return search_results
     

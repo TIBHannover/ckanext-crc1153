@@ -11,7 +11,7 @@ if Commons.check_plugin_enabled("sample_link"):
     from ckanext.semantic_media_wiki.libs.sample_link import SampleLinkHelper
 
 
-class SampleSearchHelper():
+class SampleSearch():
 
 
     @staticmethod
@@ -19,7 +19,7 @@ class SampleSearchHelper():
         search_phrase = search_query.split('sample:')[1].strip().lower()
         search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
         datasets = Package.search_by_name('')
-        search_results = SampleSearchHelper.sample_search(datasets, search_phrase, search_filters, search_results)        
+        search_results = SampleSearch.sample_search(datasets, search_phrase, search_filters, search_results)        
         toolkit.g.detected_resources_ids = search_results['detected_resources_ids']
         return search_results
 

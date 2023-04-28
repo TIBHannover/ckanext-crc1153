@@ -1,9 +1,9 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
-from ckanext.crc1153.libs.crc_search.data_column_helpers import ColumnSearchHelper
-from ckanext.crc1153.libs.crc_search.sample_search_helpers import SampleSearchHelper
-from ckanext.crc1153.libs.crc_search.publication_search_helpers import PublicationSearchHelper
-from ckanext.crc1153.libs.crc_search.extra_metadata_helpers import ExtraMetadataSearchHelper
+from ckanext.crc1153.libs.crc_search.data_column_helpers import ColumnSearch
+from ckanext.crc1153.libs.crc_search.sample_search_helpers import SampleSearch
+from ckanext.crc1153.libs.crc_search.publication_search_helpers import PublicationSearch
+from ckanext.crc1153.libs.crc_search.extra_metadata_helpers import ExtraMetadataSearch
 from ckanext.crc1153.libs.crc_search.file_helpers import FileHelper
 from ckanext.crc1153.libs.crc_search.indexer_helper import IndexerHelper
 from ckanext.crc1153.libs.commons import Commons
@@ -47,29 +47,29 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
                 return search_results
             
             elif len(search_query.split('column:')) > 1:         
-                search_results = ColumnSearchHelper.run(search_query=search_query, search_params=search_params, search_results=search_results)
+                search_results = ColumnSearch.run(search_query=search_query, search_params=search_params, search_results=search_results)
             
             elif len(search_query.split('publication:')) > 1 and Commons.check_plugin_enabled("dataset_reference"):
-                search_results = PublicationSearchHelper.run(search_query=search_query, search_params=search_params, search_results=search_results)
+                search_results = PublicationSearch.run(search_query=search_query, search_params=search_params, search_results=search_results)
                         
             elif len(search_query.split('sample:')) > 1 and Commons.check_plugin_enabled("sample_link"):     
-                search_results = SampleSearchHelper.run(search_query=search_query, search_params=search_params, search_results=search_results)
+                search_results = SampleSearch.run(search_query=search_query, search_params=search_params, search_results=search_results)
             
             elif len(search_query.split('material_combination:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):
                 target_metadata = 'material_combination'
-                search_results = ExtraMetadataSearchHelper.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
+                search_results = ExtraMetadataSearch.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
             
             elif len(search_query.split('demonstrator:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):                
                 target_metadata = 'demonstrator'
-                search_results = ExtraMetadataSearchHelper.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
+                search_results = ExtraMetadataSearch.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
             
             elif len(search_query.split('manufacturing_process:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):
                 target_metadata = 'manufacturing_process'
-                search_results = ExtraMetadataSearchHelper.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
+                search_results = ExtraMetadataSearch.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
                             
             elif len(search_query.split('analysis_method:')) > 1 and Commons.check_plugin_enabled("crc1153_specific_metadata"):          
                 target_metadata = 'analysis_method'
-                search_results = ExtraMetadataSearchHelper.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
+                search_results = ExtraMetadataSearch.run(search_query=search_query, search_params=search_params, target_metadata_name=target_metadata, search_results=search_results)
 
             else:
                 return search_results

@@ -15,14 +15,14 @@ if Commons.check_plugin_enabled("dataset_reference"):
 SIMILARITY_MEASURE_THRESHOLD = 0.7
 
 
-class PublicationSearchHelper():
+class PublicationSearch():
 
     @staticmethod
     def run(search_query, search_params, search_results):
         search_phrase = search_query.split('publication:')[1].strip().lower()
         search_results, search_filters = SearchHelper.empty_ckan_search_result(search_results, search_params)
         datasets = Package.search_by_name('')
-        search_results = PublicationSearchHelper.publication_search(datasets, search_phrase, search_filters, search_results)        
+        search_results = PublicationSearch.publication_search(datasets, search_phrase, search_filters, search_results)        
         return search_results
 
 
@@ -51,7 +51,7 @@ class PublicationSearchHelper():
             for pub in linked_publications:                
                 if not pub.citation:
                     continue                                
-                elif PublicationSearchHelper.similarity_calc(search_phrase.lower(), pub.citation.lower()) >= SIMILARITY_MEASURE_THRESHOLD:
+                elif PublicationSearch.similarity_calc(search_phrase.lower(), pub.citation.lower()) >= SIMILARITY_MEASURE_THRESHOLD:
                     if not detected:
                         search_results['search_facets'] = FacetHelper.update_search_facet_with_dataset(search_results['search_facets'], dataset)                        
                         search_results = SearchHelper.add_dataset_to_search_result(dataset, search_filters, search_results)
