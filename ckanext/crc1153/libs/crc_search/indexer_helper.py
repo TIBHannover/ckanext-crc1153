@@ -14,43 +14,25 @@ class IndexerHelper():
             Index the already added csv/xlsx data resource for column search.
         '''
 
-        AuthHelpers.abort_if_not_admin()
-
-        # empty the index table
-        indexTableModel = DataResourceColumnIndex()
-        records = indexTableModel.get_all()
-        for rec in records:
-            rec.delete()
-            rec.commit()
-
-
-        all_datasets = Package.search_by_name('')
-        for package in all_datasets:
-            if package.state != 'active':
-                continue
-            
-            dataset = toolkit.get_action('package_show')({}, {'name_or_id': package.name})
-            for resource in dataset['resources']:
-                 if resource['url_type'] == 'upload' and resource['state'] == "active":
-                    if SearchHelper.is_csv(resource):
-                        dataframe_columns, fit_for_autotag = SearchHelper.get_csv_columns(resource['id'])
-                        columns_names = ""
-                        for col in dataframe_columns:
-                            columns_names += (str(col) + ",")
-                        if len(dataframe_columns) != 0:
-                            SearchHelper.add_index(resource['id'], columns_names)  
-                    
-                    elif SearchHelper.is_xlsx(resource):
-                        xls_dataframes_columns = SearchHelper.get_xlsx_columns(resource['id'])
-                        if len(xls_dataframes_columns) == 0:
-                            continue
-
-                        columns_names = ""
-                        for sheet, columns_object in xls_dataframes_columns.items():
-                            for col in columns_object[0]:  
-                                columns_names += (str(col) + ",")
-                                
-                        SearchHelper.add_index(resource['id'], columns_names)                       
+        try:
+            AuthHelpers.abort_if_not_admin()
+            IndexerHelper.delete_the_old_index()
+            all_datasets = Package.search_by_name('')
+            for package in all_datasets:
+                if package.state != 'active':
+                    continue                
+                dataset = toolkit.get_action('package_show')({}, {'name_or_id': package.name})
+                for resource in dataset['resources']:
+                    if resource['url_type'] == 'upload' and resource['state'] == "active":
+                        if SearchHelper.is_csv(resource):                            
+                            columns_names = IndexerHelper.shape_csv_column_names_for_index(resource['id'])
+                            IndexerHelper.add_index(resource['id'], columns_names)
+                                                          
+                        elif SearchHelper.is_xlsx(resource):
+                            columns_names = IndexerHelper.shape_xlsx_column_names_for_index(resource['id'])
+                            IndexerHelper.add_index(resource['id'], columns_names) 
+        except:
+            return "Indexed Failed!"                      
         
         return "Indexed"
 
@@ -77,3 +59,33 @@ class IndexerHelper():
         column_indexer = DataResourceColumnIndex(resource_id=resource_id, columns_names=index_value)
         column_indexer.save()
         return True
+
+
+
+    @staticmethod
+    def delete_the_old_index():
+         # empty the index table
+        indexTableModel = DataResourceColumnIndex()
+        records = indexTableModel.get_all()
+        for rec in records:
+            rec.delete()
+            rec.commit()
+    
+
+    @staticmethod
+    def shape_csv_column_names_for_index(resource_id):
+        dataframe_columns, _ = SearchHelper.get_csv_columns(resource_id)
+        columns_names = ""
+        for col in dataframe_columns:
+            columns_names += (str(col) + ",")
+        return columns_names
+
+
+    @staticmethod
+    def shape_xlsx_column_names_for_index(resource_id):
+        xls_dataframes_columns = SearchHelper.get_xlsx_columns(resource_id)        
+        columns_names = ""
+        for sheet, columns_object in xls_dataframes_columns.items():
+            for col in columns_object[0]:  
+                columns_names += (str(col) + ",")
+        return columns_names
