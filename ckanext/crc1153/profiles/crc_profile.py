@@ -3,7 +3,7 @@
 from rdflib.namespace import Namespace
 from rdflib import URIRef, Literal
 from ckanext.dcat.profiles import RDFProfile
-from ckanext.dcatapcrc.libs.helpers import Helper
+from ckanext.crc1153.libs.crc_profile.helpers import Crc1153DcatProfileHelper as Helper
 from ckanext.dcat.profiles import CleanedURIRef
 from ckanext.dcat.utils import resource_uri
 
