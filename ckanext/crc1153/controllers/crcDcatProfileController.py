@@ -55,6 +55,7 @@ class Crc1153DcatProfileController:
         ElementTree.register_namespace("locn", "http://www.w3.org/ns/locn#")
         ElementTree.register_namespace("gsp", "http://www.opengis.net/ont/geosparql#")
         ElementTree.register_namespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+        ElementTree.register_namespace("dr", "http://www.w3id.org/ecsel-dr-PROD#")
         
         xml = ElementTree.fromstring("<RDF></RDF>")
         dataset_dicts = []

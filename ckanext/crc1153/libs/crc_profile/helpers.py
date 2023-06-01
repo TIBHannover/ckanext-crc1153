@@ -68,7 +68,7 @@ class Crc1153DcatProfileHelper():
     @staticmethod
     def insert_to_sparql(graph):
         for s,p,o in graph:
-            s,p,o = Helper.clean_triples(s,p,o)
+            s,p,o = Crc1153DcatProfileHelper.clean_triples(s,p,o)
             query = 'INSERT DATA{ ' + s + ' ' + p + ' ' + o + ' .  }'            
             sparql = SPARQLWrapper(Crc1153DcatProfileHelper.get_apache_jena_endpoint())                        
             sparql.setMethod(POST)
@@ -81,7 +81,7 @@ class Crc1153DcatProfileHelper():
     @staticmethod
     def delete_from_sparql(graph):
         for s,p,o in graph:
-            s,p,o = Helper.clean_triples(s,p,o)
+            s,p,o = Crc1153DcatProfileHelper.clean_triples(s,p,o)
             query = ""           
             if "_:N" in o:
                 # blank node as object
@@ -102,7 +102,7 @@ class Crc1153DcatProfileHelper():
 
     @staticmethod
     def get_dataset_graph(dataset_dict):        
-        dataset_dict = Helper.setDatasetUri(dataset_dict)
+        dataset_dict = Crc1153DcatProfileHelper.setDatasetUri(dataset_dict)
         serializer = RDFSerializer(profiles=dataset_dict.get('profiles'))
         gr_dataset = serializer.graph_from_dataset(dataset_dict)        
         return  serializer.g

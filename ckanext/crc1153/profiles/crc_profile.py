@@ -18,6 +18,7 @@ ENVO = Namespace("http://purl.obolibrary.org/obo/envo/")
 NCIT = Namespace("http://purl.obolibrary.org/obo/ncit/")
 OWL = Namespace('http://www.w3.org/2002/07/owl#')
 ADMS = Namespace("http://www.w3.org/ns/adms#")
+DR = Namespace("http://www.w3id.org/ecsel-dr-PROD#")
 
 
 class CRC1153DCATAPProfile(RDFProfile):
@@ -36,6 +37,7 @@ class CRC1153DCATAPProfile(RDFProfile):
         g.bind("TEMA", TEMA)
         g.bind("ENVO", ENVO)
         g.bind("NCIT", NCIT)
+        g.bind("DR", DR)
 
                 
         ## add linked publication(s) ##
@@ -81,7 +83,11 @@ class CRC1153DCATAPProfile(RDFProfile):
                 envo_manufacturing_process = URIRef("http://purl.obolibrary.org/obo/envo/ManufacturingProcess") 
                 g.add((distribution, envo_manufacturing_process, Literal(resource_dict.get("manufacturing_process"))))
             
-            
+             ## add demonstrator ##
+            if resource_dict.get("demonstrator"):
+                dr_finished_product = URIRef("http://www.w3id.org/ecsel-dr-PROD#Finished_Product") 
+                g.add((distribution, dr_finished_product, Literal(resource_dict.get("demonstrator"))))
+                        
 
             ## add analysis method ##
             if resource_dict.get("analysis_method"):
