@@ -50,4 +50,9 @@ hr {
   text-align: center;
   font-size: 12px;
 }
+
+.fa.fa-spinner.fa-spin{
+  font-size: 14px;
+  display: none;
+}
   
