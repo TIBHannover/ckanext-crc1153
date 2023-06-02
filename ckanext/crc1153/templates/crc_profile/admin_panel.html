@@ -2,11 +2,13 @@
 
 {% set action = h.url_for('crc1153_dcat_profile.export_catalog', _external=True) %}
 
-{% block primary_content_inner %}    
+{% block primary_content_inner %}
+    {% if h.is_plugin_enabled('crc1153_dcat_profile') %}    
     <div class="row">
         <div class="col-sm-12">
             <a class="btn btn-primary" href="{{action}}" id="export-catalog-btn" target="_blank">Export Catalog</a>
         </div>
-    </div>    
+    </div>
+    {% endif %}   
 {% endblock %}
 
