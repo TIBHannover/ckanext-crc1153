@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {%- block page -%}
-
+  {{ super() }}
   {% block skip %}
     <div class="sr-only sr-only-focusable"><a href="#content">{{ _('Skip to content') }}</a></div>
   {% endblock %}
@@ -132,6 +132,5 @@
   {% asset 'base/ckan' %}
   {% if g.tracking_enabled %}
     {% asset 'base/tracking' %}
-  {% endif %}
-  {{ super() }}
+  {% endif %}  
 {% endblock -%}
