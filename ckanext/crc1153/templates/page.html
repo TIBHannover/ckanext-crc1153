@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
 {%- block page -%}
-  {{ super() }}
-  {% block skip %}
-    <div class="sr-only sr-only-focusable"><a href="#content">{{ _('Skip to content') }}</a></div>
-  {% endblock %}
+
+  {% if h.is_user_login() or h.is_excluded() %}      
+
+    {% block skip %}
+      <div class="sr-only sr-only-focusable"><a href="#content">{{ _('Skip to content') }}</a></div>
+    {% endblock %}
 
   {#
   Override the header on a page by page basis by extending this block. If
@@ -114,7 +116,7 @@
           </div>
         {% endblock %}
       </div>
-    </div>
+    </div>    
   {% endblock -%}
 
   {#
@@ -122,15 +124,21 @@
   making sitewide header changes it is preferable to override the footer.html-u
   file.
   #}
-  {%- block footer %}
+{%- block footer %}
     {% include "footer.html" %}
   {% endblock -%}
-{%- endblock -%}
+
+{% else %}
+        {% snippet "snippets/close_for_guests_login_page.html" %}
+{% endif %} 
+
+{%- endblock page -%}
 
 {%- block scripts %}
   {% asset 'base/main' %}
   {% asset 'base/ckan' %}
   {% if g.tracking_enabled %}
     {% asset 'base/tracking' %}
-  {% endif %}  
+  {% endif %}
+  {{ super() }}
 {% endblock -%}
