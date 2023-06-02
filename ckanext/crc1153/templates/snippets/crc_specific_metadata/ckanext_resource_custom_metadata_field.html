@@ -3,7 +3,8 @@
 {% for res in resources %}
     <div class="{{box_class}}" id="{{box_id ~ (loop.index + offset)}}">        
         <div class="col-sm-6">
-            {% if input_type == "select" %}                        
+            {% if input_type == "select" %} 
+                <label>{{input_label}}</label><br>
                 <select name={{input_name ~ loop.index }} id={{input_name ~ loop.index}} class="metadata_dropdown" >
                     {% for data in select_data_source %}           
                         <option value="{{data.value}}">
