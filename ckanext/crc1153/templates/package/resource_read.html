@@ -108,11 +108,11 @@
                         {% endif %}                        
                     </tr>                                                            
                     {# machine links #}
-                    {% if h.is_plugin_enabled("semantic_media_wiki") %}
+                    {% if h.is_plugin_enabled("machine_link") %}
                       {% asset 'ckanext-semantic-media-wiki/resource-machine-js' %}
                       <tr>                           
                         {% set resource_id = resource['id']  %}
-                        {% set dest_url = h.url_for('semantic_media_wiki.get_resource_machine', id=resource_id, _external=True) %}                            
+                        {% set dest_url = h.url_for('machine_link.get_resource_machine', id=resource_id, _external=True) %}                            
                         <input type="hidden" id="get_link_url" value='{{dest_url}}'>
                         <th scope="row">{{ _('Linked Equipment') }}</th>
                         <td><div id="equipment_list"></div></td>

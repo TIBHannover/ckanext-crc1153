@@ -11,7 +11,7 @@ from ckanext.crc1153.libs.commons import Commons
 
 if Commons.check_plugin_enabled("dataset_reference"):
     from ckanext.dataset_reference.models.package_reference_link import PackageReferenceLink
-if Commons.check_plugin_enabled("semantic_media_wiki"):
+if Commons.check_plugin_enabled("machine_link"):
     from ckanext.semantic_media_wiki.libs.media_wiki import Helper as mediaWikiHelper
 if Commons.check_plugin_enabled("sample_link"):
     from ckanext.semantic_media_wiki.libs.sample_link import SampleLinkHelper
@@ -50,7 +50,7 @@ class Crc1153DcatProfileHelper():
 
     @staticmethod
     def get_linked_machines(resource_id):
-        if not Commons.check_plugin_enabled("semantic_media_wiki"):
+        if not Commons.check_plugin_enabled("machine_link"):
             return {}
         # a dict of machines [machine_name:machine_link]
         return mediaWikiHelper.get_machine_link(resource_id)        

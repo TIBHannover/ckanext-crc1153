@@ -6,7 +6,7 @@ from ckanext.crc1153.libs.auth_helpers import AuthHelpers
 from sqlalchemy.sql.expression import false
 from ckan.model import Package, Group, User
 
-if Commons.check_plugin_enabled("semantic_media_wiki"):
+if Commons.check_plugin_enabled("machine_link"):
     from ckanext.semantic_media_wiki.libs.media_wiki import Helper as machineHelper
 
 if Commons.check_plugin_enabled("sample_link"):
@@ -82,7 +82,7 @@ class BaseController():
 
     @staticmethod
     def get_linked_machines_count():
-        if not Commons.check_plugin_enabled("semantic_media_wiki"):
+        if not Commons.check_plugin_enabled("machine_link"):
             return [0, 0]
         count = 0
         dataset_count = 0
@@ -213,7 +213,7 @@ class BaseController():
 
     @staticmethod
     def get_dataset_with_machines():
-        if not Commons.check_plugin_enabled("semantic_media_wiki"):
+        if not Commons.check_plugin_enabled("machine_link"):
             return []
         result_datasets = []
         dataset_found = False
