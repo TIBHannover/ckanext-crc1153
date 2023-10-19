@@ -22,7 +22,7 @@ Compatibility with core CKAN versions:
 
 - **crc1153_system_stats**: The system stats (data resources count, formats, etc) for system admins.
 
-- **crc1153_dcat_ap**: The CRC1153 DCAT profile extension based the CRC-specific vocabulary. 
+- **crc1153_dcat_profile**: The CRC1153 DCAT profile extension based the CRC-specific vocabulary. 
 
 - **crc1153_search**: Extending The CKAN search to enable users to search for dataset and data resources based on the CRC-specific metadata. 
 

@@ -69,8 +69,8 @@ class Crc1153DcatProfileHelper():
     def insert_to_sparql(graph):
         for s,p,o in graph:
             s,p,o = Crc1153DcatProfileHelper.clean_triples(s,p,o)
-            query = 'INSERT DATA{ ' + s + ' ' + p + ' ' + o + ' .  }'            
-            sparql = SPARQLWrapper(Crc1153DcatProfileHelper.get_apache_jena_endpoint())                        
+            query = 'INSERT DATA{ ' + s + ' ' + p + ' ' + o + ' .  }'             
+            sparql = SPARQLWrapper(Crc1153DcatProfileHelper.get_apache_jena_endpoint())
             sparql.setMethod(POST)
             sparql.setQuery(query)
             results = sparql.query() 
@@ -82,7 +82,7 @@ class Crc1153DcatProfileHelper():
     def delete_from_sparql(graph):
         for s,p,o in graph:
             s,p,o = Crc1153DcatProfileHelper.clean_triples(s,p,o)
-            query = ""           
+            query = ""                       
             if "_:N" in o:
                 # blank node as object
                 query = 'DELETE{ ' + s + ' ' + p + ' ?bnode . ?bnode ?p ?o .} WHERE{ '  + s + ' ' + p + ' ?bnode . ?bnode ?p ?o . FILTER (isBlank(?bnode))}'
