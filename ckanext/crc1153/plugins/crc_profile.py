@@ -136,8 +136,8 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
             res_d = Helper.delete_from_sparql(graph)
             res_i = Helper.insert_to_sparql(graph)
         except:
-            return resource
-            # raise
+            # return resource
+            raise
         
         return resource
     
