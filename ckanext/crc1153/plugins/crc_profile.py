@@ -84,8 +84,8 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
             graph = Helper.get_dataset_graph(package)
             res_d = Helper.delete_from_sparql(graph)            
         except:
-            return pkg_dict
-            # raise
+            # return pkg_dict
+            raise
         
         return pkg_dict
     
@@ -155,8 +155,8 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
             graph = Helper.get_dataset_graph(package)
             res_d = Helper.delete_from_sparql(graph)            
         except:
-            return resource
-            # raise                 
+            # return resource
+            raise                 
         return resources
     
     
