@@ -89,13 +89,14 @@ class Crc1153DcatProfileHelper():
                 sparql = SPARQLWrapper(Crc1153DcatProfileHelper.get_apache_jena_endpoint())                        
                 sparql.setMethod(POST)
                 sparql.setQuery(query)
-                results = sparql.query()
+                results = sparql.query()                
             elif "_:N" not in s and "_:N" not in p:
-                query = 'DELETE WHERE{ ' + s + ' ' + p + ' ?anything .  }'
+                query = 'DELETE WHERE{ ' + s + ' ' + p + ' ?anything .  }'                
                 sparql = SPARQLWrapper(Crc1153DcatProfileHelper.get_apache_jena_endpoint())                        
                 sparql.setMethod(POST)
                 sparql.setQuery(query)
-                results = sparql.query()                        
+                results = sparql.query()                    
+
 
         return results
 

@@ -18,8 +18,7 @@ class CrcSpecificMetadataHelpers:
     
 
     @staticmethod
-    def updateDatasetSchema(schema):
-        print(schema['extras'])
+    def updateDatasetSchema(schema):        
         schema.update({
             'sfb_dataset_type': [toolkit.get_validator('ignore_missing'), 
                                  toolkit.get_converter('convert_to_extras')]

@@ -49,8 +49,8 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
             graph = Helper.get_dataset_graph(package)
             res = Helper.insert_to_sparql(graph)
         except:
-            return pkg_dict
-            # raise
+            # return pkg_dict
+            raise
 
         return pkg_dict
 
@@ -62,13 +62,13 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
         '''
 
         try:                     
-            package = toolkit.get_action('package_show')({}, {'name_or_id': pkg_dict['id']})            
+            package = toolkit.get_action('package_show')({}, {'name_or_id': pkg_dict['id']})                     
             graph = Helper.get_dataset_graph(package)
             res_d = Helper.delete_from_sparql(graph)
             res_i = Helper.insert_to_sparql(graph)         
         except:
-            # return pkg_dict
-            raise
+            return pkg_dict
+            # raise
                                
         return pkg_dict
     
@@ -78,14 +78,14 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
         '''
             Delete an existing dataset metadata on the sparql endpoint
         '''
-
-        try:
-            package = toolkit.get_action('package_show')({}, {'name_or_id': pkg_dict['id']})
+      
+        try:            
+            package = toolkit.get_action('package_show')({}, {'name_or_id': pkg_dict['id']})                        
             graph = Helper.get_dataset_graph(package)
             res_d = Helper.delete_from_sparql(graph)            
         except:
-            # return pkg_dict
-            raise
+            return pkg_dict
+            # raise
         
         return pkg_dict
     
@@ -132,36 +132,32 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
                 package = toolkit.get_action('package_show')({}, {'name_or_id': resource['package_id']})
             elif resource.get('name'):
                 package = toolkit.get_action('package_show')({}, {'name_or_id': resource['name']})
+                        
             graph = Helper.get_dataset_graph(package)
             res_d = Helper.delete_from_sparql(graph)
             res_i = Helper.insert_to_sparql(graph)
         except:
-            # return resource
-            raise
+            return resource
+            # raise
         
         return resource
     
 
     
-    def before_delete(self, context, resource, resources):
-        try:
+    def before_delete(self, context, resource, resources):        
+        try:            
             package = {}
             resource_dict = toolkit.get_action('resource_show')({}, {'id': resource['id']}) 
             if resource_dict.get("package_id"):   
                 package = toolkit.get_action('package_show')({}, {'name_or_id': resource_dict['package_id']})
             elif resource_dict.get('name'):
                 package = toolkit.get_action('package_show')({}, {'name_or_id': resource_dict['name']})
-
+            
             graph = Helper.get_dataset_graph(package)
             res_d = Helper.delete_from_sparql(graph)            
         except:
-            # return resource
-            raise                 
-        return resources
-    
-    
-    
-    def after_delete(self, context, resources):        
+            return resource
+            # raise                 
         return resources
 
 
@@ -170,9 +166,7 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
 
     def before_update(self, context, current, resource):
         return resource
-     
-    def after_delete(self, context, resources):
-        return resources
+      
     
     def before_show(self, resource_dict):
         return resource_dict
