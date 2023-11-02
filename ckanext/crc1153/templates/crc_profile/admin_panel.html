@@ -3,10 +3,17 @@
 
 {% block primary_content_inner %}
     {% if h.is_plugin_enabled('crc1153_dcat_profile') %}
-        {% set action = h.url_for('crc1153_dcat_profile.export_catalog', _external=True) %}
+        {% set export_action = h.url_for('crc1153_dcat_profile.export_catalog', _external=True) %}
+        {% set push_sparql_action = h.url_for('crc1153_dcat_profile.push_to_sparql', _external=True) %}
         <div class="row">
             <div class="col-sm-12">
-                <a class="btn btn-primary" href="{{action}}" id="export-catalog-btn" target="_blank">Export Catalog</a>
+                <a class="btn btn-primary" href="{{export_action}}" id="export-catalog-btn" target="_blank">Export Catalog</a>              
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-sm-12">                
+                <a class="btn btn-primary" href="{{push_sparql_action}}" id="push-to-sparql-btn">Push CKAN Datasets Metadata To SPARQL</a>
             </div>
         </div>
     {% endif %}   

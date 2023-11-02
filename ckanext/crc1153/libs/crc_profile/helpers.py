@@ -25,6 +25,7 @@ class Crc1153DcatProfileHelper():
         return toolkit.config.get('ckanext.apacheJena.endpoint')  
     
 
+
     def get_linked_publication(dataset_name):
         '''
             The functions get all the linked publications for a dataset in ckan.
@@ -48,6 +49,7 @@ class Crc1153DcatProfileHelper():
         return linked_pubs
     
 
+
     @staticmethod
     def get_linked_machines(resource_id):
         if not Commons.check_plugin_enabled("machine_link"):
@@ -55,6 +57,7 @@ class Crc1153DcatProfileHelper():
         # a dict of machines [machine_name:machine_link]
         return mediaWikiHelper.get_machine_link(resource_id)        
     
+
 
     @staticmethod
     def get_linked_samples(resource_id):
@@ -64,6 +67,7 @@ class Crc1153DcatProfileHelper():
         # a dict of samples [sample_name:sample_link]
         return SampleLinkHelper.get_sample_link(resource_id)
     
+
 
     @staticmethod
     def insert_to_sparql(graph):
@@ -76,6 +80,7 @@ class Crc1153DcatProfileHelper():
             results = sparql.query() 
 
         return results
+
 
 
     @staticmethod
@@ -101,12 +106,14 @@ class Crc1153DcatProfileHelper():
         return results
 
 
+
     @staticmethod
     def get_dataset_graph(dataset_dict):        
         dataset_dict = Crc1153DcatProfileHelper.setDatasetUri(dataset_dict)
         serializer = RDFSerializer(profiles=dataset_dict.get('profiles'))
         gr_dataset = serializer.graph_from_dataset(dataset_dict)        
         return  serializer.g
+
 
 
     @staticmethod
@@ -130,6 +137,7 @@ class Crc1153DcatProfileHelper():
     
 
 
+
     @staticmethod
     def setDatasetUri(package):        
         ckan_root_path = toolkit.config.get('ckan.root_path')
@@ -145,3 +153,7 @@ class Crc1153DcatProfileHelper():
                 res["uri"] = ckan_base_url + "/dataset/" + package['name'] + "/resource/" + res['id']
         
         return package
+    
+
+
+

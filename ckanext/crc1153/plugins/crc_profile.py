@@ -31,6 +31,13 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
             u'export_catalog',
             Crc1153DcatProfileController.export_catalog,
             methods=['GET']
+            )  
+
+        blueprint.add_url_rule(
+            u'/dcatapcrc1153/push_to_sparql',
+            u'push_to_sparql',
+            Crc1153DcatProfileController.push_to_sparql,
+            methods=['GET']
             )   
         
         return blueprint 
