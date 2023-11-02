@@ -14,7 +14,9 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
     # IConfigurer
 
     def update_config(self, config_):
-        toolkit.add_template_directory(config_, '../templates')              
+        toolkit.add_template_directory(config_, '../templates')
+        toolkit.add_public_directory(config_, '../public')
+        toolkit.add_resource('../public/crc_profile', 'ckanext-crc1153-profile')              
 
 
     def get_blueprint(self):

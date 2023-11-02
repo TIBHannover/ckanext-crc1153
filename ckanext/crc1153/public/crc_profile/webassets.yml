@@ -1,0 +1,16 @@
+# add-css:
+#   output: ckanext-crc1153-specific-metadata/%(version)s_my.css
+#   contents:
+#     - index.css
+
+profile-js:  
+  output: ckanext-crc1153-specific-metadata/%(version)s_my.js
+  extra:
+    preload:
+      - base/main
+      - vendor/vendor
+      - vendor/bootstrap
+      - vendor/jquery
+      - vendor/jquery.ui.core
+  contents:
+    - profile.js

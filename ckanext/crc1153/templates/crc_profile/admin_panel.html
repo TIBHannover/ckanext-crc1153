@@ -3,6 +3,7 @@
 
 {% block primary_content_inner %}
     {% if h.is_plugin_enabled('crc1153_dcat_profile') %}
+        {% asset 'ckanext-crc1153-profile/profile-js' %}
         {% set export_action = h.url_for('crc1153_dcat_profile.export_catalog', _external=True) %}
         {% set push_sparql_action = h.url_for('crc1153_dcat_profile.push_to_sparql', _external=True) %}
         {% set delete_sparql_action = h.url_for('crc1153_dcat_profile.delete_from_sparql', _external=True) %}
