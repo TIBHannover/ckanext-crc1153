@@ -2,8 +2,6 @@
 
 from flask import render_template
 import ckan.plugins.toolkit as toolkit
-import ckan.model as model
-import ckan.logic as logic
 from ckan.model import Package
 from ckanext.dcat.processors import RDFSerializer
 from xml.etree import ElementTree
@@ -12,6 +10,7 @@ import io
 from ckanext.crc1153.libs.crc_profile.helpers import Crc1153DcatProfileHelper as Helper
 from ckanext.crc1153.libs.auth_helpers import AuthHelpers
 from ckan.model import Package
+import json
 
 
 
@@ -39,7 +38,7 @@ class Crc1153DcatProfileController:
 
         toolkit.enqueue_job(push_catalog_to_sparql, kwargs={'catalog_graphs': all_graphs})
                 
-        return '0'
+        return json.dumps({"_result": True})
     
 
 
@@ -57,7 +56,7 @@ class Crc1153DcatProfileController:
 
         toolkit.enqueue_job(delete_catalog_from_sparql, kwargs={'catalog_graphs': all_graphs})
                 
-        return '0'
+        return json.dumps({"_result": True})
     
     
     

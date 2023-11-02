@@ -7,6 +7,10 @@
         {% set export_action = h.url_for('crc1153_dcat_profile.export_catalog', _external=True) %}
         {% set push_sparql_action = h.url_for('crc1153_dcat_profile.push_to_sparql', _external=True) %}
         {% set delete_sparql_action = h.url_for('crc1153_dcat_profile.delete_from_sparql', _external=True) %}
+        <input type="hidden" value="{{push_sparql_action}}" id="push-to-sparql-url" />
+        <input type="hidden" value="{{delete_sparql_action}}" id="delete-sparql-url" />
+        <div class="row" id="alert_container"></div>
+        
         <div class="row">
             <div class="col-sm-12">
                 <a class="btn btn-primary" href="{{export_action}}" id="export-catalog-btn" target="_blank">Export Catalog</a>              
@@ -15,13 +19,13 @@
         <br/>
         <div class="row">
             <div class="col-sm-12">                
-                <a class="btn btn-primary" href="{{push_sparql_action}}" id="push-to-sparql-btn">Push CKAN Datasets Metadata To SPARQL</a>
+                <a class="btn btn-primary" href="#" id="push-to-sparql-btn" >Push CKAN Datasets Metadata To SPARQL</a>
             </div>
         </div>
         <br/>
         <div class="row">
             <div class="col-sm-12">                
-                <a class="btn btn-danger" href="{{delete_sparql_action}}" id="delete-sparql-btn">Delete CKAN Datasets Metadata From SPARQL</a>
+                <a class="btn btn-danger" href="#" id="delete-sparql-btn">Delete CKAN Datasets Metadata From SPARQL</a>
             </div>
         </div>
     {% endif %}   
