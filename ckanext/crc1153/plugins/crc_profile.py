@@ -38,6 +38,13 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
             u'push_to_sparql',
             Crc1153DcatProfileController.push_to_sparql,
             methods=['GET']
+            ) 
+
+        blueprint.add_url_rule(
+            u'/dcatapcrc1153/delete_from_sparql',
+            u'delete_from_sparql',
+            Crc1153DcatProfileController.delete_from_sparql,
+            methods=['GET']
             )   
         
         return blueprint 

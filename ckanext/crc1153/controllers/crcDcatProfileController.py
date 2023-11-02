@@ -41,6 +41,24 @@ class Crc1153DcatProfileController:
                 
         return '0'
     
+
+
+    def delete_from_sparql():
+        AuthHelpers.abort_if_not_admin()
+        all_datasets = Package.search_by_name('')
+        all_graphs = []
+        for dataset in all_datasets:
+            if dataset.state == 'active':
+                package = toolkit.get_action('package_show')({}, {'name_or_id': dataset.name})
+                package = Helper.setDatasetUri(package)   
+                graph = Helper.get_dataset_graph(package)
+                all_graphs.append(graph)
+
+
+        toolkit.enqueue_job(delete_catalog_from_sparql, kwargs={'catalog_graphs': all_graphs})
+                
+        return '0'
+    
     
     
     def export_catalog():
@@ -88,5 +106,14 @@ def push_catalog_to_sparql(catalog_graphs):
         try:
             res_d = Helper.delete_from_sparql(graph)
             res_i = Helper.insert_to_sparql(graph)
+        except:
+            continue
+
+
+
+def delete_catalog_from_sparql(catalog_graphs):
+    for graph in catalog_graphs:
+        try:
+            res_d = Helper.delete_from_sparql(graph)            
         except:
             continue
