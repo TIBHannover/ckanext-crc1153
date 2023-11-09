@@ -65,8 +65,8 @@ class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
             graph = Helper.get_dataset_graph(package)
             res = Helper.insert_to_sparql(graph)
         except:
-            # return pkg_dict
-            raise
+            return pkg_dict
+            # raise
 
         return pkg_dict
 
