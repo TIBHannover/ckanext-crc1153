@@ -65,7 +65,7 @@ jobs:
     - name: Install ckanext-dcat
       run: |
         pip install -e "git+https://github.com/ckan/ckanext-dcat.git@${{ matrix.ckanext-dcat_version }}#egg=ckanext-dcat"
-        pip install -r src/ckanext-dcat/requirements.txt
+        pip install -r /srv/app/src/ckanext-dcat/requirements.txt
         ls -la
 
     - name: Install requirements
