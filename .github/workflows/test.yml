@@ -66,6 +66,7 @@ jobs:
       run: |
         pip install -e "git+https://github.com/ckan/ckanext-dcat.git@${{ matrix.ckanext-dcat_version }}#egg=ckanext-dcat"
         pip install -r src/ckanext-dcat/requirements.txt
+        ls -la
 
     - name: Install requirements
       # Install any extra requirements your extension has here (dev requirements, other extensions etc)
