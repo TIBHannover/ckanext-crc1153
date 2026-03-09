@@ -62,14 +62,14 @@ class CRC1153DCATAPProfile(RDFProfile):
             linked_machines = Helper.get_linked_machines(resource_dict['id'])            
             for machine_name, machine_url in linked_machines.items():
                 emmo_device = URIRef("http://emmo.info/emmo/Device")
-                machine = CleanedURIRef(machine_url)
+                machine = URIRef(machine_url)
                 g.add((distribution, emmo_device, machine))
             
             ## add samples ##
             linked_samples = Helper.get_linked_samples(resource_dict['id'])
             for sample_name, sample_link in linked_samples.items():
                 dc_physical_object = URIRef("http://purl.org/dc/dcmitype/PhysicalObject")
-                sample = CleanedURIRef(sample_link)
+                sample = URIRef(sample_link)
                 g.add((distribution, dc_physical_object, sample))
             
             ## add matarial ##
