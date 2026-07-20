@@ -3,6 +3,10 @@
 import ckan.plugins.toolkit as toolkit
 import ckan.model as model
 import ckan.logic as logic
+import logging
+
+
+log = logging.getLogger(__name__)
 
 
 class AuthHelpers:
@@ -32,15 +36,17 @@ class AuthHelpers:
 
     @staticmethod
     def get_mediaWiki_creds():
-        credentials_path = toolkit.config.get('ckanext.mediaWiki_credentials_path')        
+        credentials_path = toolkit.config.get('ckanext.mediaWiki_credentials_path')
+        if not credentials_path:
+            return {}
         try:
-            credentials = open(credentials_path, 'r').read()
-            credentials = credentials.split('\n')
-            username = credentials[0].split('=')[1]
-            password = credentials[1].split('=')[1]
+            with open(credentials_path, 'r') as credentials_file:
+                credentials = credentials_file.read().split('\n')
+            username = credentials[0].split('=', 1)[1]
+            password = credentials[1].split('=', 1)[1]
             return {"username": username, "password": password}
-           
-        except:
+        except (OSError, IndexError) as err:
+            log.warning("MediaWiki credentials could not be loaded: %s", err)
             return {}
     
 

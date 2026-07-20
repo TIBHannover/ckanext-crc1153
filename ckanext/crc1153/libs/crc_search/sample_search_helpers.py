@@ -1,14 +1,17 @@
 # encoding: utf-8
 
 
+import logging
+
 import ckan.plugins.toolkit as toolkit
 from ckanext.crc1153.libs.crc_search.search_helpers import SearchHelper
 from ckanext.crc1153.libs.crc_search.facet_helpers import FacetHelper
 from ckanext.crc1153.libs.auth_helpers import AuthHelpers
 from ckanext.crc1153.libs.commons import Commons
 from ckan.model import Package
-if Commons.check_plugin_enabled("sample_link"):
-    from ckanext.semantic_media_wiki.libs.sample_link import SampleLinkHelper
+
+
+log = logging.getLogger(__name__)
 
 
 class SampleSearch():
@@ -27,6 +30,10 @@ class SampleSearch():
 
     @staticmethod
     def sample_search(datasets, search_phrase, search_filters, search_results):
+        SampleLinkHelper = SampleSearch._sample_link_helper()
+        if SampleLinkHelper is None:
+            return search_results
+
         for package in datasets:
             if package.state != 'active' or not AuthHelpers.check_access_show_package(package.id):
                 continue
@@ -55,3 +62,14 @@ class SampleSearch():
                         break
 
         return search_results
+
+    @staticmethod
+    def _sample_link_helper():
+        if not Commons.check_plugin_enabled("sample_link"):
+            return None
+        try:
+            from ckanext.semantic_media_wiki.libs.sample_link import SampleLinkHelper
+            return SampleLinkHelper
+        except ImportError:
+            log.warning("sample_link plugin is enabled but not importable")
+            return None

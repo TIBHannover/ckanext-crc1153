@@ -12,6 +12,8 @@ Compatibility with core CKAN versions:
 | --------------- | ------------- |
 | 2.8 and earlier | not tested    |
 | 2.9             | Yes    |
+| 2.10            | Yes    |
+| 2.11            | Yes    |
 
 
 ## Plugins
@@ -77,9 +79,25 @@ The credentials file path need to be set in the **ckan.ini** file with the name:
 
      ckanext.mediaWiki_credentials_path = /YOUR_Credential_PATH/
 
+By default CRC1153 connects to the SFB1153 Semantic MediaWiki at:
+
+     https://smw.service.tib.eu/wiki-sfb1153/
+
+The host, path, scheme and request timeout can be overridden in **ckan.ini**:
+
+     ckanext.crc1153.mediawiki.scheme = https
+     ckanext.crc1153.mediawiki.host = smw.service.tib.eu
+     ckanext.crc1153.mediawiki.path = /wiki-sfb1153/
+     ckanext.crc1153.mediawiki.timeout = 30
+
 2. To use the plugins that needs Apache Jena Endpoint (such as crc1153_dcat_ap), you need to set the endpoint in **ckan.ini**
 
           ckanext.apacheJena.endpoint = APACHE_JENA_ENDPOINT/update
+
+For CRC1153/SFB1153 DCAT output, enable the CRC1153 profile together with the
+base dcat profile:
+
+          ckanext.dcat.rdf.profiles = euro_dcat_ap_2 crc1153_dcat_ap
 
 3. The **crc1153_search** has a feature to search for data resources that are in CSV/XLSX formats based on their columns' name. The search works based on an indexing table to boost the search speed. The indexer auotomatically index a new resource. However, to index the already existing data resources, you need to call the indexer endpoint (Only Admin can run this):
 

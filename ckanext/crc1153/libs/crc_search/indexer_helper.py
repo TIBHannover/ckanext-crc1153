@@ -1,10 +1,15 @@
 # encoding: utf-8
 
+import logging
+
 import ckan.plugins.toolkit as toolkit
 from ckan.model import Package
 from ckanext.crc1153.models.data_resource_column_index import DataResourceColumnIndex
 from ckanext.crc1153.libs.auth_helpers import AuthHelpers
 from ckanext.crc1153.libs.crc_search.file_helpers import FileHelper
+
+
+log = logging.getLogger(__name__)
 
 
 class IndexerHelper():
@@ -32,9 +37,9 @@ class IndexerHelper():
                         elif FileHelper.is_xlsx(resource):
                             columns_names = IndexerHelper.shape_xlsx_column_names_for_index(resource['id'])
                             IndexerHelper.add_index(resource['id'], columns_names) 
-        except:
+        except Exception:
+            log.exception("CRC1153 resource column indexing failed")
             return "Indexed Failed!"
-            # raise
         
         return "Indexed"
 
