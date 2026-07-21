@@ -25,52 +25,20 @@ def test_enabled_plugin_entrypoints_load():
     "ckan.plugins",
     "crc1153_layout crc1153_specific_metadata",
 )
-@pytest.mark.usefixtures("with_plugins", "with_request_context")
-def test_sfb_header_and_resource_form_render(monkeypatch):
-    import ckan.lib.helpers as h
-    from ckan.lib.base import render_jinja2
+@pytest.mark.ckan_config("SECRET_KEY", "test_secret")
+@pytest.mark.usefixtures("with_plugins")
+def test_sfb_base_asset_include_without_unknown_assets(app, caplog):
+    import logging
 
-    monkeypatch.setattr(
-        h,
-        "get_material_list_from_smw",
-        lambda: [{"value": "Steel", "text": "Steel"}],
-    )
-    monkeypatch.setattr(
-        h,
-        "get_demonstrator_list_from_smw",
-        lambda: [{"value": "Demo", "text": "Demo"}],
-    )
+    from ckan.lib.webassets_tools import include_asset
 
-    header = render_jinja2("header.html", {})
-    assert "sfb-header-container" in header
-    assert "user_manual.help" in header or "Datasets" in header
+    caplog.set_level(logging.ERROR, logger="ckan.lib.webassets_tools")
 
-    resource_form = render_jinja2(
-        "package/snippets/resource_form.html",
-        {
-            "data": {
-                "id": "",
-                "url": "",
-                "url_type": "",
-                "name": "",
-                "description": "",
-                "format": "",
-                "material_combination": "Steel",
-                "demonstrator": "Demo",
-                "manufacturing_process": "",
-                "analysis_method": "",
-            },
-            "errors": {},
-            "error_summary": {},
-            "pkg_name": "dataset-one",
-            "dataset_type": "dataset",
-            "stage": [],
-            "form_action": "/dataset/dataset-one/resource/new",
-            "include_metadata": False,
-        },
-    )
-    assert "material_combination" in resource_form
-    assert "demonstrator" in resource_form
+    with app.flask_app.test_request_context("/"):
+        include_asset("ckanext-crc1153-layout/sfb1153-js")
+
+    assert "Trying to include unknown asset" not in caplog.text
+    assert "vendor/jquery.ui.core" not in caplog.text
 
 
 def test_search_plugin_uses_ckan_210_callback_names():

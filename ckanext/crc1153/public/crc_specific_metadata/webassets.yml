@@ -16,7 +16,6 @@ add-js:
       - vendor/vendor
       - vendor/bootstrap
       - vendor/jquery
-      - vendor/jquery.ui.core
   contents:
     - index.js
 
@@ -28,7 +27,6 @@ field-js:
       - vendor/vendor
       - vendor/jquery
       - vendor/bootstrap      
-      - vendor/jquery.ui.core      
   contents:
     - jquery.autocomplete.js
     - field.js
