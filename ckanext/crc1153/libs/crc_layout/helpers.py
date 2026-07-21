@@ -2,6 +2,7 @@
 
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.helpers as h
+from ckan.common import c
 from ckanext.crc1153.libs.auth_helpers import AuthHelpers
 
 
@@ -94,6 +95,14 @@ class Helper():
         return base_url + '/dataset/' + dataset_name + format
 
 
+    @staticmethod
+    def new_activities():
+        if not c.userobj:
+            return None
+
+        action = toolkit.get_action('dashboard_new_activities_count')
+        return action({}, {})
+
 
     def get_json(dataset_name):
         package = toolkit.get_action('package_show')({}, {'name_or_id': dataset_name})
@@ -101,7 +110,6 @@ class Helper():
                 return toolkit.abort(403, "Not Authorized")
 
         return package
-
 
 
 

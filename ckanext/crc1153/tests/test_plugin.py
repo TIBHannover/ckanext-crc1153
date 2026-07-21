@@ -83,6 +83,14 @@ def test_search_plugin_uses_ckan_210_callback_names():
     assert hasattr(plugin, "before_resource_delete")
 
 
+def test_layout_plugin_registers_new_activities_helper():
+    from ckanext.crc1153.plugins.layout import CrcLayoutPlugin
+
+    helpers = CrcLayoutPlugin().get_helpers()
+
+    assert "new_activities" in helpers
+
+
 def test_dcat_profile_plugin_uses_ckan_210_callback_names():
     from ckanext.crc1153.plugins.crc_profile import Dcatapcrc1153Plugin
 
