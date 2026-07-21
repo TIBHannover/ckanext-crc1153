@@ -3,7 +3,10 @@
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.helpers as h
 from ckan.common import c
+import logging
 from ckanext.crc1153.libs.auth_helpers import AuthHelpers
+
+log = logging.getLogger(__name__)
 
 
 class Helper():
@@ -97,11 +100,27 @@ class Helper():
 
     @staticmethod
     def new_activities():
-        if not c.userobj:
-            return None
+        userobj = getattr(c, 'userobj', None)
+        if not userobj:
+            return 0
 
-        action = toolkit.get_action('dashboard_new_activities_count')
-        return action({}, {})
+        try:
+            action = toolkit.get_action('dashboard_activity_list')
+        except KeyError:
+            return 0
+
+        try:
+            activities = action({'user': getattr(userobj, 'id', None)}, {})
+        except toolkit.NotAuthorized:
+            return 0
+        except Exception:
+            log.exception('Unable to retrieve dashboard activity count')
+            return 0
+
+        try:
+            return sum(1 for activity in activities if activity.get('is_new'))
+        except TypeError:
+            return 0
 
 
     def get_json(dataset_name):
@@ -110,6 +129,5 @@ class Helper():
                 return toolkit.abort(403, "Not Authorized")
 
         return package
-
 
 
