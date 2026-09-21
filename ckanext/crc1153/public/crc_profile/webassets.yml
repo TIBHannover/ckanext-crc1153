@@ -11,6 +11,5 @@ profile-js:
       - vendor/vendor
       - vendor/bootstrap
       - vendor/jquery
-      - vendor/jquery.ui.core
   contents:
     - profile.js

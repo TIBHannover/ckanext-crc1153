@@ -1,19 +1,14 @@
 # encoding: utf-8
 
+import logging
+
 from flask import render_template
 from ckanext.crc1153.libs.commons import Commons
 from ckanext.crc1153.libs.auth_helpers import AuthHelpers
 from sqlalchemy.sql.expression import false
 from ckan.model import Package, Group, User
 
-if Commons.check_plugin_enabled("machine_link"):
-    from ckanext.semantic_media_wiki.libs.media_wiki import Helper as machineHelper
-
-if Commons.check_plugin_enabled("sample_link"):
-    from ckanext.semantic_media_wiki.libs.sample_link import SampleLinkHelper
-
-if Commons.check_plugin_enabled("dataset_reference"):
-    from ckanext.dataset_reference.models.package_reference_link import PackageReferenceLink
+log = logging.getLogger(__name__)
  
 
 
@@ -84,6 +79,9 @@ class BaseController():
     def get_linked_machines_count():
         if not Commons.check_plugin_enabled("machine_link"):
             return [0, 0]
+        machineHelper = BaseController._machine_link_helper()
+        if machineHelper is None:
+            return [0, 0]
         count = 0
         dataset_count = 0
         dataset_found = False
@@ -107,6 +105,9 @@ class BaseController():
     def get_linked_samples_count():
         if not Commons.check_plugin_enabled("sample_link"):
             return [0,0]
+        SampleLinkHelper = BaseController._sample_link_helper()
+        if SampleLinkHelper is None:
+            return [0, 0]
         count = 0
         dataset_count = 0
         dataset_found = False
@@ -129,6 +130,9 @@ class BaseController():
     @staticmethod
     def get_linked_publications_count():
         if not Commons.check_plugin_enabled("dataset_reference"):
+            return 0
+        PackageReferenceLink = BaseController._package_reference_model()
+        if PackageReferenceLink is None:
             return 0
         count = 0
         all_datasets = Package.search_by_name('')
@@ -199,6 +203,9 @@ class BaseController():
     def get_dataset_with_publication():
         if not Commons.check_plugin_enabled("dataset_reference"):
             return []
+        PackageReferenceLink = BaseController._package_reference_model()
+        if PackageReferenceLink is None:
+            return []
         result_datasets = []
         all_datasets = Package.search_by_name('')
         for dataset in all_datasets:
@@ -214,6 +221,9 @@ class BaseController():
     @staticmethod
     def get_dataset_with_machines():
         if not Commons.check_plugin_enabled("machine_link"):
+            return []
+        machineHelper = BaseController._machine_link_helper()
+        if machineHelper is None:
             return []
         result_datasets = []
         dataset_found = False
@@ -236,6 +246,9 @@ class BaseController():
     @staticmethod
     def get_dataset_with_samples():
         if not Commons.check_plugin_enabled("sample_link"):
+            return []
+        SampleLinkHelper = BaseController._sample_link_helper()
+        if SampleLinkHelper is None:
             return []
         result_datasets = []
         dataset_found = False
@@ -276,6 +289,11 @@ class BaseController():
     @staticmethod
     def get_dataset_with_publication_per_group():
         result_groups = {}
+        if not Commons.check_plugin_enabled("dataset_reference"):
+            return result_groups
+        PackageReferenceLink = BaseController._package_reference_model()
+        if PackageReferenceLink is None:
+            return result_groups
         packages = Package.search_by_name('')
         for dataset in packages:
             if dataset.state == 'active':
@@ -291,3 +309,30 @@ class BaseController():
                                 result_groups[g.title] = [dataset.title]
 
         return result_groups
+
+    @staticmethod
+    def _package_reference_model():
+        try:
+            from ckanext.dataset_reference.models.package_reference_link import PackageReferenceLink
+            return PackageReferenceLink
+        except ImportError:
+            log.warning("dataset_reference plugin is enabled but not importable")
+            return None
+
+    @staticmethod
+    def _machine_link_helper():
+        try:
+            from ckanext.semantic_media_wiki.libs.media_wiki import Helper
+            return Helper
+        except ImportError:
+            log.warning("machine_link plugin is enabled but not importable")
+            return None
+
+    @staticmethod
+    def _sample_link_helper():
+        try:
+            from ckanext.semantic_media_wiki.libs.sample_link import SampleLinkHelper
+            return SampleLinkHelper
+        except ImportError:
+            log.warning("sample_link plugin is enabled but not importable")
+            return None

@@ -2,7 +2,7 @@
 
 {%- block page -%}
 
-  {% if h.is_user_login() or h.is_excluded() %}      
+  {# {% if h.is_user_login() or h.is_excluded() %} #}
 
     {% block skip %}
       <div class="sr-only sr-only-focusable"><a href="#content">{{ _('Skip to content') }}</a></div>
@@ -47,7 +47,7 @@
             </div>
           {% endblock %}
 
-          <div class="row wrapper{% block wrapper_class %}{% endblock %}{% if self.secondary()|trim == '' or c.action=='resource_read' %} no-nav{% endif %}">
+          <div class="row wrapper{% block wrapper_class %}{% endblock %}{% if self.secondary()|trim == '' or request.endpoint == 'dataset_resource.read' %} no-nav{% endif %}">
             {#
             The pre_primary block can be used to add content to before the
             rendering of the main content columns of the page.
@@ -128,9 +128,9 @@
     {% include "footer.html" %}
   {% endblock -%}
 
-{% else %}
-        {% snippet "snippets/close_for_guests_login_page.html" %}
-{% endif %} 
+{# {% else %} #}
+{#        {% snippet "snippets/close_for_guests_login_page.html" %} #}
+{# {% endif %}  #}
 
 {%- endblock page -%}
 

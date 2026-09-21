@@ -1,10 +1,14 @@
 # encoding: utf-8
 
+import logging
+import os
+
 import ckan.plugins.toolkit as toolkit
 import clevercsv
 import pandas as pd
 
-RESOURCE_DIR = toolkit.config['ckan.storage_path'] + '/resources/'
+
+log = logging.getLogger(__name__)
 
 
 class FileHelper():
@@ -58,12 +62,13 @@ class FileHelper():
             Read a csv file as pandas dataframe and return the columns name.
         '''
 
-        file_path = RESOURCE_DIR + resource_id[0:3] + '/' + resource_id[3:6] + '/' + resource_id[6:]
+        file_path = FileHelper._resource_path(resource_id)
         try:
             df = clevercsv.read_dataframe(file_path)
             df = df.fillna(0)        
             return [list(df.columns), False]
-        except:
+        except (OSError, UnicodeDecodeError, ValueError) as err:
+            log.warning("Could not read CSV resource %s: %s", resource_id, err.__class__.__name__)
             return[[], False]
     
 
@@ -71,10 +76,11 @@ class FileHelper():
     @staticmethod
     def get_xlsx_columns(resource_id):
         result_df = {}
-        file_path = RESOURCE_DIR + resource_id[0:3] + '/' + resource_id[3:6] + '/' + resource_id[6:]
+        file_path = FileHelper._resource_path(resource_id)
         try:
             data_sheets = pd.read_excel(file_path, sheet_name=None, header=None)
-        except:
+        except (OSError, ValueError) as err:
+            log.warning("Could not read XLSX resource %s: %s", resource_id, err.__class__.__name__)
             return {}
 
         for sheet, data_f in data_sheets.items():
@@ -85,3 +91,16 @@ class FileHelper():
                 result_df[sheet] = [final_data_df, False]
 
         return result_df
+
+    @staticmethod
+    def _resource_path(resource_id):
+        resource_dir = os.path.join(
+            toolkit.config.get('ckan.storage_path', ''),
+            'resources',
+        )
+        return os.path.join(
+            resource_dir,
+            resource_id[0:3],
+            resource_id[3:6],
+            resource_id[6:],
+        )

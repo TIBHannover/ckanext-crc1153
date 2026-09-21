@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+import logging
+
 import ckan.plugins.toolkit as toolkit
 from flask import render_template, request, redirect
 import ckan.lib.helpers as h
@@ -7,13 +9,15 @@ from ckanext.crc1153.libs.commons import Commons
 from ckanext.crc1153.libs.crc_specific_metadata.helpers import CrcSpecificMetadataHelpers
 
 
+log = logging.getLogger(__name__)
+
 
 class CrcSpecificMetadataController:
 
 
-    def render_add_metadata_page(package_id):        
+    def render_add_metadata_page(package_id):
         package = toolkit.get_action('package_show')({}, {'name_or_id': package_id})
-        stages = True    
+        stages = True
         resources = package['resources']
         custom_metadata_fields = {'material_combination': [], 'demonstrator': [], 'manufacturing_process': [], 'analysis_method': []}
         for meta in custom_metadata_fields.keys():
@@ -26,8 +30,8 @@ class CrcSpecificMetadataController:
 
 
 
-        return render_template('crc_specific_metadata/add_view.html', 
-            pkg_dict=package, 
+        return render_template('crc_specific_metadata/add_view.html',
+            pkg_dict=package,
             custom_stage=stages,
             custom_metadata_fields=custom_metadata_fields,
             material_list=CrcSpecificMetadataHelpers.get_material_list(),
@@ -40,7 +44,7 @@ class CrcSpecificMetadataController:
         metadata_fields = ['material_combination', 'demonstrator', 'manufacturing_process', 'analysis_method']
         resource_count = request.form.get('resources_count')
         package_name = request.form.get('pkg_name')
-        
+
         try:
             for field in metadata_fields:
                 custom_metadata_fields_length = request.form.get('processed_metadata_' + field)
@@ -48,18 +52,18 @@ class CrcSpecificMetadataController:
                     resource_ids = request.form.getlist('custom_metadata_' + field + '_' + str(i))
                     field_text = request.form.get(field + '_' + str(i))
 
-                    for res_id in resource_ids:                       
+                    for res_id in resource_ids:
                         resource = toolkit.get_action('resource_show')({}, {'id': res_id})
                         resource[field] = field_text
                         toolkit.get_action('resource_update')({}, resource)
-        
-        except:
-            # raise
+
+        except Exception:
+            log.exception("Saving CRC1153 resource metadata failed")
             return toolkit.abort(500, "")
 
         if Commons.check_plugin_enabled("machine_link"):
-            return redirect(h.url_for('machine_link.machines_view', id=str(package_name) ,  _external=True)) 
+            return redirect(h.url_for('machine_link.machines_view', id=str(package_name) ,  _external=True))
 
         return redirect(h.url_for('dataset.read', id=str(package_name) ,  _external=True))
 
-    
+

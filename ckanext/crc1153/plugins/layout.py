@@ -45,6 +45,7 @@ class CrcLayoutPlugin(plugins.SingletonPlugin):
             'query_prepration': Helper.search_query_prepration,
             'search_type_selection_is_needed': Helper.search_type_selection_is_needed,
             'get_dataset_export_url': Helper.get_dataset_export_url,
+            'new_activities': Helper.new_activities,
             'get_material_list_from_smw': CrcSpecificMetadataHelpers.get_material_list,
             'get_demonstrator_list_from_smw': CrcSpecificMetadataHelpers.get_demonstrator_list
         }

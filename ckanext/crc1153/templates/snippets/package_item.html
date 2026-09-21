@@ -4,7 +4,7 @@
     <ul>
     {% for res in package['resources'] %}        
         {% if res['id'] in g.detected_resources_ids %}            
-            {% set resource_url = h.url_for('dataset_resource.read', resource_id=res['id'], package_type=package['type'], id=package['id'], _external=True) %}
+            {% set resource_url = h.url_for(package['type'] ~ '_resource.read', resource_id=res['id'], id=package['name'], _external=True) %}
                 {% if res['name'] and res['name'] != ''  %}
                     <li>
                         <a href="{{resource_url}}" target='_blank'>{{res['name']}}</a>

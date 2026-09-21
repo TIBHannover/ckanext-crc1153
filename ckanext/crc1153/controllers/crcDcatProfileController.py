@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+import logging
+
 from flask import render_template
 import ckan.plugins.toolkit as toolkit
 from ckan.model import Package
@@ -12,6 +14,8 @@ from ckanext.crc1153.libs.auth_helpers import AuthHelpers
 from ckan.model import Package
 import json
 
+
+log = logging.getLogger(__name__)
 
 
 class Crc1153DcatProfileController:
@@ -91,10 +95,24 @@ class Crc1153DcatProfileController:
                 package = Helper.setDatasetUri(package)                                                              
                 dataset_dicts.append(package)
                 
-        serializer = RDFSerializer(profiles=package.get('profiles'))
+        serializer = RDFSerializer(profiles=Helper.get_rdf_profiles())
         rdf_output = serializer.serialize_catalog(dataset_dicts=dataset_dicts, _format="ttl")        
         file = io.BytesIO(rdf_output.encode())        
-        return send_file(file, mimetype='application/ttl', attachment_filename="ckancatlog.ttl", as_attachment = True)
+        try:
+            return send_file(
+                file,
+                mimetype='application/ttl',
+                download_name="ckancatlog.ttl",
+                as_attachment=True,
+            )
+        except TypeError:
+            file.seek(0)
+            return send_file(
+                file,
+                mimetype='application/ttl',
+                attachment_filename="ckancatlog.ttl",
+                as_attachment=True,
+            )
     
 
 
@@ -103,9 +121,10 @@ class Crc1153DcatProfileController:
 def push_catalog_to_sparql(catalog_graphs):
     for graph in catalog_graphs:
         try:
-            res_d = Helper.delete_from_sparql(graph)
-            res_i = Helper.insert_to_sparql(graph)
-        except:
+            Helper.delete_from_sparql(graph)
+            Helper.insert_to_sparql(graph)
+        except Exception:
+            log.exception("Failed to push catalog graph to SPARQL")
             continue
 
 
@@ -113,6 +132,7 @@ def push_catalog_to_sparql(catalog_graphs):
 def delete_catalog_from_sparql(catalog_graphs):
     for graph in catalog_graphs:
         try:
-            res_d = Helper.delete_from_sparql(graph)            
-        except:
+            Helper.delete_from_sparql(graph)
+        except Exception:
+            log.exception("Failed to delete catalog graph from SPARQL")
             continue

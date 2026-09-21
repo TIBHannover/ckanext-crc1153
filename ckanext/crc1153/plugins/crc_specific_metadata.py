@@ -13,6 +13,7 @@ class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     plugins.implements(plugins.IBlueprint)
     plugins.implements(plugins.IDatasetForm, inherit=False)
     plugins.implements(plugins.IFacets)
+    plugins.implements(plugins.ITemplateHelpers)
 
     # IConfigurer
 
@@ -20,13 +21,13 @@ class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         toolkit.add_template_directory(config_, '../templates')
         toolkit.add_public_directory(config_, '../public')
         toolkit.add_resource('../public/crc_specific_metadata', 'ckanext-crc1153-specific-metadata')
-    
+
 
     # Blueprint
 
     def get_blueprint(self):
 
-        blueprint = Blueprint(self.name, self.__module__)        
+        blueprint = Blueprint(self.name, self.__module__)
         blueprint.add_url_rule(
             u'/resource_custom_metadata/add_metadata/<package_id>',
             u'add_metadata',
@@ -38,12 +39,18 @@ class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             u'save_metadata',
             CrcSpecificMetadataController.save_metadata,
             methods=['POST']
-            )                   
+            )
         return blueprint
-    
-    
+
+    def get_helpers(self):
+        return {
+            'get_material_list_from_smw': CrcSpecificMetadataHelpers.get_material_list,
+            'get_demonstrator_list_from_smw': CrcSpecificMetadataHelpers.get_demonstrator_list,
+        }
+
+
     # IDatasetForm
-    
+
     def is_fallback(self):
         return True
 
@@ -69,24 +76,24 @@ class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         })
         schema = CrcSpecificMetadataHelpers.updateResourceSchema(schema)
         return schema
-    
+
 
 
     # IFacet
 
     def dataset_facets(self, facets_dict, package_type):
         new_metadata_name = 'sfb_dataset_type'
-        new_metadata_title = plugins.toolkit._('Dataset Type')              
+        new_metadata_title = plugins.toolkit._('Dataset Type')
         return CrcSpecificMetadataHelpers.update_dataset_facet(facets_dict, new_metadata_name, new_metadata_title)
 
 
     def  organization_facets(self, facets_dict, group_type, package_type):
         new_metadata_name = 'sfb_dataset_type'
-        new_metadata_title = plugins.toolkit._('Dataset Type')        
+        new_metadata_title = plugins.toolkit._('Dataset Type')
         return CrcSpecificMetadataHelpers.update_dataset_facet(facets_dict, new_metadata_name, new_metadata_title)
 
     def  group_facets(self, facets_dict, group_type, package_type):
         new_metadata_name = 'sfb_dataset_type'
         new_metadata_title = plugins.toolkit._('Dataset Type')
         return CrcSpecificMetadataHelpers.update_dataset_facet(facets_dict, new_metadata_name, new_metadata_title)
-    
+
