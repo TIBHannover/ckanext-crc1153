@@ -22,6 +22,31 @@ def test_enabled_plugin_entrypoints_load():
         assert plugins.plugin_loaded(plugin_name)
 
 
+def test_system_stats_registers_only_its_existing_template_directory(
+    monkeypatch,
+):
+    from ckanext.crc1153.plugins.system_stats import SystemStatsPlugin
+
+    registered_templates = []
+    monkeypatch.setattr(
+        "ckanext.crc1153.plugins.system_stats.toolkit.add_template_directory",
+        lambda config, path: registered_templates.append((config, path)),
+    )
+    monkeypatch.setattr(
+        "ckanext.crc1153.plugins.system_stats.toolkit.add_public_directory",
+        lambda *_args: pytest.fail("system stats has no public directory"),
+    )
+    monkeypatch.setattr(
+        "ckanext.crc1153.plugins.system_stats.toolkit.add_resource",
+        lambda *_args: pytest.fail("system stats has no webassets bundle"),
+    )
+
+    config = {}
+    SystemStatsPlugin().update_config(config)
+
+    assert registered_templates == [(config, "../templates")]
+
+
 @pytest.mark.ckan_config(
     "ckan.plugins",
     "crc1153_layout crc1153_specific_metadata",
