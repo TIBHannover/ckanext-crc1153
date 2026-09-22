@@ -44,22 +44,55 @@ def test_sfb_base_asset_include_without_unknown_assets(app, caplog):
 
 @pytest.mark.ckan_config("ckan.plugins", "crc1153_layout")
 @pytest.mark.usefixtures("with_plugins")
-def test_sfb_header_renders_for_logged_out_users_without_activity_action(app, monkeypatch):
+@pytest.mark.parametrize(
+    "userobj,expected_text",
+    [
+        (None, "account not-authed"),
+        (
+            SimpleNamespace(
+                id="normal-user-id",
+                name="normal-user",
+                display_name="Normal User",
+                sysadmin=False,
+            ),
+            "/dashboard/datasets",
+        ),
+        (
+            SimpleNamespace(
+                id="sysadmin-user-id",
+                name="sysadmin-user",
+                display_name="Sysadmin User",
+                sysadmin=True,
+            ),
+            "/dashboard/datasets",
+        ),
+    ],
+)
+def test_sfb_header_renders_without_dashboard_build_error(
+    app, monkeypatch, userobj, expected_text
+):
     from ckan.lib.base import render
+    from flask import Response
 
     from ckanext.crc1153.libs.crc_layout import helpers
 
-    monkeypatch.setattr(helpers, "c", SimpleNamespace(userobj=None))
-
     def get_action(name):
-        raise AssertionError("logged-out header must not request actions")
+        assert name != "dashboard_new_activities_count"
+        raise KeyError(name)
 
+    monkeypatch.setattr(helpers, "c", SimpleNamespace(userobj=userobj))
     monkeypatch.setattr(helpers.toolkit, "get_action", get_action)
 
     with app.flask_app.test_request_context("/"):
-        header = render("header.html", {})
+        from flask import g
 
-    assert "account not-authed" in header
+        g.userobj = userobj
+        g.user = userobj.name if userobj else ""
+        response = Response(render("header.html", {}))
+
+    assert response.status_code == 200
+    assert expected_text in response.get_data(as_text=True)
+    assert "activity.dashboard" not in response.get_data(as_text=True)
 
 
 def test_search_plugin_uses_ckan_210_callback_names():
