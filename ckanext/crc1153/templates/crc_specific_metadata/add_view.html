@@ -25,6 +25,7 @@
   
   <input type="hidden" name="resource_count" id="resorces_count" value={{pkg_dict['resources']|length}}>
   <form id="resource-custom-metadata-form" method="post" action='{{action}}' data-module="basic-form" enctype="multipart/form-data">
+    {{ h.csrf_input() }}
     <div class="row">
     <div class="col-sm-12">
         <p>
