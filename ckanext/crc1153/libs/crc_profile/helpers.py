@@ -23,7 +23,6 @@ class Crc1153DcatProfileHelper():
     def get_apache_jena_endpoint():
         return get_owned_config_value(
             'ckanext.crc1153.apachejena.endpoint',
-            'ckanext.apachejena.endpoint',
         )
 
 
@@ -222,5 +221,4 @@ class Crc1153DcatProfileHelper():
         except ImportError:
             log.warning("sample_link plugin is enabled but not importable")
             return None
-
 

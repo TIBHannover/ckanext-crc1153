@@ -81,9 +81,8 @@ CRC1153-owned canonical name:
      ckanext.crc1153.mediawiki_credentials_path = /YOUR_Credential_PATH/
 
 The equivalent environment variable is
-`CKANEXT__CRC1153__MEDIAWIKI_CREDENTIALS_PATH`. The previous shared
-`ckanext.mediawiki_credentials_path` and historical
-`ckanext.mediaWiki_credentials_path` spellings remain supported for backward
+`CKANEXT__CRC1153__MEDIAWIKI_CREDENTIALS_PATH`. The historical
+`ckanext.mediaWiki_credentials_path` spelling remains supported for backward
 compatibility.
 
 By default CRC1153 connects to the SFB1153 Semantic MediaWiki at:
@@ -102,9 +101,9 @@ The host, path, scheme and request timeout can be overridden in **ckan.ini**:
           ckanext.crc1153.apachejena.endpoint = https://jena.example.test/dataset/update
 
 The equivalent environment variable is
-`CKANEXT__CRC1153__APACHEJENA__ENDPOINT`. The previous shared
-`ckanext.apachejena.endpoint` and historical `ckanext.apacheJena.endpoint`
-spellings remain supported for backward compatibility.
+`CKANEXT__CRC1153__APACHEJENA__ENDPOINT`. The historical
+`ckanext.apacheJena.endpoint` spelling remains supported for backward
+compatibility.
 
 For CRC1153/SFB1153 DCAT output, enable the CRC1153 profile together with the
 base dcat profile:

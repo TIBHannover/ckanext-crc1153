@@ -17,10 +17,8 @@ from ckanext.crc1153.plugins.crc_profile import Dcatapcrc1153Plugin
 DATASET_REF = URIRef("http://example.com/dataset/dataset-1")
 RESOURCE_REF = URIRef("http://example.com/dataset/dataset-1/resource/resource-1")
 CANONICAL_JENA_KEY = "ckanext.crc1153.apachejena.endpoint"
-SHARED_JENA_KEY = "ckanext.apachejena.endpoint"
 HISTORICAL_JENA_KEY = "ckanext.apacheJena.endpoint"
 CANONICAL_CREDENTIALS_KEY = "ckanext.crc1153.mediawiki_credentials_path"
-SHARED_CREDENTIALS_KEY = "ckanext.mediawiki_credentials_path"
 
 
 def _declared_config(values):
@@ -44,14 +42,12 @@ def test_plugin_declares_only_crc1153_owned_config():
     declaration = Declaration()
     Dcatapcrc1153Plugin().declare_config_options(declaration, Key())
 
-    assert declaration.get(SHARED_JENA_KEY).legacy_key == HISTORICAL_JENA_KEY
-    assert declaration.get(CANONICAL_JENA_KEY).legacy_key == SHARED_JENA_KEY
+    assert declaration.get(CANONICAL_JENA_KEY).legacy_key == HISTORICAL_JENA_KEY
     assert declaration.get(CANONICAL_CREDENTIALS_KEY).legacy_key == (
-        SHARED_CREDENTIALS_KEY
-    )
-    assert declaration.get(SHARED_CREDENTIALS_KEY).legacy_key == (
         "ckanext.mediaWiki_credentials_path"
     )
+    assert "ckanext.apachejena.endpoint" not in declaration
+    assert "ckanext.mediawiki_credentials_path" not in declaration
 
 
 def test_canonical_jena_endpoint_is_used(monkeypatch):
@@ -60,28 +56,10 @@ def test_canonical_jena_endpoint_is_used(monkeypatch):
     )
     monkeypatch.setattr(helpers.toolkit, "config", config)
 
-    assert declaration.get(SHARED_JENA_KEY).legacy_key == HISTORICAL_JENA_KEY
-    assert declaration.get(CANONICAL_JENA_KEY).legacy_key == SHARED_JENA_KEY
+    assert declaration.get(CANONICAL_JENA_KEY).legacy_key == HISTORICAL_JENA_KEY
     assert Crc1153DcatProfileHelper.get_apache_jena_endpoint() == (
         "https://jena.example.test/canonical"
     )
-
-
-def test_shared_jena_endpoint_populates_canonical_key(monkeypatch, caplog):
-    with caplog.at_level(logging.WARNING, logger="ckan.config.declaration"):
-        _, config = _declared_config(
-            {SHARED_JENA_KEY: "https://jena.example.test/shared"}
-        )
-    monkeypatch.setattr(helpers.toolkit, "config", config)
-
-    assert config[CANONICAL_JENA_KEY] == "https://jena.example.test/shared"
-    assert Crc1153DcatProfileHelper.get_apache_jena_endpoint() == (
-        "https://jena.example.test/shared"
-    )
-    assert (
-        f"Config option '{SHARED_JENA_KEY}' is deprecated. "
-        f"Use '{CANONICAL_JENA_KEY}' instead"
-    ) in caplog.text
 
 
 def test_historical_jena_endpoint_remains_supported(monkeypatch, caplog):
@@ -96,31 +74,17 @@ def test_historical_jena_endpoint_remains_supported(monkeypatch, caplog):
     assert HISTORICAL_JENA_KEY in caplog.text
 
 
-def test_canonical_jena_endpoint_takes_precedence_over_shared(monkeypatch):
+def test_canonical_jena_endpoint_takes_precedence_over_historical(monkeypatch):
     _, config = _declared_config(
         {
             CANONICAL_JENA_KEY: "https://jena.example.test/canonical",
-            SHARED_JENA_KEY: "https://jena.example.test/shared",
-        }
-    )
-    monkeypatch.setattr(helpers.toolkit, "config", config)
-
-    assert Crc1153DcatProfileHelper.get_apache_jena_endpoint() == (
-        "https://jena.example.test/canonical"
-    )
-
-
-def test_shared_jena_endpoint_takes_precedence_over_historical(monkeypatch):
-    _, config = _declared_config(
-        {
-            SHARED_JENA_KEY: "https://jena.example.test/shared",
             HISTORICAL_JENA_KEY: "https://jena.example.test/historical",
         }
     )
     monkeypatch.setattr(helpers.toolkit, "config", config)
 
     assert Crc1153DcatProfileHelper.get_apache_jena_endpoint() == (
-        "https://jena.example.test/shared"
+        "https://jena.example.test/canonical"
     )
 
 
