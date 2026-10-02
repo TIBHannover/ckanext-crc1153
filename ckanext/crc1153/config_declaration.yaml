@@ -2,9 +2,15 @@ version: 1
 groups:
   - annotation: CRC1153 integration settings
     options:
+      - key: ckanext.apachejena.endpoint
+        legacy_key: ckanext.apacheJena.endpoint
+        description: Shared Apache Jena SPARQL update endpoint.
       - key: ckanext.crc1153.apachejena.endpoint
         legacy_key: ckanext.apachejena.endpoint
         description: Apache Jena SPARQL update endpoint used for CRC1153 dataset metadata synchronization.
+      - key: ckanext.mediawiki_credentials_path
+        legacy_key: ckanext.mediaWiki_credentials_path
+        description: Shared path to the MediaWiki credentials file.
       - key: ckanext.crc1153.mediawiki_credentials_path
         legacy_key: ckanext.mediawiki_credentials_path
         description: Path to the MediaWiki credentials file used by CRC1153.

@@ -41,7 +41,6 @@ class AuthHelpers:
         credentials_path = get_owned_config_value(
             'ckanext.crc1153.mediawiki_credentials_path',
             'ckanext.mediawiki_credentials_path',
-            'ckanext.mediaWiki_credentials_path',
         )
         if not credentials_path:
             return {}
