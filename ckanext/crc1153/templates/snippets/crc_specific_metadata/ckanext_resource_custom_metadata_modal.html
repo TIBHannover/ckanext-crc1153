@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="{{'#resourcesModal_' ~ metadata_field_name  ~ counter_id}}">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="{{'#resourcesModal_' ~ metadata_field_name  ~ counter_id}}">
   {{_('Select data resource')}}
 </button>
 <div id="{{'resourcesModal_' ~ metadata_field_name  ~ counter_id}}" class="resource-custom-metadata-modal modal fade" role="dialog">
@@ -48,8 +48,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" id="{{'modal-add-btn-' ~ metadata_field_name ~ counter_id}}" class="btn btn-primary res_custom_metadat_modal_save" data-dismiss="modal">{{_('Save')}}</button>
-        <button type="button" id={{'ref_add_close_btn' ~ counter_id}} type="button" class="pull-left btn btn-default res_custom_metadat_modal_close" data-dismiss="modal">{{_('Close')}}</button>
+        <button type="button" id="{{'modal-add-btn-' ~ metadata_field_name ~ counter_id}}" class="btn btn-primary res_custom_metadat_modal_save" data-bs-dismiss="modal">{{_('Save')}}</button>
+        <button type="button" id={{'ref_add_close_btn' ~ counter_id}} type="button" class="pull-left btn btn-default res_custom_metadat_modal_close" data-bs-dismiss="modal">{{_('Close')}}</button>
       </div>
     </div>
 

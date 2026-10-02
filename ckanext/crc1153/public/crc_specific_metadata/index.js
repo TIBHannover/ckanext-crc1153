@@ -80,7 +80,9 @@ $(document).ready(function(){
       }
       
       if(showWarning){
-        $('#resource_metadata_warning').modal('show');
+        bootstrap.Modal.getOrCreateInstance(
+          document.getElementById('resource_metadata_warning')
+        ).show();
       }
       else {
         $("#reload_page").val("yes");
@@ -201,12 +203,12 @@ $(document).ready(function(){
 
      $('.custom-metadata-resource_count_edit').click(function(){
       let id = $(this).attr('id');
-      let field_name_box_and_id = id.split('metadata-resource-count-icon-')[1];      
-      $('#resourcesModal_' + field_name_box_and_id).modal({
+      let field_name_box_and_id = id.split('metadata-resource-count-icon-')[1];
+      let modal = document.getElementById('resourcesModal_' + field_name_box_and_id);
+      bootstrap.Modal.getOrCreateInstance(modal, {
         backdrop: 'static',
         keyboard: false
-       });
-      $('#resourcesModal_' + field_name_box_and_id).modal('show'); 
+      }).show();
     });   
 
 

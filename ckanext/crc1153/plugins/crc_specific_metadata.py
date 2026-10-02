@@ -35,7 +35,7 @@ class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
             methods=['GET']
             )
         blueprint.add_url_rule(
-            u'/resource_custom_metadata/save_metadata',
+            u'/crc1153_specific_metadata/save_metadata',
             u'save_metadata',
             CrcSpecificMetadataController.save_metadata,
             methods=['POST']
@@ -92,8 +92,8 @@ class CrcSpecificMetadata(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
         new_metadata_title = plugins.toolkit._('Dataset Type')
         return CrcSpecificMetadataHelpers.update_dataset_facet(facets_dict, new_metadata_name, new_metadata_title)
 
+
     def  group_facets(self, facets_dict, group_type, package_type):
         new_metadata_name = 'sfb_dataset_type'
         new_metadata_title = plugins.toolkit._('Dataset Type')
         return CrcSpecificMetadataHelpers.update_dataset_facet(facets_dict, new_metadata_name, new_metadata_title)
-

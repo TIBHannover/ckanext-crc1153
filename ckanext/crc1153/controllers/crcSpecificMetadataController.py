@@ -61,9 +61,11 @@ class CrcSpecificMetadataController:
             log.exception("Saving CRC1153 resource metadata failed")
             return toolkit.abort(500, "")
 
+        if Commons.check_plugin_enabled("sample_link"):
+            return redirect(h.url_for('sample_link.add_samples_view', id=str(package_name) ,  _external=True))
+
         if Commons.check_plugin_enabled("machine_link"):
             return redirect(h.url_for('machine_link.machines_view', id=str(package_name) ,  _external=True))
 
         return redirect(h.url_for('dataset.read', id=str(package_name) ,  _external=True))
-
 

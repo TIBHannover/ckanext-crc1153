@@ -1,12 +1,15 @@
 # encoding: utf-8
 
-import pytest
+from pathlib import Path
 from types import SimpleNamespace
+
+import pytest
 
 import ckan.lib.helpers as h
 import ckan.plugins.toolkit as toolkit
 from bs4 import BeautifulSoup
 from ckan.tests import factories
+from flask import Blueprint
 
 from ckanext.crc1153.libs.crc_specific_metadata.helpers import (
     CrcSpecificMetadataHelpers,
@@ -20,6 +23,7 @@ CRC1153_PLUGINS = (
     "crc1153_specific_metadata",
     "crc1153_dcat_profile",
 )
+EXTENSION_ROOT = Path(__file__).parents[1]
 
 
 @pytest.fixture
@@ -87,7 +91,7 @@ def test_save_specific_metadata_requires_csrf_token(csrf_enforced_app, clean_db)
     dataset = factories.Dataset(user=user)
 
     response = csrf_enforced_app.post(
-        "/resource_custom_metadata/save_metadata",
+        "/crc1153_specific_metadata/save_metadata",
         data=_metadata_payload(dataset["name"]),
         extra_environ={"REMOTE_USER": user["name"]},
         follow_redirects=False,
@@ -148,7 +152,7 @@ def test_save_specific_metadata_accepts_rendered_token_and_preserves_behavior(
     )
 
     response = client.post(
-        "/resource_custom_metadata/save_metadata",
+        "/crc1153_specific_metadata/save_metadata",
         data=data,
         extra_environ=auth,
         follow_redirects=False,
@@ -163,6 +167,152 @@ def test_save_specific_metadata_accepts_rendered_token_and_preserves_behavior(
         {"ignore_auth": True}, {"id": resource["id"]}
     )
     assert saved_resource["material_combination"] == "Steel, Aluminum"
+
+
+def test_specific_metadata_blueprint_uses_collision_free_routes():
+    from ckanext.crc1153.plugins.crc_specific_metadata import CrcSpecificMetadata
+    from flask import Flask
+
+    flask_app = Flask(__name__)
+    flask_app.register_blueprint(CrcSpecificMetadata().get_blueprint())
+    routes = {rule.rule: rule.endpoint for rule in flask_app.url_map.iter_rules()}
+
+    assert routes[
+        "/resource_custom_metadata/add_metadata/<package_id>"
+    ].endswith(".add_metadata")
+    assert routes[
+        "/crc1153_specific_metadata/save_metadata"
+    ].endswith(".save_metadata")
+    assert "/resource_custom_metadata/save_metadata" not in routes
+
+
+@pytest.mark.ckan_config(
+    "ckan.plugins", "crc1153_specific_metadata crc1153_layout"
+)
+@pytest.mark.ckan_config("SECRET_KEY", "test_secret")
+def test_resource_selection_modal_uses_ckan_211_contract(
+    csrf_enforced_app, clean_db, monkeypatch
+):
+    user = factories.Sysadmin()
+    dataset = factories.Dataset(
+        user=user,
+        resources=[{"url": "https://example.test/data.csv", "name": "data.csv"}],
+    )
+    resource = dataset["resources"][0]
+    monkeypatch.setattr(CrcSpecificMetadataHelpers, "get_material_list", lambda: [])
+    monkeypatch.setattr(
+        CrcSpecificMetadataHelpers, "get_demonstrator_list", lambda: []
+    )
+
+    response = csrf_enforced_app.get(
+        "/resource_custom_metadata/add_metadata/{}".format(dataset["name"]),
+        extra_environ={"REMOTE_USER": user["name"]},
+    )
+
+    assert response.status_code == 200
+    document = BeautifulSoup(response.get_data(as_text=True), "html.parser")
+    button = document.find("button", string=lambda text: text and "Select data resource" in text)
+    assert button is not None
+    assert button["data-bs-toggle"] == "modal"
+    modal = document.select_one(button["data-bs-target"])
+    assert modal is not None
+    assert modal.select_one('input.resource-box[value="{}"]'.format(resource["id"]))
+    assert document.select_one('input[name="_csrf_token"]') is not None
+
+    add_view = (EXTENSION_ROOT / "templates/crc_specific_metadata/add_view.html").read_text()
+    javascript = (EXTENSION_ROOT / "public/crc_specific_metadata/index.js").read_text()
+    webassets = (EXTENSION_ROOT / "public/crc_specific_metadata/webassets.yml").read_text()
+    assert "{% asset 'ckanext-crc1153-specific-metadata/add-js' %}" in add_view
+    assert "bootstrap.Modal.getOrCreateInstance" in javascript
+    assert ".modal(" not in javascript
+    assert "vendor/bootstrap" in webassets
+    assert "vendor/select2" not in webassets
+
+
+@pytest.mark.ckan_config(
+    "ckan.plugins", "crc1153_specific_metadata crc1153_layout"
+)
+@pytest.mark.usefixtures("with_plugins")
+def test_specific_metadata_webassets_include_without_unknown_assets(app, caplog):
+    import logging
+
+    from ckan.lib.webassets_tools import include_asset
+
+    caplog.set_level(logging.ERROR, logger="ckan.lib.webassets_tools")
+    with app.flask_app.test_request_context("/"):
+        include_asset("ckanext-crc1153-specific-metadata/add-js")
+        include_asset("ckanext-crc1153-specific-metadata/field-js")
+
+    assert "Trying to include unknown asset" not in caplog.text
+
+
+@pytest.mark.ckan_config(
+    "ckan.plugins", "crc1153_specific_metadata crc1153_layout"
+)
+@pytest.mark.ckan_config("SECRET_KEY", "test_secret")
+def test_save_and_continue_persists_metadata_and_redirects_to_samples(
+    csrf_enforced_app, clean_db, monkeypatch
+):
+    flask_app = csrf_enforced_app.flask_app
+    sample_blueprint = Blueprint("sample_link", __name__)
+    sample_blueprint.add_url_rule(
+        "/smw/add_samples_view/<id>",
+        "add_samples_view",
+        lambda id: "Samples for {}".format(id),
+    )
+    flask_app.register_blueprint(sample_blueprint)
+    monkeypatch.setitem(
+        toolkit.config,
+        "ckan.plugins",
+        "crc1153_specific_metadata crc1153_layout sample_link machine_link organization_group",
+    )
+
+    user = factories.Sysadmin()
+    dataset = factories.Dataset(
+        user=user,
+        resources=[{"url": "https://example.test/data.csv", "name": "data.csv"}],
+    )
+    resource = dataset["resources"][0]
+    monkeypatch.setattr(CrcSpecificMetadataHelpers, "get_material_list", lambda: [])
+    monkeypatch.setattr(
+        CrcSpecificMetadataHelpers, "get_demonstrator_list", lambda: []
+    )
+    client = csrf_enforced_app.test_client()
+    auth = {"REMOTE_USER": user["name"]}
+    form_response = client.get(
+        "/resource_custom_metadata/add_metadata/{}".format(dataset["name"]),
+        extra_environ=auth,
+    )
+    document = BeautifulSoup(form_response.get_data(as_text=True), "html.parser")
+    csrf_token = document.select_one('input[name="_csrf_token"]')["value"]
+    data = _metadata_payload(dataset["name"], csrf_token)
+    data.update(
+        {
+            "resources_count": "1",
+            "material_combination_1": "Steel",
+            "custom_metadata_material_combination_1": resource["id"],
+            "save_skip_btn": "finish_ownership",
+        }
+    )
+
+    response = client.post(
+        "/crc1153_specific_metadata/save_metadata",
+        data=data,
+        extra_environ=auth,
+        follow_redirects=False,
+    )
+
+    assert response.status_code == 302
+    assert response.location.endswith(
+        "/smw/add_samples_view/{}".format(dataset["name"])
+    )
+    assert "/upgrade_dataset/add_ownership_view/" not in response.location
+    saved_resource = toolkit.get_action("resource_show")(
+        {"ignore_auth": True}, {"id": resource["id"]}
+    )
+    assert saved_resource["material_combination"] == "Steel"
+    samples_response = client.get(response.location, extra_environ=auth)
+    assert samples_response.status_code == 200
 
 
 @pytest.mark.ckan_config("ckan.plugins", " ".join(CRC1153_PLUGINS))
