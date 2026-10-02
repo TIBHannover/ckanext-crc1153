@@ -4,6 +4,7 @@ import logging
 from unittest.mock import Mock
 
 import pytest
+import ckan.plugins as plugins
 from ckan.common import CKANConfig
 from ckan.config.declaration import Declaration, Key
 from rdflib import Graph, Literal, URIRef
@@ -17,6 +18,7 @@ DATASET_REF = URIRef("http://example.com/dataset/dataset-1")
 RESOURCE_REF = URIRef("http://example.com/dataset/dataset-1/resource/resource-1")
 CANONICAL_JENA_KEY = "ckanext.apachejena.endpoint"
 LEGACY_JENA_KEY = "ckanext.apacheJena.endpoint"
+MEDIAWIKI_CREDENTIALS_KEY = "ckanext.mediawiki_credentials_path"
 
 
 def _declared_config(values):
@@ -33,6 +35,26 @@ def test_canonical_jena_endpoint_is_declared(ckan_config, caplog):
     assert ckan_config.is_declared(CANONICAL_JENA_KEY)
     ckan_config.get(CANONICAL_JENA_KEY)
     assert f"Option {CANONICAL_JENA_KEY} is not declared" not in caplog.text
+
+
+def test_plugin_implements_guarded_config_declaration():
+    assert plugins.IConfigDeclaration.implemented_by(Dcatapcrc1153Plugin)
+
+    declaration = Declaration()
+    existing = declaration.declare(CANONICAL_JENA_KEY)
+    existing.legacy_key = LEGACY_JENA_KEY
+
+    Dcatapcrc1153Plugin().declare_config_options(declaration, Key())
+
+    assert declaration.get(CANONICAL_JENA_KEY) is existing
+
+
+def test_crc_declaration_does_not_redeclare_mediawiki_credentials():
+    declaration = Declaration()
+
+    Dcatapcrc1153Plugin().declare_config_options(declaration, Key())
+
+    assert declaration.get(MEDIAWIKI_CREDENTIALS_KEY) is None
 
 
 def test_canonical_jena_endpoint_is_used(monkeypatch):

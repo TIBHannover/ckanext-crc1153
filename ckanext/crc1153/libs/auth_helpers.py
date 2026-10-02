@@ -36,7 +36,7 @@ class AuthHelpers:
 
     @staticmethod
     def get_mediaWiki_creds():
-        credentials_path = toolkit.config.get('ckanext.mediaWiki_credentials_path')
+        credentials_path = toolkit.config.get('ckanext.mediawiki_credentials_path')
         if not credentials_path:
             return {}
         try:

@@ -75,9 +75,14 @@ To install ckanext-crc1153:
      username=YYY
      password=XXXX 
 
-The credentials file path need to be set in the **ckan.ini** file with the name:
+The credentials file path needs to be set in the **ckan.ini** file with the
+canonical name:
 
-     ckanext.mediaWiki_credentials_path = /YOUR_Credential_PATH/
+     ckanext.mediawiki_credentials_path = /YOUR_Credential_PATH/
+
+The equivalent environment variable is `CKANEXT__MEDIAWIKI_CREDENTIALS_PATH`.
+Semantic-Media-Wiki declares this shared setting and accepts the deprecated
+`ckanext.mediaWiki_credentials_path` spelling for backward compatibility.
 
 By default CRC1153 connects to the SFB1153 Semantic MediaWiki at:
 
@@ -97,6 +102,9 @@ The host, path, scheme and request timeout can be overridden in **ckan.ini**:
 The equivalent environment variable is `CKANEXT__APACHEJENA__ENDPOINT`.
 The previous `ckanext.apacheJena.endpoint` spelling is deprecated but remains
 supported for backward compatibility.
+Both `crc1153_dcat_profile` and `dcat_crc` can run independently. Each declares
+this shared setting only when another enabled plugin has not already declared
+it, so enabling both plugins is supported.
 
 For CRC1153/SFB1153 DCAT output, enable the CRC1153 profile together with the
 base dcat profile:
