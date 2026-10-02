@@ -1,6 +1,7 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import logging
+from pathlib import Path
 from flask import Blueprint
 from ckanext.crc1153.controllers.crcDcatProfileController import Crc1153DcatProfileController
 from ckanext.crc1153.libs.crc_profile.helpers import Crc1153DcatProfileHelper as Helper
@@ -9,6 +10,9 @@ from ckanext.crc1153.libs.crc_profile.helpers import Crc1153DcatProfileHelper as
 log = logging.getLogger(__name__)
 
 
+@toolkit.blanket.config_declarations(
+    str(Path(__file__).resolve().parents[1] / "config_declaration.yaml")
+)
 class Dcatapcrc1153Plugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IBlueprint)

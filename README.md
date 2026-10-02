@@ -92,7 +92,11 @@ The host, path, scheme and request timeout can be overridden in **ckan.ini**:
 
 2. To use the plugins that needs Apache Jena Endpoint (such as crc1153_dcat_ap), you need to set the endpoint in **ckan.ini**
 
-          ckanext.apacheJena.endpoint = APACHE_JENA_ENDPOINT/update
+          ckanext.apachejena.endpoint = https://jena.example.test/dataset/update
+
+The equivalent environment variable is `CKANEXT__APACHEJENA__ENDPOINT`.
+The previous `ckanext.apacheJena.endpoint` spelling is deprecated but remains
+supported for backward compatibility.
 
 For CRC1153/SFB1153 DCAT output, enable the CRC1153 profile together with the
 base dcat profile:

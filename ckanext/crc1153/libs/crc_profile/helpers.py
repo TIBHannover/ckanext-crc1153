@@ -20,7 +20,7 @@ class Crc1153DcatProfileHelper():
 
 
     def get_apache_jena_endpoint():
-        return toolkit.config.get('ckanext.apacheJena.endpoint')
+        return toolkit.config.get('ckanext.apachejena.endpoint')
 
 
 

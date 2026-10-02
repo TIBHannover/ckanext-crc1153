@@ -1,0 +1,7 @@
+version: 1
+groups:
+  - annotation: CRC1153 Apache Jena settings
+    options:
+      - key: ckanext.apachejena.endpoint
+        legacy_key: ckanext.apacheJena.endpoint
+        description: Apache Jena SPARQL update endpoint used for dataset metadata synchronization.
