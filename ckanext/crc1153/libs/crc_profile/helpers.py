@@ -8,6 +8,7 @@ from sqlalchemy.sql.expression import false
 from SPARQLWrapper import SPARQLWrapper, POST
 from ckanext.dcat.processors import RDFSerializer
 from ckanext.crc1153.libs.commons import Commons
+from ckanext.crc1153.libs.config import get_owned_config_value
 
 
 log = logging.getLogger(__name__)
@@ -20,7 +21,11 @@ class Crc1153DcatProfileHelper():
 
 
     def get_apache_jena_endpoint():
-        return toolkit.config.get('ckanext.apachejena.endpoint')
+        return get_owned_config_value(
+            'ckanext.crc1153.apachejena.endpoint',
+            'ckanext.apachejena.endpoint',
+            'ckanext.apacheJena.endpoint',
+        )
 
 
 

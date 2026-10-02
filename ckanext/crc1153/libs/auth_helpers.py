@@ -5,6 +5,8 @@ import ckan.model as model
 import ckan.logic as logic
 import logging
 
+from ckanext.crc1153.libs.config import get_owned_config_value
+
 
 log = logging.getLogger(__name__)
 
@@ -36,7 +38,11 @@ class AuthHelpers:
 
     @staticmethod
     def get_mediaWiki_creds():
-        credentials_path = toolkit.config.get('ckanext.mediawiki_credentials_path')
+        credentials_path = get_owned_config_value(
+            'ckanext.crc1153.mediawiki_credentials_path',
+            'ckanext.mediawiki_credentials_path',
+            'ckanext.mediaWiki_credentials_path',
+        )
         if not credentials_path:
             return {}
         try:
