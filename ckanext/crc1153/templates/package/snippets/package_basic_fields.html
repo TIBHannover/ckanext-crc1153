@@ -47,3 +47,47 @@
 
     {% endif %}
 {% endblock %}
+
+{# Set Public as the default visibility for new datasets #}
+{% block package_metadata_fields_visibility %}
+
+    <div class="form-group control-medium">
+        <label for="field-private" class="form-label">
+            {{ _('Visibility') }}
+        </label>
+
+        <div class="controls">
+
+            {# Public by default; preserve an explicitly selected value #}
+            {% set selected_visibility = data.get('private') %}
+            {% if selected_visibility is none or selected_visibility == '' %}
+                {% set selected_visibility = 'False' %}
+            {% endif %}
+
+            <select id="field-private" name="private" class="form-control">
+
+                <option value="False"
+                    {% if selected_visibility|string|lower == 'false' %}
+                        selected="selected"
+                    {% endif %}>
+                    {{ _('Public') }}
+                </option>
+
+                <option value="True"
+                    {% if selected_visibility|string|lower == 'true' %}
+                        selected="selected"
+                    {% endif %}>
+                    {{ _('Private') }}
+                </option>
+
+            </select>
+
+            <small class="form-text text-muted">
+            <i class="fa fa-info-circle"></i>
+                {{ _('Dataset visibility is set to Public by default. You can change it to Private if needed.') }}
+            </small>
+
+        </div>
+    </div>
+
+{% endblock %}
