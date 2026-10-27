@@ -68,6 +68,48 @@ def test_mediawiki_config_overrides_host_path_and_timeout(monkeypatch):
     assert created["reqs"] == {"timeout": 5}
 
 
+def test_sfb1368_uses_shared_smw_connection_settings(monkeypatch):
+    from ckanext.crc1153.libs import media_wiki_api
+
+    monkeypatch.setattr(media_wiki_api.AuthHelpers, "get_mediaWiki_creds", lambda: {})
+    monkeypatch.setitem(media_wiki_api.toolkit.config, "ckanext.crc.project.id", "1368")
+    monkeypatch.setitem(
+        media_wiki_api.toolkit.config,
+        "ckanext.smw.mediawiki.api.endpoint",
+        "wiki.example",
+    )
+    monkeypatch.setitem(
+        media_wiki_api.toolkit.config,
+        "ckanext.smw.mediawiki.api.path",
+        "/wiki-sfb1368/",
+    )
+    monkeypatch.setitem(
+        media_wiki_api.toolkit.config,
+        "ckanext.smw.mediawiki.api.scheme",
+        "http",
+    )
+
+    api = media_wiki_api.MediaWikiAPI("query")
+
+    assert (api.host, api.path, api.scheme) == (
+        "wiki.example",
+        "/wiki-sfb1368/",
+        "http",
+    )
+
+
+def test_demonstrator_response_uses_requested_smw_property(monkeypatch):
+    from ckanext.crc1153.libs import media_wiki_api
+
+    monkeypatch.setattr(media_wiki_api.AuthHelpers, "get_mediaWiki_creds", lambda: {})
+    api = media_wiki_api.MediaWikiAPI("query", query_type="demonstrator")
+
+    assert api.process_answer(
+        "demonstrator",
+        {"printouts": {"RepresentsDemonstrator": [{"fulltext": "Demo A"}]}},
+    ) == "Demo A"
+
+
 def test_mediawiki_failure_is_logged_without_sensitive_response(monkeypatch, caplog):
     from ckanext.crc1153.libs import media_wiki_api
 

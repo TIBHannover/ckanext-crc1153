@@ -76,3 +76,18 @@ def test_missing_mediawiki_credentials_path_remains_optional(monkeypatch):
     monkeypatch.setattr(auth_helpers.toolkit, "config", {})
 
     assert AuthHelpers.get_mediaWiki_creds() == {}
+
+
+def test_sfb1368_uses_smw_owned_credentials(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        auth_helpers.toolkit,
+        "config",
+        {
+            "ckanext.crc.project.id": "1368",
+            "ckanext.smw.mediawiki_credentials_path": _credentials_file(
+                tmp_path, "smw.credentials", "smw-user"
+            ),
+        },
+    )
+
+    assert AuthHelpers.get_mediaWiki_creds()["username"] == "smw-user"

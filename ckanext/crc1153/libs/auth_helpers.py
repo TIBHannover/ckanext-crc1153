@@ -38,9 +38,16 @@ class AuthHelpers:
 
     @staticmethod
     def get_mediaWiki_creds():
-        credentials_path = get_owned_config_value(
-            'ckanext.crc1153.mediawiki_credentials_path',
-        )
+        project_id = str(toolkit.config.get('ckanext.crc.project.id', '')).strip()
+        if project_id == '1368':
+            credentials_path = get_owned_config_value(
+                'ckanext.smw.mediawiki_credentials_path',
+                'ckanext.crc1153.mediawiki_credentials_path',
+            )
+        else:
+            credentials_path = get_owned_config_value(
+                'ckanext.crc1153.mediawiki_credentials_path',
+            )
         if not credentials_path:
             return {}
         try:

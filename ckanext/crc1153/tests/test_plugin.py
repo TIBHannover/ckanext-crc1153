@@ -148,6 +148,8 @@ def test_save_specific_metadata_accepts_rendered_token_and_preserves_behavior(
             "resources_count": "1",
             "material_combination_1": "Steel, Aluminum",
             "custom_metadata_material_combination_1": resource["id"],
+            "demonstrator_1": "Demonstrator A",
+            "custom_metadata_demonstrator_1": resource["id"],
         }
     )
 
@@ -160,13 +162,14 @@ def test_save_specific_metadata_accepts_rendered_token_and_preserves_behavior(
 
     assert response.status_code == 302
     assert response.location.endswith("/dataset/{}".format(dataset["name"]))
-    assert len(updated_resources) == 1
+    assert len(updated_resources) == 2
     assert updated_resources[0]["id"] == resource["id"]
     assert updated_resources[0]["material_combination"] == "Steel, Aluminum"
     saved_resource = real_get_action("resource_show")(
         {"ignore_auth": True}, {"id": resource["id"]}
     )
     assert saved_resource["material_combination"] == "Steel, Aluminum"
+    assert saved_resource["demonstrator"] == "Demonstrator A"
 
 
 def test_specific_metadata_blueprint_uses_collision_free_routes():
@@ -232,6 +235,73 @@ def test_resource_selection_modal_uses_ckan_211_contract(
 @pytest.mark.ckan_config(
     "ckan.plugins", "crc1153_specific_metadata crc1153_layout"
 )
+@pytest.mark.ckan_config("SECRET_KEY", "test_secret")
+def test_dropdowns_render_smw_options_and_existing_values(
+    csrf_enforced_app, clean_db, monkeypatch
+):
+    user = factories.Sysadmin()
+    dataset = factories.Dataset(
+        user=user,
+        resources=[{
+            "url": "https://example.test/data.csv",
+            "name": "data.csv",
+            "material_combination": "Existing material",
+            "demonstrator": "Existing demonstrator",
+        }],
+    )
+    monkeypatch.setattr(
+        CrcSpecificMetadataHelpers,
+        "get_material_list",
+        lambda: [
+            {"value": "N/A", "text": "None selected"},
+            {"value": "SMW material", "text": "SMW material"},
+        ],
+    )
+    monkeypatch.setattr(
+        CrcSpecificMetadataHelpers,
+        "get_demonstrator_list",
+        lambda: [
+            {"value": "N/A", "text": "None selected"},
+            {"value": "SMW demonstrator", "text": "SMW demonstrator"},
+        ],
+    )
+
+    response = csrf_enforced_app.get(
+        "/resource_custom_metadata/add_metadata/{}".format(dataset["name"]),
+        extra_environ={"REMOTE_USER": user["name"]},
+    )
+    document = BeautifulSoup(response.get_data(as_text=True), "html.parser")
+
+    material = document.select_one('select[name="material_combination_1"]')
+    demonstrator = document.select_one('select[name="demonstrator_1"]')
+    assert {option["value"] for option in material.select("option")} == {
+        "N/A", "SMW material", "Existing material"
+    }
+    assert material.select_one("option[selected]")["value"] == "Existing material"
+    assert {option["value"] for option in demonstrator.select("option")} == {
+        "N/A", "SMW demonstrator", "Existing demonstrator"
+    }
+    assert demonstrator.select_one("option[selected]")["value"] == (
+        "Existing demonstrator"
+    )
+
+
+def test_empty_smw_responses_keep_safe_dropdown_option(monkeypatch):
+    from ckanext.crc1153.libs.crc_specific_metadata import helpers
+
+    monkeypatch.setattr(helpers.MediaWikiAPI, "pipeline", lambda self: [])
+
+    assert CrcSpecificMetadataHelpers.get_material_list() == [
+        {"value": "N/A", "text": "None selected"}
+    ]
+    assert CrcSpecificMetadataHelpers.get_demonstrator_list() == [
+        {"value": "N/A", "text": "None selected"}
+    ]
+
+
+@pytest.mark.ckan_config(
+    "ckan.plugins", "crc1153_specific_metadata crc1153_layout"
+)
 @pytest.mark.usefixtures("with_plugins")
 def test_specific_metadata_webassets_include_without_unknown_assets(app, caplog):
     import logging
@@ -250,17 +320,17 @@ def test_specific_metadata_webassets_include_without_unknown_assets(app, caplog)
     "ckan.plugins", "crc1153_specific_metadata crc1153_layout"
 )
 @pytest.mark.ckan_config("SECRET_KEY", "test_secret")
-def test_save_and_continue_persists_metadata_and_redirects_to_samples(
+def test_save_and_continue_persists_metadata_and_redirects_to_equipment(
     csrf_enforced_app, clean_db, monkeypatch
 ):
     flask_app = csrf_enforced_app.flask_app
-    sample_blueprint = Blueprint("sample_link", __name__)
-    sample_blueprint.add_url_rule(
-        "/smw/add_samples_view/<id>",
-        "add_samples_view",
-        lambda id: "Samples for {}".format(id),
+    machine_blueprint = Blueprint("machine_link", __name__)
+    machine_blueprint.add_url_rule(
+        "/smw/machines_view/<id>",
+        "machines_view",
+        lambda id: "Equipment for {}".format(id),
     )
-    flask_app.register_blueprint(sample_blueprint)
+    flask_app.register_blueprint(machine_blueprint)
     monkeypatch.setitem(
         toolkit.config,
         "ckan.plugins",
@@ -304,15 +374,15 @@ def test_save_and_continue_persists_metadata_and_redirects_to_samples(
 
     assert response.status_code == 302
     assert response.location.endswith(
-        "/smw/add_samples_view/{}".format(dataset["name"])
+        "/smw/machines_view/{}".format(dataset["name"])
     )
     assert "/upgrade_dataset/add_ownership_view/" not in response.location
     saved_resource = toolkit.get_action("resource_show")(
         {"ignore_auth": True}, {"id": resource["id"]}
     )
     assert saved_resource["material_combination"] == "Steel"
-    samples_response = client.get(response.location, extra_environ=auth)
-    assert samples_response.status_code == 200
+    equipment_response = client.get(response.location, extra_environ=auth)
+    assert equipment_response.status_code == 200
 
 
 @pytest.mark.ckan_config("ckan.plugins", " ".join(CRC1153_PLUGINS))

@@ -14,6 +14,9 @@ DEFAULT_MEDIAWIKI_SCHEME = "https"
 DEFAULT_MEDIAWIKI_HOST = "smw.service.tib.eu"
 DEFAULT_MEDIAWIKI_PATH = "/wiki-sfb1153/"
 DEFAULT_MEDIAWIKI_TIMEOUT = 30
+SMW_MEDIAWIKI_HOST = "ckanext.smw.mediawiki.api.endpoint"
+SMW_MEDIAWIKI_PATH = "ckanext.smw.mediawiki.api.path"
+SMW_MEDIAWIKI_SCHEME = "ckanext.smw.mediawiki.api.scheme"
 
 
 class MediaWikiAPI():
@@ -23,18 +26,27 @@ class MediaWikiAPI():
         self.username = creds.get('username')
         self.password = creds.get('password')
         self.query = query
-        self.host = toolkit.config.get(
-            "ckanext.crc1153.mediawiki.host", DEFAULT_MEDIAWIKI_HOST
-        )
+        project_id = str(toolkit.config.get("ckanext.crc.project.id", "")).strip()
+        if project_id == "1368":
+            default_path = "/wiki-sfb1368/"
+            self.host = toolkit.config.get(SMW_MEDIAWIKI_HOST, DEFAULT_MEDIAWIKI_HOST)
+            self.path = toolkit.config.get(SMW_MEDIAWIKI_PATH, default_path)
+            self.scheme = toolkit.config.get(
+                SMW_MEDIAWIKI_SCHEME, DEFAULT_MEDIAWIKI_SCHEME
+            )
+        else:
+            self.host = toolkit.config.get(
+                "ckanext.crc1153.mediawiki.host", DEFAULT_MEDIAWIKI_HOST
+            )
+            self.path = toolkit.config.get(
+                "ckanext.crc1153.mediawiki.path", DEFAULT_MEDIAWIKI_PATH
+            )
+            self.scheme = toolkit.config.get(
+                "ckanext.crc1153.mediawiki.scheme", DEFAULT_MEDIAWIKI_SCHEME
+            )
         self.sample_query = sample_query
         self.image_field = "Image"
         self.site = None
-        self.path = toolkit.config.get(
-            "ckanext.crc1153.mediawiki.path", DEFAULT_MEDIAWIKI_PATH
-        )
-        self.scheme = toolkit.config.get(
-            "ckanext.crc1153.mediawiki.scheme", DEFAULT_MEDIAWIKI_SCHEME
-        )
         self.timeout = self._configured_timeout()
         self.query_type = query_type
 
@@ -47,7 +59,14 @@ class MediaWikiAPI():
             for answer in raw_results:
                results.append(self.process_answer(self.query_type, answer))
             return results
-        except (errors.MwClientError, requests_exceptions.RequestException, KeyError, IndexError) as err:
+        except (
+            errors.MwClientError,
+            requests_exceptions.RequestException,
+            KeyError,
+            IndexError,
+            TypeError,
+            ValueError,
+        ) as err:
             log.warning(
                 "MediaWiki query failed for %s://%s%s: %s",
                 self.scheme,
@@ -87,6 +106,11 @@ class MediaWikiAPI():
     def process_answer(self, query_type, record):
         if query_type == "material":
             return record['fulltext']
-        return record['printouts']['Demonstrator'][0]
+        printouts = record['printouts']
+        values = printouts.get('RepresentsDemonstrator', printouts.get('Demonstrator'))
+        value = values[0]
+        if isinstance(value, dict):
+            return value.get('fulltext') or value.get('text')
+        return value
 
 
