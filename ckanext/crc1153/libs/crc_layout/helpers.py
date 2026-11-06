@@ -124,7 +124,7 @@ class Helper():
 
 
     def get_json(dataset_name):
-        package = toolkit.get_action('package_show')({}, {'name_or_id': dataset_name})
+        package = toolkit.get_action('package_show')({}, {'id': dataset_name})
         if not AuthHelpers.check_access_show_package(package['id']):
                 return toolkit.abort(403, "Not Authorized")
 

@@ -27,7 +27,7 @@ class IndexerHelper():
             for package in all_datasets:
                 if package.state != 'active':
                     continue                
-                dataset = toolkit.get_action('package_show')({}, {'name_or_id': package.name})
+                dataset = toolkit.get_action('package_show')({}, {'id': package.name})
                 for resource in dataset['resources']:
                     if resource['url_type'] == 'upload' and resource['state'] == "active":
                         if FileHelper.is_csv(resource):

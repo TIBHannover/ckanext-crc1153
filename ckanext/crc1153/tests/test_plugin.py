@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import Mock
 
 import pytest
 
@@ -14,6 +15,8 @@ from flask import Blueprint
 from ckanext.crc1153.libs.crc_specific_metadata.helpers import (
     CrcSpecificMetadataHelpers,
 )
+from ckanext.crc1153.libs.crc_profile.helpers import Crc1153DcatProfileHelper
+from ckanext.crc1153.plugins.crc_profile import Dcatapcrc1153Plugin
 
 
 CRC1153_PLUGINS = (
@@ -80,6 +83,76 @@ def test_specific_metadata_form_contains_csrf_token(
     csrf_input = form.select_one('input[name="_csrf_token"]')
     assert csrf_input is not None
     assert csrf_input.attrs["value"]
+
+
+@pytest.mark.ckan_config(
+    "ckan.plugins", "crc1153_specific_metadata crc1153_layout"
+)
+def test_specific_metadata_page_uses_ckan_211_package_show_id(
+    app, clean_db, with_plugins, monkeypatch
+):
+    user = factories.Sysadmin()
+    dataset = factories.Dataset(user=user)
+    monkeypatch.setattr(CrcSpecificMetadataHelpers, "get_material_list", lambda: [])
+    monkeypatch.setattr(
+        CrcSpecificMetadataHelpers, "get_demonstrator_list", lambda: []
+    )
+    real_get_action = toolkit.get_action
+    package_show_calls = []
+
+    def get_action(name):
+        action = real_get_action(name)
+        if name != "package_show":
+            return action
+
+        def tracked_package_show(context, data_dict):
+            package_show_calls.append(dict(data_dict))
+            return action(context, data_dict)
+
+        return tracked_package_show
+
+    monkeypatch.setattr(toolkit, "get_action", get_action)
+
+    response = app.get(
+        "/resource_custom_metadata/add_metadata/{}".format(dataset["name"]),
+        extra_environ={"REMOTE_USER": user["name"]},
+    )
+
+    assert response.status_code == 200
+    assert {"id": dataset["name"]} in package_show_calls
+    assert all("name_or_id" not in call for call in package_show_calls)
+
+
+def test_after_dataset_update_uses_ckan_211_package_show_id(monkeypatch):
+    package = {"id": "dataset-id", "name": "dataset-name"}
+    package_show = Mock(return_value=package)
+    monkeypatch.setattr(
+        toolkit,
+        "get_action",
+        lambda name: package_show if name == "package_show" else Mock(),
+    )
+    monkeypatch.setattr(Crc1153DcatProfileHelper, "get_dataset_graph", Mock(return_value="graph"))
+    monkeypatch.setattr(Crc1153DcatProfileHelper, "delete_from_sparql", Mock())
+    monkeypatch.setattr(Crc1153DcatProfileHelper, "insert_to_sparql", Mock())
+
+    result = Dcatapcrc1153Plugin().after_dataset_update({}, package)
+
+    assert result == package
+    package_show.assert_called_once_with({}, {"id": "dataset-id"})
+
+
+def test_crc1153_package_show_calls_do_not_use_removed_name_or_id_argument():
+    source_files = (EXTENSION_ROOT / "controllers").glob("*.py")
+    source_files = list(source_files) + list((EXTENSION_ROOT / "libs").rglob("*.py"))
+    source_files += list((EXTENSION_ROOT / "plugins").glob("*.py"))
+
+    offenders = [
+        str(path.relative_to(EXTENSION_ROOT))
+        for path in source_files
+        if "name_or_id" in path.read_text()
+    ]
+
+    assert offenders == []
 
 
 @pytest.mark.ckan_config(

@@ -34,7 +34,7 @@ class Crc1153DcatProfileController:
         all_graphs = []
         for dataset in all_datasets:
             if dataset.state == 'active':
-                package = toolkit.get_action('package_show')({}, {'name_or_id': dataset.name})
+                package = toolkit.get_action('package_show')({}, {'id': dataset.name})
                 package = Helper.setDatasetUri(package)   
                 graph = Helper.get_dataset_graph(package)
                 all_graphs.append(graph)
@@ -52,7 +52,7 @@ class Crc1153DcatProfileController:
         all_graphs = []
         for dataset in all_datasets:
             if dataset.state == 'active':
-                package = toolkit.get_action('package_show')({}, {'name_or_id': dataset.name})
+                package = toolkit.get_action('package_show')({}, {'id': dataset.name})
                 package = Helper.setDatasetUri(package)   
                 graph = Helper.get_dataset_graph(package)
                 all_graphs.append(graph)
@@ -91,7 +91,7 @@ class Crc1153DcatProfileController:
         dataset_dicts = []
         for dataset in all_datasets:
             if dataset.state == 'active':                
-                package = toolkit.get_action('package_show')({}, {'name_or_id': dataset.name})
+                package = toolkit.get_action('package_show')({}, {'id': dataset.name})
                 package = Helper.setDatasetUri(package)                                                              
                 dataset_dicts.append(package)
                 

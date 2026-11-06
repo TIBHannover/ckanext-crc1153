@@ -46,7 +46,7 @@ class SampleSearch():
             if SearchHelper.dataset_is_not_in_selected_group(search_filters, package.get_groups()):
                 continue
 
-            dataset = toolkit.get_action('package_show')({}, {'name_or_id': package.name})
+            dataset = toolkit.get_action('package_show')({}, {'id': package.name})
             detected = False
 
             for res in dataset['resources']:

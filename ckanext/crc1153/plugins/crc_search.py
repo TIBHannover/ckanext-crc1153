@@ -79,7 +79,7 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
         resources = pkg_dict.get('resources')
         if resources is None and pkg_dict.get('id'):
             try:
-                dataset = toolkit.get_action('package_show')({}, {'name_or_id': pkg_dict['id']})
+                dataset = toolkit.get_action('package_show')({}, {'id': pkg_dict['id']})
                 resources = dataset.get('resources', [])
             except Exception:
                 log.exception("CRC1153 column index cleanup failed for deleted dataset")

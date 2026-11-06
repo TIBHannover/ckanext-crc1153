@@ -47,7 +47,7 @@ class PublicationSearch():
             if SearchHelper.dataset_is_not_in_selected_group(search_filters, package.get_groups()):
                 continue
 
-            dataset = toolkit.get_action('package_show')({}, {'name_or_id': package.name})
+            dataset = toolkit.get_action('package_show')({}, {'id': package.name})
             detected = False
             linked_publications = pub_model.get_by_package(name=dataset['name'])
             if linked_publications == false:
