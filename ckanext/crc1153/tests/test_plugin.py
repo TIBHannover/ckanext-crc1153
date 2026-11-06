@@ -97,6 +97,9 @@ def test_specific_metadata_page_uses_ckan_211_package_show_id(
     monkeypatch.setattr(
         CrcSpecificMetadataHelpers, "get_demonstrator_list", lambda: []
     )
+    monkeypatch.setitem(
+        h.helper_functions, "cancel_dataset_is_enabled", lambda: False
+    )
     real_get_action = toolkit.get_action
     package_show_calls = []
 
