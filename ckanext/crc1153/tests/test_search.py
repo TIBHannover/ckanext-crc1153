@@ -44,3 +44,59 @@ def test_column_search_is_dispatched(monkeypatch):
 
     assert calls == [("column:force", {"q": "column:force", "fq": [""]})]
     assert result["results"] == [{"name": "column-match"}]
+
+
+def test_empty_special_searches_are_removed_before_solr():
+    from ckanext.crc1153.plugins.crc_search import CrcSearchPlugin
+
+    for search_type in (
+        "column", "publication", "sample", "material_combination",
+        "demonstrator", "manufacturing_process", "analysis_method",
+    ):
+        params = {
+            "q": search_type + ":   ",
+            "fq": ['organization:"sfb1153"'],
+            "sort": "metadata_modified desc",
+        }
+
+        result = CrcSearchPlugin().before_dataset_search(params)
+
+        assert result is params
+        assert result == {
+            "q": "",
+            "fq": ['organization:"sfb1153"'],
+            "sort": "metadata_modified desc",
+        }
+
+
+def test_valid_special_search_is_preserved_before_solr():
+    from ckanext.crc1153.plugins.crc_search import CrcSearchPlugin
+
+    params = {"q": "column:force", "fq": ['tags:"experiment"']}
+
+    result = CrcSearchPlugin().before_dataset_search(params)
+
+    assert result is params
+    assert result == {"q": "column:force", "fq": ['tags:"experiment"']}
+
+
+def test_non_special_empty_field_query_is_preserved():
+    from ckanext.crc1153.plugins.crc_search import CrcSearchPlugin
+
+    params = {"q": "title:", "fq": [""]}
+
+    result = CrcSearchPlugin().before_dataset_search(params)
+
+    assert result["q"] == "title:"
+
+
+def test_missing_or_non_string_query_is_preserved():
+    from ckanext.crc1153.plugins.crc_search import CrcSearchPlugin
+
+    for query in (None, 42):
+        params = {"q": query, "fq": [""]}
+
+        result = CrcSearchPlugin().before_dataset_search(params)
+
+        assert result is params
+        assert result["q"] == query

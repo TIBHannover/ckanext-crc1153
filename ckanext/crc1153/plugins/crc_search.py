@@ -42,6 +42,22 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
 
     # IPackageController
 
+    @staticmethod
+    def _ignore_empty_special_search(search_params):
+        """Treat an empty special-search value like CKAN's empty search."""
+        query = search_params.get('q')
+        if not isinstance(query, str) or ':' not in query:
+            return search_params
+
+        search_type, search_phrase = query.split(':', 1)
+        if search_type.strip().lower() in {
+            'column', 'publication', 'sample', 'material_combination',
+            'demonstrator', 'manufacturing_process', 'analysis_method'
+        } and not search_phrase.strip():
+            search_params['q'] = ''
+
+        return search_params
+
     def after_dataset_search(self, search_results, search_params):
         try:
             search_types = ['column', 'publication', 'sample', 'material_combination', 'demonstrator', 'manufacturing_process', 'analysis_method']
@@ -116,7 +132,7 @@ class CrcSearchPlugin(plugins.SingletonPlugin):
         return pkg_dict
 
     def before_dataset_search(self, search_params):
-        return search_params
+        return self._ignore_empty_special_search(search_params)
 
     def before_dataset_index(self, pkg_dict):
         return pkg_dict
