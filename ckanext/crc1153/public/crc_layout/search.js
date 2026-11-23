@@ -7,8 +7,8 @@ $(document).ready(function(){
         if($('#search-type-dropdown').length !== 0){
             e.preventDefault();
             let searchType = $('#search-type-dropdown').val();
-            let searchPhrase = $('#field-giant-search-mimic').val();
-            if (searchType !== '0'){
+            let searchPhrase = $('#field-giant-search-mimic').val().trim();
+            if (searchType !== '0' && searchPhrase !== ''){
                 $('#field-giant-search').val('');
                 $('#field-giant-search').val(searchType + ":" + searchPhrase);
             }
